@@ -3,6 +3,11 @@ using UnityPool = UnityEngine.Pool;
 
 namespace Patterns
 {
+  /// <summary>
+  ///  모든 오브젝트 풀의 인터페이스를 정하는 기초 class 
+  ///  내부적으로 유니티의 ObjectPool을 사용함
+  /// </summary>
+  /// <typeparam name="T">오브젝트 풀에 저장되는 타입</typeparam>
   public abstract class ObjectPool<T> where T: class, IPooledObject
   {
     UnityPool.ObjectPool<T> pool;
@@ -32,6 +37,9 @@ namespace Patterns
       return (this.pool.Get());
     }
 
+    /// <summary>
+    /// 오브젝트 풀에 저장되기 전 해당 타입을 생성하는 방법을 정의
+    /// </summary>
     abstract protected T CreatePooledObject();
 
     T createPooledObject() {
