@@ -4,6 +4,7 @@
 
 # c-tag
 **/tags
+**/tags.meta
 
 # VisualStudioCode
 .vscode/
