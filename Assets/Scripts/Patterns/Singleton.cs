@@ -4,13 +4,13 @@ namespace Patterns
 {
   public interface ISingleton<T>
   {
-     static T Shared { get; private set; } 
+     static T  Instance { get; private set; } 
   }
 
   public abstract class Singleton<T>: ISingleton<T> where T: class, new()
   {
     static T instance;
-    public static T Shared 
+    public static T  Instance
     {
       get {
         if (Singleton<T>.instance != null ) {
@@ -26,12 +26,12 @@ namespace Patterns
   {
     static T instance;
 
-    public static T Shared => SingletonBehaviour<T>.instance;
+    public static T  Instance => SingletonBehaviour<T>.instance;
   
     public static void Destroy()
     {
       if (SingletonBehaviour<T>.instance != null) {
-        Destroy(SingletonBehaviour<T>.Shared.gameObject);
+        Destroy(SingletonBehaviour<T>.Instance.gameObject);
         SingletonBehaviour<T>.instance = null;
       }
     }
