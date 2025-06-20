@@ -66,6 +66,9 @@ namespace SHG
       }
       Item item = this.GetItem(itemData);
       var gameObject = Instantiate(itemData.Prefab);
+      var itemHolder = gameObject.AddComponent<ItemHolder>();
+      itemHolder.itemData = itemData;
+      return (gameObject);
     }
 
     public Item GetItem(ItemData itemData)

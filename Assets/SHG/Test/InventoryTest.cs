@@ -31,8 +31,11 @@ namespace SHG
         Debug.Log($"No {this.itemToGet.Name} in Inventory");
         return ;
       }
-      var item = Inventory.Instance.GetItem(this.itemToGet);
-      var gameObject = Instantiate(item.Data.Prefab);
+      var itemObject = Inventory.Instance.GetItemAsGameObject(this.itemToGet);
+      var itemHolder = itemObject.GetComponent<ItemHolder>();
+      itemHolder.OnDestroyed += (item) => {
+        Debug.Log($"{item.Name} is Destroyed");
+      };
     }
 
     [Button ("Test print Inventory items")]
