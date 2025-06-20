@@ -26,5 +26,16 @@ namespace SHG
     {
       Inventory.Instance.AddItem(itemData);
     }
+
+    [Button ("Get Item")]
+    void GetItem(ItemData itemData)
+    {
+      if (Inventory.Instance.GetItemCount(itemData) < 1) {
+        Debug.Log($"No item for ");
+        return ;
+      }
+      var item = Inventory.Instance.GetItem(itemData);
+      Instantiate(item.Data.Prefab);
+    }
   }
 }
