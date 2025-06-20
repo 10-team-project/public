@@ -8,6 +8,7 @@ namespace KSH
     public class HP : MonoBehaviour
     {
         [Header("Assign a script")]
+        [Tooltip("No changes needed inside ResourceDecay")]
         [SerializeField] private ResourceDegenerator resourceDegenerator;
         [SerializeField] private Hunger hunger;
         [SerializeField] private Thirsty thirsty;
