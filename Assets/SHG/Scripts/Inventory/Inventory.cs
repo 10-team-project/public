@@ -59,13 +59,22 @@ namespace SHG
       }
     }
 
+    public GameObject GetItemAsGameObject(ItemData itemData)
+    {
+      if (itemData.Prefab == null) {
+        throw (new ArgumentException($"{itemData.Name} has no Prefab"));
+      }
+      Item item = this.GetItem(itemData);
+      var gameObject = Instantiate(itemData.Prefab);
+    }
+
     public Item GetItem(ItemData itemData)
     {
-      this.WillChange?.Invoke(this);
       int itemCount = this.GetItemCount(itemData);
       if (itemCount < 1) {
         throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
       }
+      this.WillChange?.Invoke(this);
       Item item;
       if (itemData is RecoveryItemData recoveryItemData) {
         item = new RecoveryItem(recoveryItemData); 
@@ -79,8 +88,14 @@ namespace SHG
       if (index != -1) {
         this.ItemNamesForDebugging.RemoveAt(index);
       }
-      this.OnChange?.Invoke(this);
       #endif
+      if (itemCount > 0) {
+        this.items.Remove(itemData);
+      }
+      else {
+        this.items[itemData] = itemCount - 1;
+      }
+      this.OnChange?.Invoke(this);
       return (item);
     }
   }
