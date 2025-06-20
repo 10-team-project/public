@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace SHG
 {
-  public abstract class Item 
+  public abstract partial class Item 
   {
     public ItemData Data => this.data; 
     [SerializeField]

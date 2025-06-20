@@ -3,7 +3,7 @@ using System;
 namespace SHG
 {
   using Character = TempCharacter;
-  public class RecoveryItem : Item, IUsable, IRecoveryable
+  public partial class RecoveryItem : Item, IUsable, IRecoveryable
   {
     RecoveryItemData recoveryItemData;
     public Action<IUsable> OnUsed { get; set; }
