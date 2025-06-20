@@ -15,7 +15,11 @@ namespace KSH
         public event Action<Resource> OnResourceChanged; //코드용 이벤트
         
         public float Max => max;
-        public float Cur => cur;
+        public float Cur
+        {
+            get => cur;
+            set => cur = value;
+        }
 
         public void Decrease(float amount) //자원 감소
         {

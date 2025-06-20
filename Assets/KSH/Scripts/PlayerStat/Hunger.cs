@@ -10,9 +10,11 @@ namespace KSH
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
 
-        private void Eat(float amount)
+        public float HungerCur => resourceDegenerator.Resource.Cur;
+
+        public void Eat(float amount)
         {
-            resourceDegenerator.Resource.Decrease(amount);
+            resourceDegenerator.Resource.Increase(amount);
         }
 
     }    
