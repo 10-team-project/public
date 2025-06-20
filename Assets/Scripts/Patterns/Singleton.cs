@@ -4,7 +4,7 @@ namespace Patterns
 {
   public interface ISingleton<T>
   {
-     static T  Instance { get; private set; } 
+     public static T  Instance { get; private set; } 
   }
 
   public abstract class Singleton<T>: ISingleton<T> where T: class, new()
