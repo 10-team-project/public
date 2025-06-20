@@ -25,10 +25,6 @@ namespace KSH
         [SerializeField] private float HpLossFromHunger;
         [SerializeField] private float HpLossFromThirsty;
         [SerializeField] private float HpLossFromFatigue;
-        
-        public Hunger Hunger => hunger;
-        public Thirsty Thirsty => thirsty;
-        public Fatigue Fatigue => fatigue;
 
         private void Start()
         {

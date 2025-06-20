@@ -476,8 +476,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 0
-  resourceAmount: 0
+  decayTime: 5
+  resourceAmount: 2
   decaying: 1
   resource: {fileID: 591123060}
 --- !u!114 &591123060
@@ -493,7 +493,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max: 100
-  cur: 0
+  cur: 100
 --- !u!4 &591123061
 Transform:
   m_ObjectHideFlags: 0
@@ -539,8 +539,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4bc5ace39346d04292488ce9aa2f3a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  max: 0
-  cur: 0
+  max: 100
+  cur: 100
 --- !u!4 &1246266224
 Transform:
   m_ObjectHideFlags: 0
@@ -568,8 +568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 0
-  resourceAmount: 0
+  decayTime: 5
+  resourceAmount: 2
   decaying: 1
   resource: {fileID: 1246266223}
 --- !u!1 &1317728048
@@ -602,8 +602,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 0
-  resourceAmount: 0
+  decayTime: 5
+  resourceAmount: 2
   decaying: 1
   resource: {fileID: 1317728050}
 --- !u!114 &1317728050
@@ -619,7 +619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max: 100
-  cur: 0
+  cur: 100
 --- !u!4 &1317728051
 Transform:
   m_ObjectHideFlags: 0
@@ -664,16 +664,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3afdae1b924ca1c4e8de6e4cc4ce9a03, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resource: {fileID: 2064310881}
+  resourceDegenerator: {fileID: 2064310883}
   hunger: {fileID: 137843084}
   thirsty: {fileID: 526742160}
   fatigue: {fileID: 506418315}
-  hungerLimit: 0
-  thirstyLimit: 0
-  fatigueLimit: 0
-  HpLossFromHunger: 0
-  HpLossFromThirsty: 0
-  HpLossFromFatigue: 0
+  hungerLimit: 50
+  thirstyLimit: 50
+  fatigueLimit: 50
+  decayTimeFromHunger: 6
+  decayTimeFromThirsty: 6
+  decayTimeFromFatigue: 6
+  HpLossFromHunger: 5
+  HpLossFromThirsty: 5
+  HpLossFromFatigue: 5
 --- !u!4 &1563290604
 Transform:
   m_ObjectHideFlags: 0
@@ -700,6 +703,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2064310882}
   - component: {fileID: 2064310881}
+  - component: {fileID: 2064310883}
   m_Layer: 0
   m_Name: HPResource
   m_TagString: Untagged
@@ -720,7 +724,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   max: 100
-  cur: 0
+  cur: 100
 --- !u!4 &2064310882
 Transform:
   m_ObjectHideFlags: 0
@@ -736,6 +740,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1563290604}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2064310883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064310880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decayTime: 0
+  resourceAmount: 0
+  decaying: 1
+  resource: {fileID: 2064310881}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
