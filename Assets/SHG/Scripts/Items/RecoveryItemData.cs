@@ -4,7 +4,6 @@ using EditorAttributes;
 
 namespace SHG
 {
-  using Character = TempCharacter;
   [Serializable]
 
   [CreateAssetMenu (menuName = "ScriptableObjects/Items/Recovery Item")]
@@ -15,7 +14,7 @@ namespace SHG
     [SerializeField, ReadOnly, Validate("Amount must greater than zero", nameof(this.HasInvalidAmount), MessageMode.Warning)]
     bool amountCheck;
     public Efficacy[] Efficacies => this.efficacy;
-    [SerializeField] 
+    [SerializeField]
     Efficacy[] efficacy;
     
     protected bool EmptyEfficacy() => this.efficacy == null || this.Efficacies.Length == 0;

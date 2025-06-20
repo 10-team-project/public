@@ -1,11 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace SHG
 {
   using Character = TempCharacter;
 
+  [Serializable]
   public struct Efficacy
   {
     [SerializeField]

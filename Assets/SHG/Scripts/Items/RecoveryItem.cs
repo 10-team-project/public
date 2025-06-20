@@ -2,7 +2,6 @@ using System;
 
 namespace SHG
 {
-  using Character = TempCharacter;
   public partial class RecoveryItem : Item, IUsable, IRecoveryable
   {
     RecoveryItemData recoveryItemData;
