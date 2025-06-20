@@ -21,7 +21,7 @@ namespace SHG
     [SerializeField, AssetPreview(64f, 64f), Validate("Prefab is none", nameof(IsPrefabNone), MessageMode.Warning)]
     protected GameObject prefab;
 
-    protected bool IsNameEmpty() => this.itemName.Length == 0;
+    protected bool IsNameEmpty() => this.itemName == null || this.itemName.Replace(" ", "").Length == 0;
     protected bool IsImageNone() => this.Image == null;
     protected bool IsPrefabNone() => this.Prefab == null;
   }
