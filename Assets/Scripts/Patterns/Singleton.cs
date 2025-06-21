@@ -22,7 +22,7 @@ namespace Patterns
     }
   }
 
-  public class SingletonBehaviour<T>: MonoBehaviour where T: MonoBehaviour
+  public class SingletonBehaviour<T>: MonoBehaviour where T: MonoBehaviour, ISingleton<T>
   {
     static T instance;
 
