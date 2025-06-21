@@ -56,12 +56,12 @@ namespace SHG
     // Start is called before the first frame update
     void OnEnable()
     {
-      Inventory.Instance.OnChange += this.PrintInventory;
+      Inventory.Instance.OnChanged += this.PrintInventory;
     }
 
     void OnDisable()
     {
-      Inventory.Instance.OnChange -= this.PrintInventory;
+      Inventory.Instance.OnChanged -= this.PrintInventory;
     }
   }
 }

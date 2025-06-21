@@ -13,7 +13,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 #endif
 
   public Action<Inventory> WillChange { get; set; }
-  public Action<Inventory> OnChange { get; set; }
+  public Action<Inventory> OnChanged { get; set; }
 
   protected override void Awake()
   {
@@ -36,7 +36,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     else {
       this.items.Add(itemData, 1);
     }
-    this.OnChange?.Invoke(this);
+    this.OnChanged?.Invoke(this);
   }
 
 #if UNITY_EDITOR
@@ -96,7 +96,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     else {
       this.items[itemData] = itemCount - 1;
     }
-    this.OnChange?.Invoke(this);
+    this.OnChanged?.Invoke(this);
     return (item);
   }
 }

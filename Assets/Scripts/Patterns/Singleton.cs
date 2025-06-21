@@ -22,11 +22,11 @@ namespace Patterns
     }
   }
 
-  public class SingletonBehaviour<T>: MonoBehaviour where T: MonoBehaviour, ISingleton<T>
+  public class SingletonBehaviour<T>: MonoBehaviour, ISingleton<T> where T: MonoBehaviour 
   {
     static T instance;
 
-    public static T  Instance => SingletonBehaviour<T>.instance;
+    public static T Instance => SingletonBehaviour<T>.instance;
   
     public static void Destroy()
     {
