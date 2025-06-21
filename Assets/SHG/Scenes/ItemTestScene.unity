@@ -421,7 +421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351b67a40e74338cb9f8532fd24976e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToAdd: {fileID: 0}
+  itemToAdd: {fileID: 11400000, guid: 0525198294084e41da0f5bfcde68159c, type: 2}
   itemToGet: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
