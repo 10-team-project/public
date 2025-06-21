@@ -53,7 +53,7 @@ namespace Patterns
       }
     }
 
-    protected void OnDestroyed()
+    protected void OnDestroy()
     {
       SingletonBehaviour<T>.instance = null;
     }
