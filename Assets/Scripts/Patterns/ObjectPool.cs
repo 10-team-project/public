@@ -25,7 +25,7 @@ namespace Patterns
           this.createPooledObject,
           this.OnTakeFromPool,
           this.OnReturnedToPool,
-          this.OnDestoryPoolObject,
+          this.OnDestroyPoolObject,
           collectionCheck: collectionCheck,
           defaultPoolSize,
           maxPoolSize ?? DEFAULT_MAX_POOL_SIZE
@@ -53,7 +53,7 @@ namespace Patterns
 
     protected virtual void OnTakeFromPool(T obj) {}
 
-    protected virtual void OnDestoryPoolObject(T obj) { }
+    protected virtual void OnDestroyPoolObject(T obj) { }
 
     protected void ReturnToPool(T obj) 
     {
