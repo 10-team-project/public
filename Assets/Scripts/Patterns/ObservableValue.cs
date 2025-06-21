@@ -27,15 +27,15 @@ namespace Patterns
     /// <summary>
     /// 필요하다면 class를 해제할 때를 감지하는 기능
     /// </summary>
-    public void DestorySelf()
+    public void DestroySelf()
     {
-      if (this.OnDestory != null) {
-        this.OnDestory.Invoke();
+      if (this.OnDestroy != null) {
+        this.OnDestroy.Invoke();
       }
     }
 
     public Action<T> OnChanged;
-    public Action OnDestory;
+    public Action OnDestroy;
 
     [SerializeField]
     T innerValue;
