@@ -55,7 +55,9 @@ namespace Patterns
 
     protected void OnDestroy()
     {
-      SingletonBehaviour<T>.instance = null;
+      if (SingletonBehaviour<T>.Instance == this) {
+        SingletonBehaviour<T>.instance = null;
+      }  
     }
   }
 }
