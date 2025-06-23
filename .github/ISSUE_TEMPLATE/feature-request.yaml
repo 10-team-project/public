@@ -2,8 +2,6 @@ name: 기능 추가 요청
 description: 새로운 기능이나 시스템 추가를 위한 이슈 템플릿입니다.
 title: "[Feature] 기능 이름 요약"
 labels: ["feature", "pending"]
-assignees:
-  - 작성자GitHubID
 
 body:
   - type: input
