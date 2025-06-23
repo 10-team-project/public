@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract partial class Item 
 {
   public ItemData Data => this.data; 
+  public bool IsCraftable => this.data.IsCraftable;
   [SerializeField]
   ItemData data;
 
