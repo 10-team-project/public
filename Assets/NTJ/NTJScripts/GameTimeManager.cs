@@ -1,50 +1,111 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
+
 
 namespace NTJ
 {
     public class GameTimeManager : MonoBehaviour
     {
-        public int timeMultiplier = 60; // 이 수치가 60이면 1초 = 1분 (수치 변경 가능)
-                                        // public Text timeText; // UI 표시용
-                                        // public Text dateText; // UI 표시용
+        [Header("UI")]
+        public TextMeshProUGUI timeText;           // 상단 현재 시간
+        public TextMeshProUGUI dayText;            // 상단 현재 Day-X
+        public Image fadePanel;                    // 화면 암전용 Panel
+        public GameObject dayTextPanel;            // 중앙에 띄울 "Day - X" 패널
+        public TextMeshProUGUI dayTextDisplay;     // 중앙 텍스트 ("Day - X")
+        public CanvasGroup topUITextGroup;
 
-        private float gameMinutes; // 누적된 게임 내 분(minute)
-        private int day = 1;
-        private int month = 1;
-        private int year = 1;
+        [Header("Time Settings")]
+        public int timeScale = 60; // 현실 1초 = 게임 1분
+        private float gameTime;    // 누적된 게임 시간
+        private int currentDay = 1;
 
-        private void Update()
+        private bool isSleeping = false;
+        private float fadeDuration = 2f;
+
+        void Start()
         {
-            // 게임 시간 경과 계산
-            gameMinutes += Time.deltaTime * timeMultiplier;
+            gameTime = 9 * 3600f; // 오전 9시부터 시작
+            UpdateDayText();
 
-            // 하루 24시간 넘었는지
-            if (gameMinutes >= 1440)
-            {
-                gameMinutes -= 1440; // 24시간이 지나면 다음날로
-                day++;
+            fadePanel.gameObject.SetActive(false);
+            fadePanel.color = new Color(0, 0, 0, 0);
 
-                if (day > 30)
-                {
-                    day = 1;
-                    month++;
-
-                    if (month > 12)
-                    {
-                        month = 1;
-                        year++;
-                    }
-                }
-            }
-            UpdateTimeUI();
+            dayTextPanel.SetActive(false);
         }
 
-        private void UpdateTimeUI()
+        void Update()
         {
-            int hours = (int)(gameMinutes / 60) % 24;
-            int minutes = (int)(gameMinutes % 60);
-            // timeText.text = $"시간: {hours:D2}:{minutes:D2}";
-            // dateText.text = $"날짜: {year}년 {month}월 {day}일";
+            if (isSleeping) return;
+
+            gameTime += Time.deltaTime * timeScale;
+
+            int hours = (int)(gameTime / 3600) % 24;
+            int minutes = (int)(gameTime / 60) % 60;
+
+            timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
+
+            if (hours >= 24 || hours < 9)
+            {
+                StartCoroutine(SleepAndStartNextDay());
+            }
+        }
+
+        void UpdateDayText()
+        {
+            dayText.text = $"Day - {currentDay}";
+        }
+
+        IEnumerator SleepAndStartNextDay()
+        {
+            isSleeping = true;
+
+            // Fade In
+            fadePanel.gameObject.SetActive(true);
+            fadePanel.color = new Color(0, 0, 0, 0);
+
+            float t = 0;
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                float alpha = Mathf.Lerp(0, 1, t / fadeDuration);
+
+                fadePanel.color = new Color(0, 0, 0, alpha);
+
+                topUITextGroup.alpha = 1 - alpha;
+
+                yield return null;
+            }
+
+            currentDay++;
+            UpdateDayText();
+
+            // 중앙 Day-X 텍스트 표시
+            dayTextPanel.SetActive(true);
+            dayTextDisplay.text = $"Day - {currentDay}";
+            yield return new WaitForSeconds(1.5f); // 텍스트 유지 시간
+
+            // 다음 날 시간 리셋
+            gameTime = 9 * 3600f;
+
+            // Fade Out
+            t = 0;
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                float alpha = Mathf.Lerp(1, 0, t / fadeDuration);
+
+                fadePanel.color = new Color(0, 0, 0, alpha);
+
+                topUITextGroup.alpha = 1 - alpha;
+
+                yield return null;
+            }
+
+            fadePanel.gameObject.SetActive(false);
+            dayTextPanel.SetActive(false);
+            isSleeping = false;
         }
     }
 }

@@ -582,3 +582,5 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,vim,linux,windows,macos,unity
 
 Assets/SJO/PlayerStatData.cs
+/Assets/TextMesh Pro
+Assets/TextMesh Pro.meta
