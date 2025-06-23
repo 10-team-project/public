@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f0848c2e0a9e8d5dab59a9b94b30bf7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
   m_Name: TestWater
   m_EditorClassIdentifier: 
-  itemName: TestWater
+  itemName: Water
   image: {fileID: 21300000, guid: 93ba8691a6908bb1fa73ea3be8a17fa9, type: 3}
   prefab: {fileID: 6945446762825401387, guid: b212faf593155376fb82ece12f70b52a, type: 3}
   emptyEfficacyCheck: 0

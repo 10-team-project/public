@@ -22,11 +22,11 @@ namespace Patterns
     }
   }
 
-  public class SingletonBehaviour<T>: MonoBehaviour where T: MonoBehaviour
+  public class SingletonBehaviour<T>: MonoBehaviour, ISingleton<T> where T: MonoBehaviour 
   {
     static T instance;
 
-    public static T  Instance => SingletonBehaviour<T>.instance;
+    public static T Instance => SingletonBehaviour<T>.instance;
   
     public static void Destroy()
     {
@@ -53,9 +53,11 @@ namespace Patterns
       }
     }
 
-    protected void OnDestroyed()
+    protected void OnDestroy()
     {
-      SingletonBehaviour<T>.instance = null;
+      if (SingletonBehaviour<T>.Instance == this) {
+        SingletonBehaviour<T>.instance = null;
+      }  
     }
   }
 }

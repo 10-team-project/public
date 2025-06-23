@@ -9,14 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f0848c2e0a9e8d5dab59a9b94b30bf7, type: 3}
+  m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
   m_Name: TestPotion
   m_EditorClassIdentifier: 
-  itemName: Test Postion
+  itemName: Potion
   image: {fileID: 21300000, guid: ba886817d0b1a0251bb01e0afd3beec5, type: 3}
   prefab: {fileID: 3925492623532481384, guid: 39d74b60ce06ec816889f8b5fbc50e59, type: 3}
   emptyEfficacyCheck: 0
   amountCheck: 0
   efficacy:
   - Stat: 0
-    Amount: 50
+    Amount: 10

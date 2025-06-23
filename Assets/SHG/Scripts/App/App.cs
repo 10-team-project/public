@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Patterns;
 
@@ -16,6 +14,7 @@ namespace SHG
       if (app == null) {
         throw new ApplicationException("Create App");
       }
+      Inventory.CreateInstance();
       DontDestroyOnLoad(app);
     }
 

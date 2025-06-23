@@ -5,6 +5,9 @@
 # c-tag
 **/tags
 **/tags.meta
+# vim
+**/NetrwTreeListing
+**/NetrwTreeListing.meta
 
 # VisualStudioCode
 .vscode/

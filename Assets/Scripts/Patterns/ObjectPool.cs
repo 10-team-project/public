@@ -11,7 +11,6 @@ namespace Patterns
   public abstract class ObjectPool<T> where T: class, IPooledObject
   {
     UnityPool.ObjectPool<T> pool;
-    protected bool collectionCheck;
     const int DEFAULT_MAX_POOL_SIZE = 10000;
     public ObjectPool(int defaultPoolSize, int? maxPoolSize = DEFAULT_MAX_POOL_SIZE, bool collectionCheck = true)
     {
@@ -26,8 +25,8 @@ namespace Patterns
           this.createPooledObject,
           this.OnTakeFromPool,
           this.OnReturnedToPool,
-          this.OnDestoryPoolObject,
-          true,
+          this.OnDestroyPoolObject,
+          collectionCheck: collectionCheck,
           defaultPoolSize,
           maxPoolSize ?? DEFAULT_MAX_POOL_SIZE
           );
@@ -54,7 +53,7 @@ namespace Patterns
 
     protected virtual void OnTakeFromPool(T obj) {}
 
-    protected virtual void OnDestoryPoolObject(T obj) { }
+    protected virtual void OnDestroyPoolObject(T obj) { }
 
     protected void ReturnToPool(T obj) 
     {
