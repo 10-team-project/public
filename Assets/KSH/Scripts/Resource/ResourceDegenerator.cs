@@ -22,6 +22,11 @@ namespace KSH
         public bool Decaying => decaying;
 
         private float timer = 0f; //초기 시간
+
+        private void Update()
+        {
+            ResourceTick(resourceAmount, decayTime);
+        }
         
         public void ResourceTick(float amount, float decreaseTime)
         {

@@ -12,7 +12,7 @@ namespace KSH
         public float ThirstyCur => resourceDegenerator.Resource.Cur;
 
 
-        public void Drink(float amount)
+        private void Drink(float amount)
         {
             resourceDegenerator.Resource.Increase(amount);
         }

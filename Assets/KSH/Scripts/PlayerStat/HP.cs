@@ -7,9 +7,8 @@ namespace KSH
 {
     public class HP : MonoBehaviour
     {
-        [Header("Assign a script")]
-        [Tooltip("No changes needed inside ResourceDecay")]
-        [SerializeField] private ResourceDegenerator resourceDegenerator;
+        [Header("Assign a script")] [Tooltip("No changes needed inside ResourceDecay")] 
+        [SerializeField] private Resource resource;
         [SerializeField] private Hunger hunger;
         [SerializeField] private Thirsty thirsty;
         [SerializeField] private Fatigue fatigue;
@@ -26,24 +25,48 @@ namespace KSH
         [SerializeField] private float HpLossFromThirsty;
         [SerializeField] private float HpLossFromFatigue;
 
+        private float hungerTimer = 0f;
+        private float thirstyTimer = 0f;
+        private float fatigueTimer = 0f;
+
         private void Start()
         {
-            resourceDegenerator.Resource.Cur = resourceDegenerator.Resource.Max; //체력 초기화
+            resource.Cur = resource.Max; //체력 초기화
+        }
+
+        private void Update()
+        {
+            HealthDecay();
         }
 
         private void HealthDecay() //Hunger, Thirsty, Fatigue의 정해진 수치 이하가 되면 체력 떨어짐
         {
             if (hunger.HungerCur <= hungerLimit) // Hunger의 Cur이 일정 수준 내려가면
             {
-                resourceDegenerator.ResourceTick(HpLossFromHunger, decayTimeFromHunger); // 몇초마다 HP 깎임   
+                hungerTimer += Time.deltaTime;
+                if (hungerTimer >= decayTimeFromHunger) // 정해진 시간이 타이머를 넘기면
+                {
+                    hungerTimer = 0f;
+                    resource.Decrease(HpLossFromHunger); // 감소
+                }
             }
-            else if (thirsty.ThirstyCur <= thirstyLimit) // Thirsty의 Cur이 일정 수준 내려가면
+            if (thirsty.ThirstyCur <= thirstyLimit) // Thirsty의 Cur이 일정 수준 내려가면
             {
-                resourceDegenerator.ResourceTick(HpLossFromThirsty, decayTimeFromThirsty); //몇초마다 HP 깎임
+                thirstyTimer += Time.deltaTime;
+                if (thirstyTimer >= decayTimeFromThirsty)
+                {
+                    thirstyTimer = 0f;
+                    resource.Decrease(HpLossFromThirsty);
+                }
             }
-            else if (fatigue.FatigueCur <= fatigueLimit) // Fatigue의 Cur이 일정 수준 내려가면
+            if (fatigue.FatigueCur <= fatigueLimit) // Fatigue의 Cur이 일정 수준 내려가면
             {
-                resourceDegenerator.ResourceTick(HpLossFromFatigue, decayTimeFromFatigue); //몇초마다 HP 깎임
+                fatigueTimer += Time.deltaTime;
+                if (fatigueTimer >= decayTimeFromFatigue)
+                {
+                    fatigueTimer = 0f;
+                    resource.Decrease(HpLossFromFatigue);
+                }
             }
         }
     }
