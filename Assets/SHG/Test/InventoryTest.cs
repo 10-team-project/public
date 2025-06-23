@@ -17,7 +17,8 @@ namespace SHG
         Debug.Log("itemToAdd is none");
         return ;
       }
-      Inventory.Instance.AddItem(this.itemToAdd);
+      var item = Item.CreateItemFrom(this.itemToAdd);
+      Inventory.Instance.AddItem(item);
     }
 
     [Button ("Test get item")]
@@ -31,11 +32,8 @@ namespace SHG
         Debug.Log($"No {this.itemToGet.Name} in Inventory");
         return ;
       }
-      var itemObject = Inventory.Instance.GetItemAsGameObject(this.itemToGet);
-      var itemHolder = itemObject.GetComponent<ItemHolder>();
-      itemHolder.OnDestroyed += (item) => {
-        Debug.Log($"{item.Name} is Destroyed");
-      };
+      var item = Inventory.Instance.GetItem(this.itemToGet);
+      Item.CreateItemObjectFrom(item.Data);
     }
 
     [Button ("Test print Inventory items")]
