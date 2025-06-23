@@ -10,8 +10,6 @@ body:
       label: 📝 기능 요약
       description: 구현할 기능을 간단하게 설명해주세요.
       placeholder: ex) 플레이어 점프 기능 추가
-      validations:
-        required: true
 
   - type: textarea
     id: detail
@@ -21,8 +19,6 @@ body:
       placeholder: |
         - 스페이스바 입력 시 캐릭터 점프
         - 장애물 회피를 위한 기능
-      validations:
-        required: true
 
   - type: textarea
     id: classplan
@@ -32,8 +28,6 @@ body:
       placeholder: |
         - JumpController: 입력 감지 및 점프 처리
         - PhysicsHandler: 중력 적용
-          validations:
-            required: false
 
         - type: textarea
           id: note
