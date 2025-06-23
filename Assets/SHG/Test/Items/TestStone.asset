@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e422aa3a2512acdc8f32b90023007a0, type: 3}
+  m_Name: TestStone
+  m_EditorClassIdentifier: 
+  itemName: stone
+  image: {fileID: 21300000, guid: b2b12c7b0f5054110a10536fe291a45f, type: 3}
+  prefab: {fileID: 6074755540811872593, guid: f6e7314ad679adac9b9e9ac5bd3ce08b, type: 3}
+  description: Stone for crafting

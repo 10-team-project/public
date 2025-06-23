@@ -61,7 +61,9 @@ namespace SHG
 
     void OnDisable()
     {
-      Inventory.Instance.OnChanged -= this.PrintInventory;
+      if (Inventory.Instance != null) {
+        Inventory.Instance.OnChanged -= this.PrintInventory;
+      }
     }
   }
 }
