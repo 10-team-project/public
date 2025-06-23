@@ -24,17 +24,17 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 #endif
   }
 
-  public void AddItem(ItemData itemData)
+  public void AddItem(Item item)
   {
     this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
-    this.AddItemName(itemData);
+    this.AddItemName(item.Data);
 #endif
-    if (this.items.TryGetValue(itemData, out int itemCount)) {
-      this.items[itemData] = itemCount + 1;
+    if (this.items.TryGetValue(item.Data, out int itemCount)) {
+      this.items[item.Data] = itemCount + 1;
     }
     else {
-      this.items.Add(itemData, 1);
+      this.items.Add(item.Data, 1);
     }
     this.OnChanged?.Invoke(this);
   }
@@ -55,18 +55,6 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     else {
       return (0);
     }
-  }
-
-  public GameObject GetItemAsGameObject(ItemData itemData)
-  {
-    if (itemData.Prefab == null) {
-      throw (new ArgumentException($"{itemData.Name} has no Prefab"));
-    }
-    Item item = this.GetItem(itemData);
-    var gameObject = Instantiate(itemData.Prefab);
-    var itemHolder = gameObject.AddComponent<ItemHolder>();
-    itemHolder.ItemData = itemData;
-    return (gameObject);
   }
 
   public Item GetItem(ItemData itemData)
