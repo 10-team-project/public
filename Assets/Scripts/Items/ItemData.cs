@@ -3,7 +3,7 @@ using UnityEngine;
 using EditorAttributes;
 
 [Serializable]
-public abstract class ItemData : ScriptableObject
+public abstract partial class ItemData : ScriptableObject
 {
   [HideInInspector]
   public string Name => this.itemName;

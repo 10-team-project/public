@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace SHG
@@ -8,6 +9,7 @@ namespace SHG
      public int Count;
   }
 
+  [Serializable]
   public class ItemRecipe: UnityEngine.Object
   {
     public ItemRecipeData RecipeData { get; private set; }
