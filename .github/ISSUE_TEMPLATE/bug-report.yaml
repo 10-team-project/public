@@ -1,0 +1,50 @@
+name: 버그 리포트
+description: 발생한 문제를 보고합니다.
+title: "[Bug] 문제 요약"
+labels: ["bug"]
+body:
+  - type: input
+    id: summary
+    attributes:
+      label: 버그 요약
+      placeholder: ex) 게임 실행 시 캐릭터가 움직이지 않음
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 재현 방법
+      placeholder: |
+        1. 게임 시작
+        2. W 키 입력
+        3. 캐릭터가 정지 상태 유지
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 기대 동작
+      placeholder: ex) W 키를 누르면 캐릭터가 앞으로 이동해야 함
+    validations:
+      required: false
+
+  - type: textarea
+    id: env
+    attributes:
+      label: 실행 환경
+      placeholder: |
+        - OS: Windows 10
+        - Unity 버전: 2022.3.1f
+        - 플랫폼: PC
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: 확인 사항
+      options:
+        - label: 최신 버전에서 테스트했습니다
+        - label: 중복된 이슈가 없는지 확인했습니다
