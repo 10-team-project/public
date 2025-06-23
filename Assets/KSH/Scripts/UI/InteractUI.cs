@@ -1,0 +1,69 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace KSH
+{
+    public class InteractUI : MonoBehaviour
+    {
+        [Header("InteractUI")]
+        [SerializeField] private Image imageUI; // UI이미지
+        
+        [Header("Interact Radius")]
+        [SerializeField] private float radius; //상호작용할 원의 범위
+    
+        private bool isreach = false;
+        private bool previousisreach = false;
+        
+        public event Action<bool> OnInteract; // bool 이벤트
+        
+        void Start()
+        {
+            imageUI.enabled = false;
+            OnInteract += ImageInteract; // 이벤트에 연결
+        }
+    
+        void Update()
+        {
+            Detect();
+        }
+    
+        private void Detect()
+        {
+            isreach = false;
+            Vector3 center = transform.position; // 스크립트가 붙은 오브젝트의 위치를 센터로 함 
+            
+            Collider[] colliders = Physics.OverlapSphere(center, radius); //원모양의 콜라이더 생성
+    
+            foreach (Collider col in colliders)
+            {
+                if (col.gameObject.layer == LayerMask.NameToLayer("Player")&& !isreach) // 콜라이더에 감지된 오브젝트의 레이어가 "Player" 이거나 isreach = false라면
+                {
+                    isreach = true;
+                    break;
+                }
+            }
+    
+           if (previousisreach != isreach) //전의 bool 값과 현재 bool값이 다르면
+           {
+               OnInteract?.Invoke(isreach); // 이벤트 호출
+               previousisreach = isreach;
+           }
+        }
+    
+        private void ImageInteract(bool state)
+        {
+            imageUI.enabled = state;
+        }
+    
+        private void OnDrawGizmosSelected() //기즈모
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, radius);
+        }
+    }
+}
+

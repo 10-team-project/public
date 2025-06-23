@@ -11,7 +11,6 @@ namespace KSH
         
         public float FatigueCur => resourceDegenerator.Resource.Cur;
 
-
         public void Sleep(float amount)
         {
             resourceDegenerator.Resource.Increase(amount);
