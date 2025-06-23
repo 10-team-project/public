@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using EditorAttributes;
+using Void = EditorAttributes.Void;
 
 namespace SHG
 {
@@ -16,7 +17,7 @@ namespace SHG
     [SerializeField, Validate("Material is none", nameof(hasNullMaterial), MessageMode.Error)]
     protected ItemData[] materials;
     [SerializeField, ReadOnly, Validate("Materials are empty", nameof(IsMaterialEmpty), MessageMode.Error)] 
-    protected bool emptyMaterialError;
+    protected Void emptyMaterialError;
 
     protected bool IsMaterialEmpty() => (this.Materials == null || this.Materials.Length == 0);
     protected bool hasNullMaterial()

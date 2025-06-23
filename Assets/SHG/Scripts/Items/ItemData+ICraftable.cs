@@ -4,7 +4,7 @@ using SHG;
 
 public partial class ItemData 
 {
-  public bool IsCraftable => this.Recipes != null && this.Recipes.Length > 1;
+  public bool IsCraftable => this.Recipes != null && this.Recipes.Length > 0;
   [HideInInspector]
   public ItemRecipeData[] Recipes => this.recipes;
 

@@ -10,13 +10,18 @@ public partial class Item
   public static Item CreateItemFrom(ItemData itemData)
   {
     Item item;
-    if (itemData is RecoveryItemData recoveryItemData) {
-      item = new RecoveryItem(recoveryItemData); 
-    }
-    else if (itemData is PlainItemData plainItemData) {
-      item = new PlainItem(itemData);
-    }
-    else {
+    switch (itemData)
+    {
+      case RecoveryItemData recoveryItemData:
+        item = new RecoveryItem(recoveryItemData); 
+        break;
+      case PlainItemData plainItemData:
+        item = new PlainItem(itemData);
+        break;
+      case EquipmentItemData equipmentItemData:
+        item = new EquipmentItem(equipmentItemData);
+        break;
+      default:
       throw (new NotImplementedException());
     }
     return (item);

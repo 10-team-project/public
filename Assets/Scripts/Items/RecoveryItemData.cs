@@ -1,15 +1,16 @@
 using System;
 using UnityEngine;
 using EditorAttributes;
+using Void = EditorAttributes.Void;
 
 [Serializable]
 [CreateAssetMenu (menuName = "ScriptableObjects/Items/Recovery Item")]
 public class RecoveryItemData : ItemData
 {
   [SerializeField, ReadOnly, Validate("Must have some efficacy", nameof(this.EmptyEfficacy), MessageMode.Error)]
-  bool emptyEfficacyCheck;
+  Void emptyEfficacyCheck;
   [SerializeField, ReadOnly, Validate("Amount must greater than zero", nameof(this.HasInvalidAmount), MessageMode.Warning)]
-  bool amountCheck;
+  Void amountCheck;
   public Efficacy[] Efficacies => this.efficacy;
   [SerializeField]
   Efficacy[] efficacy;
