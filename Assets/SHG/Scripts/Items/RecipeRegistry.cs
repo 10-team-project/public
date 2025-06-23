@@ -8,6 +8,7 @@ namespace SHG
   {
     const string ITEM_DIR = "Assets/SHG/Test/Items";
     const string RECIPE_DIR = "Assets/SHG/Test/Recipes";
+    public static readonly List<ItemRecipe> EMPTY_RECIPES = new (0);
     //TODO: 아이템 레시피 최적화 자료구조
     Dictionary<ItemData, List<ItemRecipe>> recipeTable;
     #if UNITY_EDITOR
@@ -19,7 +20,7 @@ namespace SHG
       if (this.recipeTable.TryGetValue(craftableItem, out List<ItemRecipe> recipes)) {
         return (recipes);
       }
-      return (new());
+      return (EMPTY_RECIPES);
     }
 
     protected override void Awake()

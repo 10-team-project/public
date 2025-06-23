@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Patterns;
+using SHG;
 
 public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Inventory>
 {
 
-  Dictionary<ItemData, int> items;
+  public Dictionary<ItemData, int> Items { get; private set; }
 #if UNITY_EDITOR
   [SerializeField]
   public List<string> ItemNamesForDebugging;
@@ -15,13 +16,46 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
   public Action<Inventory> WillChange { get; set; }
   public Action<Inventory> OnChanged { get; set; }
 
-  protected override void Awake()
+  public List<ItemRecipe> GetCraftableRecipes(ItemData product)
   {
-    base.Awake();
-    this.items = new ();
-#if UNITY_EDITOR
-    this.ItemNamesForDebugging = new();
-#endif
+    if (product.Recipes.Length == 0) {
+      return (RecipeRegistry.EMPTY_RECIPES);
+    }
+    var recipes = RecipeRegistry.Instance.GetRecipes(product);
+    if (recipes.Count == 0) {
+      return (RecipeRegistry.EMPTY_RECIPES);
+    }
+    List<ItemRecipe> craftableRecipes = new ();
+    foreach (var recipe in recipes) {
+      var required = recipe.RequiredItems;
+      bool isCraftable = true;
+      for (int i = 0; i < required.Count; ++i) {
+        var itemAndCount = required[i];
+        var currentCount = this.GetItemCount(itemAndCount.Item);
+        if (currentCount < itemAndCount.Count) {
+          isCraftable = false;
+          break;
+        }
+      }
+      if (isCraftable) {
+        craftableRecipes.Add(recipe);
+      }
+    }
+    return (craftableRecipes);
+  }
+
+  public Item CraftItem(ItemRecipe recipe)
+  {
+    foreach (var required in recipe.RequiredItems) {
+      if (!this.Items.TryGetValue(required.Item, out int count) ||
+        count < required.Count) {
+        throw (new ApplicationException($"not enough material for {recipe.RecipeData.Product}"));
+      }  
+      else {
+        this.Items[required.Item] = count - required.Count;
+      }
+    } 
+    return (Item.CreateItemFrom(recipe.RecipeData.Product));
   }
 
   public void AddItem(Item item)
@@ -30,11 +64,11 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 #if UNITY_EDITOR
     this.AddItemName(item.Data);
 #endif
-    if (this.items.TryGetValue(item.Data, out int itemCount)) {
-      this.items[item.Data] = itemCount + 1;
+    if (this.Items.TryGetValue(item.Data, out int itemCount)) {
+      this.Items[item.Data] = itemCount + 1;
     }
     else {
-      this.items.Add(item.Data, 1);
+      this.Items.Add(item.Data, 1);
     }
     this.OnChanged?.Invoke(this);
   }
@@ -49,7 +83,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 
   public int GetItemCount(ItemData itemData)
   {
-    if (this.items.TryGetValue(itemData, out int itemCount)) {
+    if (this.Items.TryGetValue(itemData, out int itemCount)) {
       return (itemCount);
     }
     else {
@@ -79,12 +113,21 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
 #endif
     if (itemCount > 0) {
-      this.items.Remove(itemData);
+      this.Items.Remove(itemData);
     }
     else {
-      this.items[itemData] = itemCount - 1;
+      this.Items[itemData] = itemCount - 1;
     }
     this.OnChanged?.Invoke(this);
     return (item);
+  }
+
+  protected override void Awake()
+  {
+    base.Awake();
+    this.Items = new ();
+#if UNITY_EDITOR
+    this.ItemNamesForDebugging = new();
+#endif
   }
 }
