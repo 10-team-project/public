@@ -942,7 +942,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemToCraft: {fileID: 0}
-  recipesForCraft: []
+  selectedRecipeData: {fileID: 0}
 --- !u!114 &1443797590
 MonoBehaviour:
   m_ObjectHideFlags: 0

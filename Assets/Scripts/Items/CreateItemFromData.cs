@@ -22,13 +22,10 @@ public partial class Item
     return (item);
   }
 
-  public static ItemObject CreateItemObjectFrom(ItemData itemData)
+  public static ItemObject CreateItemObjectFrom(Item item)
   {
-    if (itemData.Prefab == null) {
-      throw (new ArgumentException($"{itemData.Name} has no Prefab"));
-    }
-    var item = Item.CreateItemFrom(itemData);
-    var gameObject = GameObject.Instantiate(itemData.Prefab);
+    var gameObject = GameObject.Instantiate(item.Data.Prefab);
+    gameObject.name = item.Data.Name;
     gameObject.layer = ITEM_LAYER;
     //FIXME: 테스트 끝나면 직접 설정하기
     #if UNITY_EDITOR
@@ -42,6 +39,15 @@ public partial class Item
     itemObject.OnPickedUp += Inventory.Instance.AddItem;
     itemObject.SetItem(item);
     return (itemObject);
+  }
+
+  public static ItemObject CreateItemObjectFrom(ItemData itemData)
+  {
+    if (itemData.Prefab == null) {
+      throw (new ArgumentException($"{itemData.Name} has no Prefab"));
+    }
+    var item = Item.CreateItemFrom(itemData);
+    return (Item.CreateItemObjectFrom(item));
   }
 
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,8 @@ namespace SHG
   
     [SerializeField]
     ItemData itemToCraft;
-    [SerializeField, ReadOnly]
-    List<string> recipesForCraft;
+    [SerializeField]
+    ItemRecipeData selectedRecipeData;
 
     [Button("Get recipes test")]
     void GetRecipe()
@@ -23,14 +24,48 @@ namespace SHG
       var recipes = RecipeRegistry.Instance.GetRecipes(this.itemToCraft);
       
       Debug.Log($"found {recipes.Count} recipes for {this.itemToCraft.Name}");
+      this.PrintRecipes(recipes);
+    }
+
+    [Button ("Get current craftable recipes")]
+    void GetCraftableRecipes()
+    {
+      if (itemToCraft == null) {
+        Debug.Log("No Item is selected");
+        return ;
+      }
+      var recipes = Inventory.Instance.GetCraftableRecipes(this.itemToCraft);
+      Debug.Log($"craftable recipe: {recipes.Count} for {this.itemToCraft.Name} from current inventory");
+      this.PrintRecipes(recipes);
+    }
+
+    [Button("Craft test")]
+    void CraftItem()
+    {
+      if (this.selectedRecipeData == null) {
+        Debug.Log("No recipe to craft");
+        return ;
+      }
+      var recipe = new ItemRecipe(this.selectedRecipeData);
+      try {
+        var item = Inventory.Instance.CraftItem(recipe);      
+        Item.CreateItemObjectFrom(item);
+      }
+      catch (Exception e) {
+        Debug.LogError($"Fail to Craft: {e.Message}");
+      }
+    }
+
+    void PrintRecipes(List<ItemRecipe> recipes)
+    {
       var index = 0;
-      this.recipesForCraft = recipes.ConvertAll<string>(
+      recipes.ForEach(
         recipe => {
           var builder = new StringBuilder($"{++index} :");
           foreach (var itemAndCount in recipe.RequiredItems) {
             builder.Append($"[{itemAndCount.Item.Name}: {itemAndCount.Count}]");
           }
-          return (builder.ToString());
+          Debug.Log(builder.ToString());
         });
     }
   }

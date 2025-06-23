@@ -46,6 +46,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 
   public Item CraftItem(ItemRecipe recipe)
   {
+    this.WillChange?.Invoke(this);
     foreach (var required in recipe.RequiredItems) {
       if (!this.Items.TryGetValue(required.Item, out int count) ||
         count < required.Count) {
@@ -53,8 +54,14 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       }  
       else {
         this.Items[required.Item] = count - required.Count;
+        #if UNITY_EDITOR
+        for (int i = 0; i < required.Count; i++) {
+          this.RemoveItemName(required.Item);    
+        }
+        #endif
       }
     } 
+    this.OnChanged?.Invoke(this);
     return (Item.CreateItemFrom(recipe.RecipeData.Product));
   }
 
@@ -91,6 +98,17 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
   }
 
+  #if UNITY_EDITOR
+  void RemoveItemName(ItemData itemData)
+  {
+    var index = this.ItemNamesForDebugging.FindIndex(
+      name => name == itemData.Name);
+    if (index != -1) {
+      this.ItemNamesForDebugging.RemoveAt(index);
+    }
+  }
+  #endif
+
   public Item GetItem(ItemData itemData)
   {
     int itemCount = this.GetItemCount(itemData);
@@ -98,19 +116,9 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
     }
     this.WillChange?.Invoke(this);
-    Item item;
-    if (itemData is RecoveryItemData recoveryItemData) {
-      item = new RecoveryItem(recoveryItemData); 
-    }
-    else {
-      throw (new NotImplementedException());
-    }
+    Item item = Item.CreateItemFrom(itemData);
 #if UNITY_EDITOR
-    var index = this.ItemNamesForDebugging.FindIndex(
-      name => name == itemData.Name);
-    if (index != -1) {
-      this.ItemNamesForDebugging.RemoveAt(index);
-    }
+    this.RemoveItemName(itemData);
 #endif
     if (itemCount > 0) {
       this.Items.Remove(itemData);

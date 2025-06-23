@@ -1,10 +1,12 @@
 using System;
 using UnityEngine;
+using EditorAttributes;
 
 public class ItemObject : MonoBehaviour, IInteractable, IPickupable
 {
   public event Action<Item> OnPickedUp;
-  private Item item;
+  [SerializeField, ShowInInspector]
+  Item item;
 
   public void SetItem(Item item) 
   {
