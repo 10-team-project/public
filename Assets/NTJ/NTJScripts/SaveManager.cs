@@ -1,27 +1,30 @@
 using UnityEngine;
 
-public static class SaveManager
+namespace NTJ
 {
-    private const string SaveKey = "SavedDay";
-
-    public static void SaveGame(int currentDay)
+    public static class SaveManager
     {
-        PlayerPrefs.SetInt(SaveKey, currentDay);
-        PlayerPrefs.Save();
-    }
+        private const string SaveKey = "SavedDay";
 
-    public static int LoadSavedDay() 
-    {
-        return PlayerPrefs.GetInt(SaveKey, 1); // 기본값: Day 1
-    }
+        public static void SaveGame(int currentDay)
+        {
+            PlayerPrefs.SetInt(SaveKey, currentDay);
+            PlayerPrefs.Save();
+        }
 
-    public static bool HasSavedData()
-    {
-        return PlayerPrefs.HasKey(SaveKey);
-    }
+        public static int LoadSavedDay()
+        {
+            return PlayerPrefs.GetInt(SaveKey, 1); // 기본값: Day 1
+        }
 
-    public static void ClearSave()
-    {
-        PlayerPrefs.DeleteKey(SaveKey);
+        public static bool HasSavedData()
+        {
+            return PlayerPrefs.HasKey(SaveKey);
+        }
+
+        public static void ClearSave()
+        {
+            PlayerPrefs.DeleteKey(SaveKey);
+        }
     }
 }
