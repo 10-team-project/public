@@ -49,7 +49,7 @@ namespace SHG
     void CreateUI()
     {
       var label = new Label();
-      label.text = "Invetory";
+      label.text = "Inventory";
       label.AddToClassList("window-label");
       this.Add(label);
       this.itemsContainer = new VisualElement();
