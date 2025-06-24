@@ -1,54 +1,23 @@
 using System;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  class SlotItem: VisualElement
-  {
-    public ItemData itemData { get; private set; }
-    public bool IsEmpty => (this.itemData == null);
-    VisualElement itemImage;
-    Label itemLabel;
-
-    public SlotItem() 
-    { 
-      this.CreateUI();
-    }
-
-    public void SetData(ItemData itemData)
-    {
-      this.itemData = itemData;
-      this.itemImage.style.backgroundImage = new StyleBackground(itemData.Image);
-      this.itemLabel.text = String.Format($"{itemData.Name}");
-    }
-
-    public void RemoveData()
-    {
-      this.itemData = null;
-      this.itemImage.style.backgroundImage = null;
-      this.itemLabel.text = null;
-    }
-
-    void CreateUI()
-    {
-      this.AddToClassList("quick-slot-window-item-container");
-      this.itemImage = new VisualElement();
-      this.itemImage.AddToClassList("inventory-window-item-image"); 
-      this.Add(this.itemImage);
-      this.itemLabel = new Label();
-      this.itemLabel.AddToClassList("inventory-window-item-label");
-      this.Add(this.itemLabel);
-    }
-      
-  }
   public class QuickSlotWindow : VisualElement, IHideableWindow
   {
     public bool IsVisiable { get; private set; }
-    SlotItem[] slots;
+    public bool IsDraggingItem => this.currentDraggingTarget != null;
 
-    public QuickSlotWindow()
+    ItemBox[] slots;
+    Vector2 dragStartPosition;
+    ItemBox currentDraggingTarget;
+    ItemBox floatingItemBox;
+
+    public QuickSlotWindow(ItemBox floatingItemBox)
     {
       this.name = "quick-slot-window";     
+      this.floatingItemBox = floatingItemBox;
       this.AddToClassList("window-container");
       this.CreateUI();
       Inventory.Instance.OnChanged += this.OnChangeInventory;
@@ -59,54 +28,115 @@ namespace SHG
     {
       var itemCount = inventory.QuickSlotItems.Count;
       for (int i = 0; i < this.slots.Length; i++) {
-        if (i < itemCount) {
-          var itemData = inventory.QuickSlotItems[i];
-          if (itemData != null) {
-            this.slots[i].SetData(itemData);
-          }
-          else {
-            this.slots[i].RemoveData();
-          }
-        }
-        else {
-          this.slots[i].RemoveData();
-        }
-      } 
+        this.slots[i].RemoveData();
+      }
+      for (int i = 0; i < itemCount; i++) {
+        var item = inventory.QuickSlotItems[i];
+        this.slots[i].SetData(new ItemAndCount { Item = item, Count = 1});
+      }
     }
 
     void CreateUI()
     {
-      this.slots = new SlotItem[Inventory.QUICKSLOT_COUNT];
+      this.slots = new ItemBox[Inventory.QUICKSLOT_COUNT];
       for (int i = 0; i < this.slots.Length; i++) {
-        this.slots[i] = new SlotItem();
+        this.slots[i] = new ItemBox(this);
+        this.slots[i].RegisterCallback<PointerDownEvent>(this.OnPointerDown);
+        this.slots[i].RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+        this.slots[i].RegisterCallback<PointerUpEvent>(this.OnPointerUp);
         this.Add(this.slots[i]);
       }
     }
 
-    VisualElement CreateItemBox(ItemData itemData)
+    void OnPointerDown(PointerDownEvent pointerDownEvent)
     {
-      var itemContainer = new VisualElement();
-      itemContainer.AddToClassList("quick-slot-window-item-container");
-      var itemImage = new VisualElement();
-      itemImage.AddToClassList("inventory-window-item-image"); 
-      var itemLabel = new Label();
-      itemLabel = new Label();
-      itemLabel.AddToClassList("inventory-window-item-label");
-      itemImage.style.backgroundImage = new StyleBackground(itemData.Image);
-      itemLabel.text = String.Format($"{itemData.Name}");
-      return (itemContainer);
+      if (!this.IsDraggingItem) {
+        var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
+        this.dragStartPosition = pointerDownEvent.position;
+        if (boxElement != null &&
+          boxElement.ItemData != ItemAndCount.None) {
+          this.floatingItemBox.SetData(boxElement.ItemData);
+          this.floatingItemBox.style.left = this.dragStartPosition.x;
+          this.floatingItemBox.style.top = this.dragStartPosition.y;
+          this.floatingItemBox.Show();
+          boxElement.AddToClassList("inventory-item-box-inactive");
+          this.currentDraggingTarget = boxElement;
+          boxElement.CapturePointer(pointerDownEvent.pointerId);
+        }
+        else {
+          Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
+        }
+      }
+      else {
+        Debug.Log($"Already dragging item");
+      }
+    }
+
+    ItemBox FindSelectedItemBox(VisualElement toFound)
+    {
+      return (Array.Find(this.slots, slot => slot == toFound));
+    }
+
+    void OnPointerMove(PointerMoveEvent pointerMoveEvent)
+    {
+      if (this.IsDraggingItem) {
+        var offset = new Vector2(
+          pointerMoveEvent.position.x,
+          pointerMoveEvent.position.y) - this.dragStartPosition;
+        this.floatingItemBox.UpdateOffset(offset); 
+      }
+    }
+
+    void OnPointerUp(PointerUpEvent pointerUpEvent)
+    {
+      if (this.IsDraggingItem &&
+        pointerUpEvent.target == this.currentDraggingTarget) {
+        this.currentDraggingTarget.RemoveFromClassList("inventory-item-box-inactive");
+        this.floatingItemBox.UpdateOffset(Vector2.zero);
+        this.floatingItemBox.Hide();
+        VisualElement target = this.panel.Pick(pointerUpEvent.position);
+        bool isDroppingToInventory = this.IsDroppingToInventory(target);
+        if (isDroppingToInventory &&
+          this.currentDraggingTarget.ItemData.Item is EquipmentItemData equipmentItemData) {
+          this.OnDropItemToInventory(equipmentItemData); 
+        }
+        this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
+        this.currentDraggingTarget = null;
+        this.dragStartPosition = Vector2.zero;
+      }
+    }
+
+    void OnDropItemToInventory(EquipmentItemData equipmentItemData)
+    {
+      Debug.Log("OnDropItemToInventory");
+      Inventory.Instance.MoveItemFromQuickSlot(equipmentItemData);
+    }
+
+    bool IsDroppingToInventory(VisualElement target)
+    {
+      if (target is InventoryWindow) {
+        return (true);
+      }
+      ItemBox destBox = ItemBox.FindItemBoxFrom(target);
+      if (destBox != null &&
+        destBox.ParentWindow is InventoryWindow) {
+        return (true);
+      }
+      return (false);
     }
 
     public void Show()
     {
       this.IsVisiable = true;
-      this.visible = true;
+      this.style.display = DisplayStyle.Flex;
+      this.BringToFront();
     }
 
     public void Hide()
     {
       this.IsVisiable = false;
-      this.visible = false;
+      this.style.display = DisplayStyle.None;
+      this.SendToBack();
     }
   }
 }

@@ -1,77 +1,24 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  class ItemBox: VisualElement, IHideableWindow
-  {
-    public ItemAndCount ItemData { get; private set; }
-    VisualElement itemImage;
-    Label itemLabel;
-    public bool IsVisiable { get; private set; }
-
-    public ItemBox(ItemAndCount itemData)
-    { 
-      this.ItemData = itemData;
-      this.CreateUI();
-      this.AddToClassList("inventory-window-item-box");
-    }
-
-    public void UpdateOffset(Vector2 offset)
-    {
-      this.style.translate = new Translate(offset.x, offset.y);
-    }
-
-    void CreateUI()
-    {
-      this.AddToClassList("inventory-window-item-box");
-      this.itemImage = new VisualElement();
-      this.itemImage.AddToClassList("inventory-window-item-image"); 
-      this.itemLabel = new Label();
-      this.itemLabel.AddToClassList("inventory-window-item-label");
-      this.itemImage.style.backgroundImage = new StyleBackground(this.ItemData.Item.Image);
-      if (this.ItemData.Count < 2) {
-        itemLabel.text = this.ItemData.Item.Name;
-      }
-      else {
-        itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
-      }
-      this.Add(itemImage);
-      this.Add(itemLabel);
-    }
-
-    public void Show()
-    {
-      this.IsVisiable = true;
-      this.visible = true;
-      this.BringToFront();
-      
-    }
-
-    public void Hide()
-    {
-      this.IsVisiable = false;
-      this.visible = false;
-      this.SendToBack();
-    }
-  }
-
   public class InventoryWindow : VisualElement, IHideableWindow
   {
     public bool IsVisiable { get; private set; }
     VisualElement itemsContainer;
-    public Action<ItemAndCount> OnStartDragItem;
     VisualElement currentDraggingTarget;
     bool IsDraggingItem => this.currentDraggingTarget != null;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     Vector2 dragStartPosition;
+    ItemBox floatingItemBox;
 
-    public InventoryWindow()
+    public InventoryWindow(ItemBox floatingItemBox)
     {
       this.name = "inventory-window-container";
       this.itemBoxTable = new ();
+      this.floatingItemBox = floatingItemBox;
       this.AddToClassList("window-container");
       this.CreateUI();
     }
@@ -81,7 +28,7 @@ namespace SHG
       Inventory.Instance.OnChanged += this.OnInventoryUpdated;
       this.OnInventoryUpdated(Inventory.Instance);
       this.IsVisiable = true;
-      this.visible = true;
+      this.style.display = DisplayStyle.Flex;
       this.BringToFront();
     }
 
@@ -89,7 +36,7 @@ namespace SHG
     {
       Inventory.Instance.OnChanged -= this.OnInventoryUpdated;
       this.IsVisiable = false;
-      this.visible = false;
+      this.style.display = DisplayStyle.None;
       this.SendToBack();
     }
 
@@ -136,7 +83,8 @@ namespace SHG
     //TODO: 각 아이템 UI를 objectpool에 보관
     VisualElement CreateItembox(ItemAndCount itemAndCount)
     {
-      ItemBox itemBox = new ItemBox(itemAndCount);
+      ItemBox itemBox = new ItemBox(this);
+      itemBox.SetData(itemAndCount);
       itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
       itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
       itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
@@ -144,26 +92,21 @@ namespace SHG
       return (itemBox);
     }
 
-    ItemBox FindItemBoxFrom(VisualElement target)
-    {
-      if (target is ItemBox itemBox) {
-        return (itemBox);
-      }
-      return (target.GetFirstAncestorOfType<ItemBox>());
-    }
-
     void OnPointerDown(PointerDownEvent pointerDownEvent)
     {
       if (!this.IsDraggingItem) {
-        var boxElement = this.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
-        this.dragStartPosition = pointerDownEvent.position;
+        var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
         if (boxElement != null &&
           this.itemBoxTable.TryGetValue(boxElement,
             out ItemAndCount itemData)) {
-          boxElement.AddToClassList("inventory-window-floating-itembox");
+          this.dragStartPosition = pointerDownEvent.position;
+          boxElement.AddToClassList("inventory-item-box-inactive");
+          this.floatingItemBox.SetData(boxElement.ItemData);
+          this.floatingItemBox.style.left = this.dragStartPosition.x;
+          this.floatingItemBox.style.top = this.dragStartPosition.y;
+          this.floatingItemBox.Show();
           this.currentDraggingTarget = boxElement;
           boxElement.CapturePointer(pointerDownEvent.pointerId);
-          this.OnStartDragItem?.Invoke(itemData);
         }
         else {
           Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
@@ -177,27 +120,50 @@ namespace SHG
     void OnPointerMove(PointerMoveEvent pointerMoveEvent)
     {
       if (this.IsDraggingItem) {
-        var boxElement = this.FindItemBoxFrom(pointerMoveEvent.target as VisualElement);
-        if (boxElement == this.currentDraggingTarget &&
-          boxElement is ItemBox itemBox) {
-          var offset = new Vector2(
-            pointerMoveEvent.position.x,
-            pointerMoveEvent.position.y) - this.dragStartPosition;
-          itemBox.UpdateOffset(offset); 
-        }
+        var offset = new Vector2(
+          pointerMoveEvent.position.x,
+          pointerMoveEvent.position.y) - this.dragStartPosition;
+        this.floatingItemBox.UpdateOffset(offset); 
       } 
     }
 
     void OnPointerUp(PointerUpEvent pointerUpEvent)
     {
-      if (pointerUpEvent.target == this.currentDraggingTarget) {
-        this.currentDraggingTarget.RemoveFromClassList("inventory-window-floating-itembox");
-        if (this.currentDraggingTarget is ItemBox itemBox) {
-          itemBox.UpdateOffset(Vector2.zero);
+      if (this.IsDraggingItem) {
+        this.floatingItemBox.UpdateOffset(Vector2.zero);
+        this.currentDraggingTarget.RemoveFromClassList("inventory-item-box-inactive");
+        this.floatingItemBox.Hide();
+        VisualElement target = this.panel.Pick(pointerUpEvent.position);
+        bool isDroppingToQuickSlot = this.IsDroppingToQuickSlot(target);
+        if (isDroppingToQuickSlot && 
+          this.itemBoxTable.TryGetValue(this.currentDraggingTarget, out ItemAndCount itemAndCount) &&
+          itemAndCount.Item is EquipmentItemData equipmentItemData) {
+          this.OnDropItemToQuickSlot(equipmentItemData); 
         }
         this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
         this.currentDraggingTarget = null;
+        this.dragStartPosition = Vector2.zero;
       }
+    }
+
+    bool IsDroppingToQuickSlot(VisualElement target)
+    {
+      if (target is QuickSlotWindow quickSlotWindow) {
+        return (true);
+      }
+      else {
+        ItemBox foundBox = ItemBox.FindItemBoxFrom(target);
+        if (foundBox != null &&
+          foundBox.ParentWindow is QuickSlotWindow) {
+          return (true);
+        } 
+      }
+      return (false);
+    }
+
+    void OnDropItemToQuickSlot(EquipmentItemData equipmentItemData)
+    {
+      Inventory.Instance.MoveItemToQuickSlot(equipmentItemData);
     }
   }
 }
