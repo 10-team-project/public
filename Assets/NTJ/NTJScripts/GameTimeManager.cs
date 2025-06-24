@@ -1,7 +1,7 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 
 namespace NTJ
@@ -17,7 +17,7 @@ namespace NTJ
         public CanvasGroup topUITextGroup;
 
         [Header("Time Settings")]
-        public int timeScale = 60; // 현실 1초 = 게임 1분
+        public int timeScale = 30; // 현실 1초 = 게임 1분
         private float gameTime;    // 누적된 게임 시간
         private int currentDay = 1;
 
@@ -26,12 +26,20 @@ namespace NTJ
 
         void Start()
         {
+            if (SaveManager.HasSavedData())
+            {
+                currentDay = SaveManager.LoadSavedDay();
+            }
+            else
+            {
+                currentDay = 1;
+            }
+
             gameTime = 9 * 3600f; // 오전 9시부터 시작
             UpdateDayText();
 
             fadePanel.gameObject.SetActive(false);
             fadePanel.color = new Color(0, 0, 0, 0);
-
             dayTextPanel.SetActive(false);
         }
 
@@ -48,8 +56,14 @@ namespace NTJ
 
             if (hours >= 24 || hours < 9)
             {
-                StartCoroutine(SleepAndStartNextDay());
+                StartCoroutine(SleepAndStartNextDay(false)); // 강제 수면
             }
+        }
+
+        public void OnSleepButtonPressed()
+        {
+            if (isSleeping)
+                StartCoroutine(SleepAndStartNextDay(true)); // 수동 수면
         }
 
         void UpdateDayText()
@@ -57,7 +71,7 @@ namespace NTJ
             dayText.text = $"Day - {currentDay}";
         }
 
-        IEnumerator SleepAndStartNextDay()
+        IEnumerator SleepAndStartNextDay(bool isManual)
         {
             isSleeping = true;
 
@@ -70,11 +84,8 @@ namespace NTJ
             {
                 t += Time.deltaTime;
                 float alpha = Mathf.Lerp(0, 1, t / fadeDuration);
-
                 fadePanel.color = new Color(0, 0, 0, alpha);
-
                 topUITextGroup.alpha = 1 - alpha;
-
                 yield return null;
             }
 
@@ -89,17 +100,22 @@ namespace NTJ
             // 다음 날 시간 리셋
             gameTime = 9 * 3600f;
 
+            // 체력 회복
+            float maxHP = GameStateManager.Instance.maxHP;
+            GameStateManager.Instance.playerHP = isManual ?
+                maxHP * 0.7f : maxHP * 0.3f;
+
+            // 자동 저장
+            SaveManager.SaveGame(currentDay);
+
             // Fade Out
             t = 0;
             while (t < fadeDuration)
             {
                 t += Time.deltaTime;
                 float alpha = Mathf.Lerp(1, 0, t / fadeDuration);
-
                 fadePanel.color = new Color(0, 0, 0, alpha);
-
                 topUITextGroup.alpha = 1 - alpha;
-
                 yield return null;
             }
 
