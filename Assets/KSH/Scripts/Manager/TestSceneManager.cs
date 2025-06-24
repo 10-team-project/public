@@ -5,7 +5,7 @@ using Patterns;
 using UnityEngine.SceneManagement;
 namespace KSH
 {
-    public class SceneManager : SingletonBehaviour<AchieveManager> //싱글톤
+    public class TestSceneManager : SingletonBehaviour<TestSceneManager> //싱글톤
     {
         protected override void Awake()
         {
@@ -13,9 +13,9 @@ namespace KSH
             DontDestroyOnLoad(gameObject);
         }
 
-        public void MainGameScene()
+        public void MainGameScene(string sceneName)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("Test");
+            UnityEngine.SceneManagement.SceneManager.LoadScene("sceneName");
         }
     }   
 }

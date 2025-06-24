@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 namespace KSH
 {
@@ -20,6 +21,7 @@ namespace KSH
         [SerializeField] private TextMeshProUGUI DescriptionText;
         [SerializeField] private CharacterType CharacterType;
         private Image image;
+        private SceneManager sceneManager;
 
         private void Start()
         {
@@ -49,6 +51,12 @@ namespace KSH
         public void OnPointerExit(PointerEventData eventData)
         {
             UIAlpha(0.5f);
+        }
+
+        public void OnClickButton()
+        {
+            PlayerPrefs.SetInt("PlayerSelect", (int)CharacterType); // 클릭하면 해당 UI의 캐릭터 타입을 저장
+            KSH.TestSceneManager.Instance.MainGameScene("Test");
         }
     }
 }
