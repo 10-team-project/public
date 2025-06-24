@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using EditorAttributes;
 
@@ -9,6 +10,10 @@ namespace SHG
     ItemData itemToAdd;
     [SerializeField]
     ItemData itemToGet;
+    [SerializeField]
+    ItemData itemToMoveQuickSlot;
+    [SerializeField]
+    ItemData itemToGetFromQuickSlot;
 
     [Button ("Test add item")]
     void AddItemTest()
@@ -17,7 +22,8 @@ namespace SHG
         Debug.Log("itemToAdd is none");
         return ;
       }
-      Inventory.Instance.AddItem(this.itemToAdd);
+      var item = Item.CreateItemFrom(this.itemToAdd);
+      Inventory.Instance.AddItem(item);
     }
 
     [Button ("Test get item")]
@@ -31,11 +37,8 @@ namespace SHG
         Debug.Log($"No {this.itemToGet.Name} in Inventory");
         return ;
       }
-      var itemObject = Inventory.Instance.GetItemAsGameObject(this.itemToGet);
-      var itemHolder = itemObject.GetComponent<ItemHolder>();
-      itemHolder.OnDestroyed += (item) => {
-        Debug.Log($"{item.Name} is Destroyed");
-      };
+      var item = Inventory.Instance.GetItem(this.itemToGet);
+      Item.CreateItemObjectFrom(item.Data);
     }
 
     [Button ("Test print Inventory items")]
@@ -44,12 +47,55 @@ namespace SHG
       this.PrintInventory(Inventory.Instance);
     }
 
+    [Button ("Move item to quickslot")]
+    void TestMoveItemToQuickSlot()
+    {
+      if (this.itemToMoveQuickSlot == null) {
+        Debug.Log($"not selected item to move to quickslot");
+        return ;
+      }
+      if (Inventory.Instance.GetItemCount(this.itemToMoveQuickSlot) == 0) {
+        Debug.Log($"{this.itemToMoveQuickSlot.Name} is not in Inventory");
+        return ;
+      }
+      try {
+        Inventory.Instance.MoveItemToQuickSlot(this.itemToMoveQuickSlot);
+      }
+      catch (Exception e) {
+        Debug.LogError(e.Message);
+      }
+    }
+
+    [Button ("Get item from quickslot")]
+    void TestGetItemFromQuickSlot()
+    {
+      if (this.itemToGetFromQuickSlot == null) {
+        Debug.Log($"not selected item to get from quickslot");
+        return ;
+      }
+      if (Inventory.Instance.GetItemCouontInQuickSlot(
+          this.itemToGetFromQuickSlot) == 0) {
+        Debug.Log($"{this.itemToGetFromQuickSlot.Name} is not in quickslot");
+        return ;
+      }
+      try {
+        Inventory.Instance.MoveItemFromQuickSlot(this.itemToGetFromQuickSlot); 
+      } catch (Exception e) {
+        Debug.LogError(e.Message);
+      }
+    }
+
     void PrintInventory(Inventory inventory)
     {
       Debug.Log("Inventory items");
       for (int i = 0; i < Inventory.Instance.ItemNamesForDebugging.Count; i++) {
         var itemName = Inventory.Instance.ItemNamesForDebugging[i];
         Debug.Log($"{i + 1}: {itemName}"); 
+      }
+      Debug.Log("Quick slot items");
+      var quickslotItems = Inventory.Instance.ItemNamesForDebuggingInQuickSlot;
+      for (int i = 0; i < quickslotItems.Count; i++) {
+        Debug.Log($"{i + 1}: {quickslotItems[i]}"); 
       }
     }
 
