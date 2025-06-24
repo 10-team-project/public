@@ -1106,9 +1106,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1639890287}
-        m_TargetAssemblyTypeName: KSH.SceneManager, Assembly-CSharp
-        m_MethodName: MainGameScene
+      - m_Target: {fileID: 676099860}
+        m_TargetAssemblyTypeName: KSH.SelectCharacter, Assembly-CSharp
+        m_MethodName: OnClickButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1960,7 +1960,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   LockChar: {fileID: 131980211}
   UnlockChar: {fileID: 676099855}
-  istest: 0
 --- !u!4 &1562661765
 Transform:
   m_ObjectHideFlags: 0
@@ -2315,9 +2314,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1639890287}
-        m_TargetAssemblyTypeName: KSH.SceneManager, Assembly-CSharp
-        m_MethodName: MainGameScene
+      - m_Target: {fileID: 1977111009}
+        m_TargetAssemblyTypeName: KSH.SelectCharacter, Assembly-CSharp
+        m_MethodName: OnClickButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
