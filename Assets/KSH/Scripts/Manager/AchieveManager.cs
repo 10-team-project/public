@@ -8,17 +8,18 @@ namespace KSH
 {
  public class AchieveManager : SingletonBehaviour<AchieveManager> //싱글톤
  {
-     public GameObject LockChar;
-     public GameObject UnlockChar;
+     
+    [SerializeField]private GameObject LockChar; //잠겨있는 캐릭터 옵젝
+    [SerializeField]private GameObject UnlockChar; // 기본으로 잠기지않는 캐릭터 옵젝
  
-     private const string Achieve = "Unlock";
+     private const string Achieve = "Unlock"; //변경되지 않는 값
      
      protected override void Awake()
      {
          base.Awake();
          DontDestroyOnLoad(gameObject);
          
-         if (!PlayerPrefs.HasKey("MyData"))
+         if (!PlayerPrefs.HasKey("MyData")) //만약 MyData라는 키가 없으면
          {
              Init();
          }
@@ -26,8 +27,8 @@ namespace KSH
  
      private void Init()
      {
-         PlayerPrefs.SetInt("MyData", 1);
-         PlayerPrefs.SetInt(Achieve, 0);
+         PlayerPrefs.SetInt("MyData", 1); //MyData는 1을 저장한다.
+         PlayerPrefs.SetInt(Achieve, 0); // Achieve는 0을 저장한다.
      }
  
      private void Start()
@@ -53,9 +54,9 @@ namespace KSH
      }
 
      [Button("ClearPlayerPrefs(Test)")]
-     private void ClearPlayerPrefs()
+     private void ClearPlayerPrefs() //테스트용 초기화
      {
-         PlayerPrefs.DeleteAll();
+         PlayerPrefs.DeleteAll(); //데이터 삭제
      }
  }   
 }

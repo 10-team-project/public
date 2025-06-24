@@ -15,7 +15,7 @@ namespace KSH
 
         public void MainGameScene(string sceneName)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName); //sceneName 씬으로 이동
         }
     }   
 }
