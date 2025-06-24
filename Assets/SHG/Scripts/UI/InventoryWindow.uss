@@ -49,6 +49,12 @@
   padding: 10px;
   width: 200px;
   height: 200px;
+  opacity: 1;
+}
+
+.inventory-window-item-box-inactive
+{
+  opacity: 0.5;
 }
 
 .inventory-window-item-image
@@ -62,4 +68,9 @@
 {
   font-size: 20px;
   color: green;
+}
+
+.inventory-window-floaing-itembox
+{
+  opacity: 0.5;
 }

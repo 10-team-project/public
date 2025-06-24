@@ -7,6 +7,7 @@ namespace SHG
   {
      public ItemData Item;
      public int Count;
+     public static ItemAndCount None = new ItemAndCount { Item = null, Count = 0 };
   }
 
   [Serializable]
