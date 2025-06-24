@@ -8,6 +8,7 @@ namespace SHG
   {
     VisualElement root;
     InventoryWindow inventoryWindow;
+    QuickSlotWindow quickSlotWindow;
     Button inventoryButton;
 
     void Awake()
@@ -26,6 +27,8 @@ namespace SHG
       this.inventoryButton.style.top = Length.Percent(5);
       this.inventoryButton.style.right = Length.Percent(5);
       this.inventoryButton.RegisterCallback<ClickEvent>(this.OnClickInventoryButton);
+      this.quickSlotWindow = new QuickSlotWindow();
+      this.root.Add(this.quickSlotWindow);
       this.root.Add(this.inventoryButton);
     }
 

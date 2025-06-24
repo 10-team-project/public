@@ -119,9 +119,11 @@ namespace SHG
     {
       foreach (var pair in inventory.Items) {
         var (item, count) = pair;
-        var box = this.CreateItembox(
-          new ItemAndCount { Item = item, Count = count });
-        this.itemsContainer.Add(box);
+        if (count > 0) {
+          var box = this.CreateItembox(
+            new ItemAndCount { Item = item, Count = count });
+          this.itemsContainer.Add(box);
+        }
       } 
     }
 
