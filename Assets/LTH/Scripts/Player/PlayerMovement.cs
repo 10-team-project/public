@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using LTH;
+using UnityEditor.Experimental.GraphView;
 
-namespace LTH 
+namespace LTH
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour, IInputLockHandler
     {
         [SerializeField] float moveSpeed;
         [SerializeField] float runSpeed;
@@ -20,7 +21,7 @@ namespace LTH
         private bool IsGrounded()
         {
             Ray ray = new Ray(transform.position, Vector3.down);
-            return Physics.Raycast(ray, 0.5f, LayerMask.GetMask("Ground"));
+            return Physics.Raycast(ray, 1.03f, LayerMask.GetMask("Ground"));
         }
 
         private void Start()
@@ -31,6 +32,8 @@ namespace LTH
 
         private void Update()
         {
+            if (InputManager.instance.IsBlocked(InputType.Move)) return;
+
             PlayerInput();
         }
 
@@ -102,6 +105,7 @@ namespace LTH
             {
                 isOnLadder = false;
                 _rigid.useGravity = true;
+                InputManager.instance.EndInput(this);
             }
         }
 
@@ -109,6 +113,7 @@ namespace LTH
         {
             if (other.CompareTag("Ladder"))
             {
+                InputManager.instance.StartInput(this);
                 isOnLadder = true;
                 _rigid.useGravity = false;
                 _rigid.velocity = Vector3.zero;
@@ -119,9 +124,25 @@ namespace LTH
         {
             if (other.CompareTag("Ladder"))
             {
+                InputManager.instance.EndInput(this);
                 isOnLadder = false;
                 _rigid.useGravity = true;
             }
+        }
+
+        public bool IsInputBlocked(InputType inputType)
+        {
+            return inputType == InputType.Move; // 나는 이동만 막음
+        }
+
+        public bool OnInputStart()
+        {
+            return true;
+        }
+
+        public bool OnInputEnd()
+        {
+            return true;
         }
     }
 }
