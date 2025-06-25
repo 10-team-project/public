@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,11 +9,26 @@ using KSH;
 
 namespace SHG
 {
+  public enum GameMode
+  {
+    MainMenu,
+    CharacterSelect,
+    Loading,
+    Farming,
+    Shelter,
+    Ending
+  }
+
   public class App : SingletonBehaviour<App>
   {
-    public bool IsEditor { get; set; }
-    public static bool IsEnabled { get; private set;}
+    public bool IsEditor { get; private set; }
+    static bool IsGamemodeControlEnabled;
     GameModeManager gameModeManager;
+    public IGameMode CurrentMode => this.gameModeManager.CurrentMode;
+    List<ISingleton<MonoBehaviour>> managers;
+    public TestSceneManager SceneManager { get; private set; }
+    GameMode startMode = GameMode.MainMenu;
+    
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void CreateApp()
     {
@@ -22,7 +38,7 @@ namespace SHG
       }
       Inventory.CreateInstance();
       DontDestroyOnLoad(app);
-      if (!IsEnabled) {
+      if (!IsGamemodeControlEnabled) {
         return ;
       }
     }
@@ -31,12 +47,42 @@ namespace SHG
     {
       base.Awake();
       this.IsEditor = false;
+      IsGamemodeControlEnabled = true;
       #if UNITY_EDITOR
-      if (IsEnabled) {
-        this.IsEditor = true;
-        this.gameModeManager = new GameModeManager();
+      this.IsEditor = true;
+      IsGamemodeControlEnabled = EditorPrefs.GetBool("IsAppEnabled");
+      this.managers = new ();
+      this.SceneManager = TestSceneManager.CreateInstance();
+      this.managers.Add(this.SceneManager as ISingleton<MonoBehaviour>);
+      this.gameModeManager = GameModeManager.CreateInstance();
+      foreach (var manager in this.managers) {
+          if (manager is MonoBehaviour singletonBehaviour) {
+            singletonBehaviour.transform.parent = this.transform;
+          }
+        }
+      if (IsGamemodeControlEnabled) {
+        this.gameModeManager.CurrentMode = this.selectGameMode(this.startMode);
       }
       #endif
+    }
+
+    public void ChangeMode(GameMode gameMode)
+    {
+      var nextGameMode = this.selectGameMode(gameMode); 
+      this.gameModeManager.CurrentMode = nextGameMode;
+    }
+
+    IGameMode selectGameMode(GameMode gameMode)
+    {
+      switch (gameMode)
+      {
+        case GameMode.MainMenu:
+          return (MainMenuMode.Instance);
+        case GameMode.CharacterSelect:
+          return (CharacterSelectMode.Instance);
+        default: 
+          throw (new NotImplementedException());
+      }
     }
 
     #if UNITY_EDITOR
@@ -44,23 +90,25 @@ namespace SHG
     [MenuItem ("App/Gamemode control/enable")]
     static void Enable()
     {
-      IsEnabled = true;
+      IsGamemodeControlEnabled = true;
+      EditorPrefs.SetBool("IsAppEnabled", true);
     }
 
     [MenuItem("App/Gamemode control/enable", true)]
     private static bool EnableValidate() {
-      return (IsEnabled);
+      return (!IsGamemodeControlEnabled);
     }
 
     [MenuItem ("App/Gamemode control/disable")]
     static void Disable()
     {
-      IsEnabled = false;
+      IsGamemodeControlEnabled = false;
+      EditorPrefs.SetBool("IsGamemodeControlEnabled", false);
     }
 
     [MenuItem("App/Gamemode control/disable", true)]
     private static bool DisableValidate() {
-      return (!IsEnabled);
+      return (IsGamemodeControlEnabled);
     }
     #endif
   }

@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/KSH/Scene/Test.unity
     guid: 43d66f7914b49d04891f7218e47a83d0
+  - enabled: 1
+    path: Assets/SHG/Scenes/MainMenuScene.unity
+    guid: f37b6e286d838e4adaf520e774dbb701
   m_configObjects: {}
