@@ -18,6 +18,17 @@ namespace LTH
         private bool isRunning;
         private bool isOnLadder = false;
 
+        private Vector3 ladderPosition;
+        private Vector3 ladderDirection;
+
+        private bool isLadderEnterZone = false;
+        private bool isLadderExitZone = false;
+        private bool isAtLadderTop = false;
+
+        private LadderClimber ladderClimber;
+
+        [HideInInspector] public bool IsOnLadder => isOnLadder;
+
         private bool IsGrounded()
         {
             Ray ray = new Ray(transform.position, Vector3.down);
@@ -28,20 +39,31 @@ namespace LTH
         {
             _rigid = GetComponent<Rigidbody>();
             _rigid.freezeRotation = true;
+
+            ladderClimber = new LadderClimber(_rigid, climbSpeed, EndClimb);
         }
 
         private void Update()
         {
-            if (InputManager.instance.IsBlocked(InputType.Move)) return;
+            if (!isOnLadder && InputManager.Instance.IsBlocked(InputType.Move)) return;
 
             PlayerInput();
+
+            if (isLadderEnterZone && Input.GetKeyDown(KeyCode.F))
+            {
+                StartClimbing(ladderPosition, ladderDirection);
+            }
+            else if (isOnLadder && Input.GetKeyDown(KeyCode.F) && isLadderExitZone)
+            {
+                EndClimb();
+            }
         }
 
         private void FixedUpdate()
         {
             if (isOnLadder)
             {
-                ClimbLadder();
+                ladderClimber.Climb(moveInput, IsGrounded(), isAtLadderTop);
             }
             else
             {
@@ -54,12 +76,21 @@ namespace LTH
             float moveX = Input.GetAxisRaw("Horizontal");
             float moveY = Input.GetAxisRaw("Vertical");
 
-            moveInput = new Vector3(moveX, moveY, 0f);
+            if (Mathf.Abs(moveX) > 0 && Mathf.Abs(moveY) > 0)
+            {
+                moveInput = Vector3.zero;
+            }
+            else
+            {
+                moveInput = new Vector3(moveX, moveY, 0f);
+            }
+
             isRunning = Input.GetKey(KeyCode.LeftShift);
         }
 
         private void Move()
         {
+
             float speed;
 
             if (isRunning)
@@ -72,12 +103,23 @@ namespace LTH
             }
 
             Vector3 move = Vector3.right * moveInput.x * speed;
-            _rigid.MovePosition(_rigid.position + move * Time.fixedDeltaTime);
-            PlayerCam(moveInput.x);
+
+            Ray ray = new Ray(transform.position, move.normalized);
+            float rayDistance = 0.6f;
+
+            bool isBlocked = Physics.Raycast(ray, rayDistance, LayerMask.GetMask("Blocker"));
+
+            if (!isBlocked)
+            {
+                _rigid.MovePosition(_rigid.position + move * Time.fixedDeltaTime);
+                PlayerCam(moveInput.x);
+            }
         }
 
         private void PlayerCam(float dir)
         {
+            if (isOnLadder) return;
+
             Vector3 lookDir = Vector3.zero;
 
             if (dir > 0)
@@ -96,27 +138,42 @@ namespace LTH
             }
         }
 
-        private void ClimbLadder()
+        public void StartClimbing(Vector3 pos, Vector3 forward)
         {
-            Vector3 climb = Vector3.up * moveInput.y * climbSpeed;
-            _rigid.velocity = climb;
+            InputManager.Instance.StartInput(this);
+            isOnLadder = true;
+            _rigid.useGravity = false;
+            _rigid.velocity = Vector3.zero;
 
-            if (IsGrounded())
-            {
-                isOnLadder = false;
-                _rigid.useGravity = true;
-                InputManager.instance.EndInput(this);
-            }
+            Vector3 targetPos = new Vector3(pos.x, transform.position.y, pos.z) - forward * 0.3f;
+            targetPos.y += 0.1f;
+            transform.position = targetPos;
+
+            transform.rotation = Quaternion.LookRotation(forward);
+        }
+
+        public void EndClimb()
+        {
+            isOnLadder = false;
+            _rigid.useGravity = true;
+            InputManager.Instance.EndInput(this);
         }
 
         private void OnTriggerEnter(Collider other)
         {
-            if (other.CompareTag("Ladder"))
+            if (other.CompareTag("LadderDownStart") || other.CompareTag("LadderUpStart"))
             {
-                InputManager.instance.StartInput(this);
-                isOnLadder = true;
-                _rigid.useGravity = false;
-                _rigid.velocity = Vector3.zero;
+                ladderPosition = other.transform.position;
+                ladderDirection = other.transform.forward;
+                isLadderEnterZone = true;
+            }
+            else if (other.CompareTag("LadderDownEnd"))
+            {
+                isLadderExitZone = true;
+            }
+            else if (other.CompareTag("LadderUpEnd"))
+            {
+                isAtLadderTop = true;
             }
         }
 
@@ -124,15 +181,19 @@ namespace LTH
         {
             if (other.CompareTag("Ladder"))
             {
-                InputManager.instance.EndInput(this);
+                InputManager.Instance.EndInput(this);
                 isOnLadder = false;
                 _rigid.useGravity = true;
+            }
+            else if (other.CompareTag("LadderUpEnd"))
+            {
+                isAtLadderTop = false;
             }
         }
 
         public bool IsInputBlocked(InputType inputType)
         {
-            return inputType == InputType.Move; // 나는 이동만 막음
+            return inputType == InputType.Move;
         }
 
         public bool OnInputStart()
