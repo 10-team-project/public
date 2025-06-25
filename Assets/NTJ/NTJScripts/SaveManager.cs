@@ -1,30 +1,46 @@
 using UnityEngine;
+using System.IO;
 
 namespace NTJ
 {
     public static class SaveManager
     {
-        private const string SaveKey = "SavedDay";
+        private static string SavePath => Application.persistentDataPath + "/save.json";
 
         public static void SaveGame(int currentDay)
         {
-            PlayerPrefs.SetInt(SaveKey, currentDay);
-            PlayerPrefs.Save();
+            GameData data = new GameData
+            {
+                savedDay = currentDay,
+                playerHP = GameStateManager.Instance.playerHP,
+                maxHP = GameStateManager.Instance.maxHP
+            };
+
+            string json = JsonUtility.ToJson(data, true);
+            File.WriteAllText(SavePath, json);
         }
 
-        public static int LoadSavedDay()
+        public static void LoadGame()
         {
-            return PlayerPrefs.GetInt(SaveKey, 1); // ±âº»°ª: Day 1
+            if (!File.Exists(SavePath)) return;
+
+            string json = File.ReadAllText(SavePath);
+            GameData data = JsonUtility.FromJson<GameData>(json);
+
+            GameStateManager.Instance.playerHP = data.playerHP;
+            GameStateManager.Instance.maxHP = data.maxHP;
+            GameTimeManager.InitialDay = data.savedDay;
         }
 
         public static bool HasSavedData()
         {
-            return PlayerPrefs.HasKey(SaveKey);
+            return File.Exists(SavePath);
         }
 
         public static void ClearSave()
         {
-            PlayerPrefs.DeleteKey(SaveKey);
+            if (File.Exists(SavePath))
+                File.Delete(SavePath);
         }
     }
 }

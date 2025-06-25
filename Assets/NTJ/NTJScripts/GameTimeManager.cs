@@ -23,19 +23,21 @@ namespace NTJ
 
         private bool isSleeping = false;
         private float fadeDuration = 2f;
+        public static int InitialDay = 1;
 
         void Start()
         {
             if (SaveManager.HasSavedData())
             {
-                currentDay = SaveManager.LoadSavedDay();
+                SaveManager.LoadGame();
+                currentDay = InitialDay;
             }
             else
             {
                 currentDay = 1;
             }
 
-            gameTime = 9 * 3600f; // 오전 9시부터 시작
+            gameTime = 9 * 3600f;
             UpdateDayText();
 
             fadePanel.gameObject.SetActive(false);
