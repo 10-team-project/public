@@ -7,10 +7,11 @@ using SHG;
 public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Inventory>
 {
 
+  public const int QUICKSLOT_COUNT = 4;
   public Dictionary<ItemData, int> Items { get; private set; }
   public Action<Inventory> WillChange { get; set; }
   public Action<Inventory> OnChanged { get; set; }
-  List<ItemData> quickSlotItems;
+  public List<ItemData> QuickSlotItems { get; private set;}
 
 #if UNITY_EDITOR
   [SerializeField]
@@ -21,8 +22,8 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 
   public ItemData[] PeakItemsInQuickSlot()
   {
-    var items = new ItemData[this.quickSlotItems.Count];
-    this.quickSlotItems.CopyTo(items);
+    var items = new ItemData[this.QuickSlotItems.Count];
+    this.QuickSlotItems.CopyTo(items);
     return (items);
   }
 
@@ -32,8 +33,13 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       var currentCount = this.GetItemCount(itemData);
       if (currentCount > 0) {
         this.WillChange?.Invoke(this);
-        this.quickSlotItems.Add(equipmentItemData);
-        this.Items[itemData] = currentCount - 1;
+        this.QuickSlotItems.Add(equipmentItemData);
+        if (currentCount > 1) {
+          this.Items[itemData] = currentCount - 1;
+        }
+        else {
+          this.Items.Remove(itemData);
+        }
         #if UNITY_EDITOR
         this.RemoveItemName(itemData);
         this.AddQuickSlotItemName(itemData);
@@ -52,10 +58,10 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
   public void MoveItemFromQuickSlot(ItemData itemData)
   {
     if (itemData is EquipmentItemData equipmentItemData) {
-      var index = this.quickSlotItems.IndexOf(equipmentItemData);
+      var index = this.QuickSlotItems.IndexOf(equipmentItemData);
       if (index != -1) {
         this.WillChange?.Invoke(this);
-        this.quickSlotItems.RemoveAt(index);
+        this.QuickSlotItems.RemoveAt(index);
         if (this.Items.TryGetValue(itemData, out int currentCount)) {
           this.Items[itemData] = currentCount + 1;
         }
@@ -145,8 +151,8 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
   public int GetItemCouontInQuickSlot(ItemData itemData)
   {
     int count = 0;
-    for (int i = 0; i < this.quickSlotItems.Count; i++) {
-      if (this.quickSlotItems[i] == itemData) {
+    for (int i = 0; i < this.QuickSlotItems.Count; i++) {
+      if (this.QuickSlotItems[i] == itemData) {
         count += 1;
       } 
     }
@@ -226,7 +232,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
   {
     base.Awake();
     this.Items = new ();
-    this.quickSlotItems = new ();
+    this.QuickSlotItems = new ();
 #if UNITY_EDITOR
     this.ItemNamesForDebugging = new();
     this.ItemNamesForDebuggingInQuickSlot = new();

@@ -1,4 +1,5 @@
-using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
@@ -7,10 +8,17 @@ namespace SHG
   {
     public bool IsVisiable { get; private set; }
     VisualElement itemsContainer;
+    VisualElement currentDraggingTarget;
+    bool IsDraggingItem => this.currentDraggingTarget != null;
+    Dictionary<VisualElement, ItemAndCount> itemBoxTable;
+    Vector2 dragStartPosition;
+    ItemBox floatingItemBox;
 
-    public InventoryWindow()
+    public InventoryWindow(ItemBox floatingItemBox)
     {
       this.name = "inventory-window-container";
+      this.itemBoxTable = new ();
+      this.floatingItemBox = floatingItemBox;
       this.AddToClassList("window-container");
       this.CreateUI();
     }
@@ -20,7 +28,7 @@ namespace SHG
       Inventory.Instance.OnChanged += this.OnInventoryUpdated;
       this.OnInventoryUpdated(Inventory.Instance);
       this.IsVisiable = true;
-      this.visible = true;
+      this.style.display = DisplayStyle.Flex;
       this.BringToFront();
     }
 
@@ -28,7 +36,7 @@ namespace SHG
     {
       Inventory.Instance.OnChanged -= this.OnInventoryUpdated;
       this.IsVisiable = false;
-      this.visible = false;
+      this.style.display = DisplayStyle.None;
       this.SendToBack();
     }
 
@@ -41,7 +49,7 @@ namespace SHG
     void CreateUI()
     {
       var label = new Label();
-      label.text = "Invetory";
+      label.text = "Inventory";
       label.AddToClassList("window-label");
       this.Add(label);
       this.itemsContainer = new VisualElement();
@@ -58,8 +66,11 @@ namespace SHG
     {
       foreach (var pair in inventory.Items) {
         var (item, count) = pair;
-        var box = this.CreateItembox(item, count);
-        this.itemsContainer.Add(box);
+        if (count > 0) {
+          var box = this.CreateItembox(
+            new ItemAndCount { Item = item, Count = count });
+          this.itemsContainer.Add(box);
+        }
       } 
     }
 
@@ -70,27 +81,89 @@ namespace SHG
     }
 
     //TODO: 각 아이템 UI를 objectpool에 보관
-    VisualElement CreateItembox(ItemData itemData, int count)
+    VisualElement CreateItembox(ItemAndCount itemAndCount)
     {
-      if (itemData.Image == null) {
-        throw (new ArgumentException($"{itemData.Name} has no image for ui"));
-      }
-      VisualElement box = new VisualElement();
-      box.AddToClassList("inventory-window-item-box");
-      VisualElement itemImage = new VisualElement();
-      itemImage.style.backgroundImage = new StyleBackground(itemData.Image);
-      itemImage.AddToClassList("inventory-window-item-image"); 
-      box.Add(itemImage);
-      var itemLabel = new Label();
-      if (count < 2) {
-        itemLabel.text = itemData.Name;
+      ItemBox itemBox = new ItemBox(this);
+      itemBox.SetData(itemAndCount);
+      itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
+      itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
+      itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+      this.itemBoxTable[itemBox] = itemAndCount;
+      return (itemBox);
+    }
+
+    void OnPointerDown(PointerDownEvent pointerDownEvent)
+    {
+      if (!this.IsDraggingItem) {
+        var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
+        if (boxElement != null &&
+          this.itemBoxTable.TryGetValue(boxElement,
+            out ItemAndCount itemData)) {
+          this.dragStartPosition = pointerDownEvent.position;
+          boxElement.AddToClassList("inventory-item-box-inactive");
+          this.floatingItemBox.SetData(boxElement.ItemData);
+          this.floatingItemBox.style.left = this.dragStartPosition.x;
+          this.floatingItemBox.style.top = this.dragStartPosition.y;
+          this.floatingItemBox.Show();
+          this.currentDraggingTarget = boxElement;
+          boxElement.CapturePointer(pointerDownEvent.pointerId);
+        }
+        else {
+          Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
+        }
       }
       else {
-        itemLabel.text = String.Format($"{itemData.Name} ({count})");
+        Debug.Log($"Already dragging item");
       }
-      itemLabel.AddToClassList("inventory-window-item-label");
-      box.Add(itemLabel);
-      return (box);
+    }
+
+    void OnPointerMove(PointerMoveEvent pointerMoveEvent)
+    {
+      if (this.IsDraggingItem) {
+        var offset = new Vector2(
+          pointerMoveEvent.position.x,
+          pointerMoveEvent.position.y) - this.dragStartPosition;
+        this.floatingItemBox.UpdateOffset(offset); 
+      } 
+    }
+
+    void OnPointerUp(PointerUpEvent pointerUpEvent)
+    {
+      if (this.IsDraggingItem) {
+        this.floatingItemBox.UpdateOffset(Vector2.zero);
+        this.currentDraggingTarget.RemoveFromClassList("inventory-item-box-inactive");
+        this.floatingItemBox.Hide();
+        VisualElement target = this.panel.Pick(pointerUpEvent.position);
+        bool isDroppingToQuickSlot = this.IsDroppingToQuickSlot(target);
+        if (isDroppingToQuickSlot && 
+          this.itemBoxTable.TryGetValue(this.currentDraggingTarget, out ItemAndCount itemAndCount) &&
+          itemAndCount.Item is EquipmentItemData equipmentItemData) {
+          this.OnDropItemToQuickSlot(equipmentItemData); 
+        }
+        this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
+        this.currentDraggingTarget = null;
+        this.dragStartPosition = Vector2.zero;
+      }
+    }
+
+    bool IsDroppingToQuickSlot(VisualElement target)
+    {
+      if (target is QuickSlotWindow quickSlotWindow) {
+        return (true);
+      }
+      else {
+        ItemBox foundBox = ItemBox.FindItemBoxFrom(target);
+        if (foundBox != null &&
+          foundBox.ParentWindow is QuickSlotWindow) {
+          return (true);
+        } 
+      }
+      return (false);
+    }
+
+    void OnDropItemToQuickSlot(EquipmentItemData equipmentItemData)
+    {
+      Inventory.Instance.MoveItemToQuickSlot(equipmentItemData);
     }
   }
 }

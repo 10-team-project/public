@@ -1,0 +1,18 @@
+.window-container {
+    padding: 20px;
+}
+
+.window-label {
+    font-size: 30px;
+    -unity-text-align: middle-center;
+    align-self: center;
+    color: black;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.window-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
