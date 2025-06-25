@@ -228,6 +228,16 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     return (item);
   }
 
+  public Item PeakItem(ItemData itemData)
+  {
+    int itemCount = this.GetItemCount(itemData);
+    if (itemCount < 1) {
+      throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
+    }
+
+    return (Item.CreateItemFrom(itemData));
+  }
+
   protected override void Awake()
   {
     base.Awake();
