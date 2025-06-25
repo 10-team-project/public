@@ -6,12 +6,12 @@ using LTH;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField] float interactRange; // 상호작용 범위
+    [SerializeField] float interactRange;
 
-    [SerializeField] string[] interactLayerNames; // 상호작용을 볼 수 있는 레이어 설정 (한 가지가 아니기 때문에 배열로 배치)
+    [SerializeField] string[] interactLayerNames;
     private LayerMask interactLayer;
 
-    [SerializeField] float interactionCooldown = 0.5f; // 연속으로 아이템 획득 방지 쿨타임
+    [SerializeField] float interactionCooldown = 0.5f;
     private float lastInteractionTime = float.MinValue;
 
 
@@ -24,7 +24,6 @@ public class PlayerInteraction : MonoBehaviour
     {
         AllInteraction();
     }
-
 
     private void AllInteraction()
     {

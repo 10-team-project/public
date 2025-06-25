@@ -17,9 +17,9 @@ namespace LTH
 
         public void Interact()
         {
-            if (InputManager.instance.IsBlocked(InputType.Interaction)) return;
+            if (InputManager.Instance.IsBlocked(InputType.Interaction)) return;
 
-            InputManager.instance.StartInput(this);
+            InputManager.Instance.StartInput(this);
             dialogueText.text = message;
             dialoguePanel.SetActive(true);
         }
@@ -29,7 +29,7 @@ namespace LTH
             if (dialoguePanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
             {
                 dialoguePanel.SetActive(false);
-                InputManager.instance.EndInput(this);
+                InputManager.Instance.EndInput(this);
             }
         }
 

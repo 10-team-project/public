@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using LTH;
+using Patterns;
+using UnityEngine;
 
 namespace LTH
 {
@@ -13,24 +14,9 @@ namespace LTH
         All
     }
 
-
-    public class InputManager : MonoBehaviour
+    public class InputManager : SingletonBehaviour<InputManager>
     {
-        public static InputManager instance { get; private set; }
-
         private readonly List<IInputLockHandler> activeLocks = new();
-
-        private void Awake()
-        {
-            if (instance == null)
-            {
-                instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
 
         public void StartInput(IInputLockHandler startInputRequest)
         {
