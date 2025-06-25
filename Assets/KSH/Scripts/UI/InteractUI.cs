@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace KSH
 {
-    public class InteractUI : MonoBehaviour
+    public class InteractUI : MonoBehaviour, IInteractableUI
     {
         [Header("InteractUI")]
         [SerializeField] private Canvas interactUI; // UI이미지
@@ -23,7 +23,7 @@ namespace KSH
         void Start()
         {
             interactUI.enabled = false;
-            OnInteract += ImageInteract; // 이벤트에 연결
+            OnInteract += Interact; // 이벤트에 연결
         }
     
         void Update()
@@ -31,7 +31,7 @@ namespace KSH
             Detect();
         }
     
-        private void Detect()
+        public void Detect()
         {
             isreach = false;
             Vector3 center = transform.position; // 스크립트가 붙은 오브젝트의 위치를 센터로 함 
@@ -44,7 +44,7 @@ namespace KSH
                 {
                     isreach = true;
                     break;
-                }
+                } 
             }
     
            if (previousisreach != isreach) //전의 bool 값과 현재 bool값이 다르면
@@ -54,7 +54,7 @@ namespace KSH
            }
         }
     
-        private void ImageInteract(bool state)
+        public void Interact(bool state) //bool값에 따른 상호작용
         {
             interactUI.enabled = state;
         }
