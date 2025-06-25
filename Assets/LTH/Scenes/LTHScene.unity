@@ -574,7 +574,7 @@ GameObject:
   - component: {fileID: 516880512}
   m_Layer: 15
   m_Name: DownStart
-  m_TagString: LadderDownStart
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1458,7 +1458,7 @@ GameObject:
   - component: {fileID: 1241448473}
   m_Layer: 15
   m_Name: UpEnd
-  m_TagString: LadderUpEnd
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1511,7 +1511,7 @@ GameObject:
   - component: {fileID: 1523339235}
   m_Layer: 15
   m_Name: DownEnd
-  m_TagString: LadderDownEnd
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1843,7 +1843,7 @@ GameObject:
   - component: {fileID: 1990747002}
   m_Layer: 15
   m_Name: UpStart
-  m_TagString: LadderUpStart
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
