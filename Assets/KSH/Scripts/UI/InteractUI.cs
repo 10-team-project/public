@@ -10,7 +10,7 @@ namespace KSH
     public class InteractUI : MonoBehaviour
     {
         [Header("InteractUI")]
-        [SerializeField] private Image imageUI; // UI이미지
+        [SerializeField] private Canvas interactUI; // UI이미지
         
         [Header("Interact Radius")]
         [SerializeField] private float radius; //상호작용할 원의 범위
@@ -22,7 +22,7 @@ namespace KSH
         
         void Start()
         {
-            imageUI.enabled = false;
+            interactUI.enabled = false;
             OnInteract += ImageInteract; // 이벤트에 연결
         }
     
@@ -56,7 +56,7 @@ namespace KSH
     
         private void ImageInteract(bool state)
         {
-            imageUI.enabled = state;
+            interactUI.enabled = state;
         }
     
         private void OnDrawGizmosSelected() //기즈모

@@ -8,11 +8,13 @@ namespace SHG
   [Serializable]
   struct TeleportPointPair: IEquatable<TeleportPointPair>
   {
+    public string Name { get; private set; }
     public MapTeleportPoint PointA { get; private set; }
     public MapTeleportPoint PointB { get; private set; } 
 
-    public TeleportPointPair(MapTeleportPoint pointA, MapTeleportPoint pointB)
+    public TeleportPointPair(string name, MapTeleportPoint pointA, MapTeleportPoint pointB)
     {
+      this.Name = name;
       this.PointA = pointA;
       this.PointB = pointB;
     }
@@ -60,19 +62,19 @@ namespace SHG
 
   public class MapTeleporter : MonoBehaviour
   {
+    public const string TELEPORT_POINT_TAG = "TeleportPoint";
+    public const string TELEPORT_POINT_LAYER = "Teleport";
     [SerializeField]
-    List<TeleportPointPair> teleportPoints = new ();
+    Dictionary<string, TeleportPointPair> teleportPoints = new ();
 
-    public void AddPointPair(MapTeleportPoint pointA, MapTeleportPoint pointB)
+    public void AddPointPair(string name, MapTeleportPoint pointA, MapTeleportPoint pointB)
     {
-      if (this.teleportPoints.FindIndex(
-          pair => pair.Contains(pointA) || pair.Contains(pointB)
-          ) != -1) {
-        throw (new ArgumentException($""));
+      if (this.teleportPoints.ContainsKey(name)) {
+        throw (new ArgumentException($"TeleportPoint for {name} is exist"));
       }
       pointA.OnTrigger += this.OnTriggerTeleportFrom;
       pointB.OnTrigger += this.OnTriggerTeleportFrom;
-      this.teleportPoints.Add(new TeleportPointPair (pointA, pointB));
+      this.teleportPoints.Add(name, new TeleportPointPair (name, pointA, pointB));
     }
 
     void OnTriggerTeleportFrom(MapTeleportPoint point, Transform playerTransform)
@@ -92,12 +94,49 @@ namespace SHG
 
     TeleportPointPair FindPair(MapTeleportPoint point)
     {
-      return (this.teleportPoints.Find(pair => pair.Contains(point)));
+      foreach (var (name, pointPair) in this.teleportPoints) {
+        if (pointPair.Contains(point)) {
+          return (pointPair);
+        } 
+      }
+      throw (new ApplicationException($"Unable to find teleport point for {point}"));
     }
 
     void MovePlayerTo(Vector3 position, Transform playerTransform)
     {
       playerTransform.position = position;
+    }
+
+    void Start()
+    {
+      this.FindAllTeleportPointInMap();
+    }
+
+    void FindAllTeleportPointInMap()
+    {
+      var points = GameObject.FindGameObjectsWithTag("TeleportPoint");
+      var addedNames = new HashSet<string>();
+
+      foreach (var point in points) {
+        if (addedNames.Contains(point.name)) {
+          continue;
+        }
+        var found = Array.Find(points, p => 
+          p != point && p.name == point.name 
+          );
+        if (found == null) {
+          Debug.LogError($"No teleport pair for {point.name}");
+          continue;
+        }
+        var pointA = point.GetComponent<MapTeleportPoint>();
+        var pointB = found.GetComponent<MapTeleportPoint>();
+        if (pointA == null || pointB == null) {
+          Debug.LogError($"points not have {nameof(MapTeleportPoint)} component {found.name} {point.name}");
+          continue;
+        }
+        this.AddPointPair(point.name, pointA, pointB);
+        addedNames.Add(point.name);
+      }
     }
   }
 }

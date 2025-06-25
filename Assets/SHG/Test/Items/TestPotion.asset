@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
   m_Name: TestPotion
   m_EditorClassIdentifier: 
+  recipes: []
   itemName: Potion
   image: {fileID: 21300000, guid: ba886817d0b1a0251bb01e0afd3beec5, type: 3}
   prefab: {fileID: 3925492623532481384, guid: 39d74b60ce06ec816889f8b5fbc50e59, type: 3}
@@ -19,4 +20,6 @@ MonoBehaviour:
   recipes: []
   efficacy:
   - Stat: 0
+    Amount: 30
+  - Stat: 1
     Amount: 30
