@@ -55,6 +55,20 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
   }
 
+  public void UseItem(IUsable item)
+  {
+    if (item is RecoveryItem recoveryItem) {
+      //FIXME: 여기에 회복아이템 코드 작성
+    }
+
+
+    else {
+      throw (new NotImplementedException());
+    }
+
+  }
+
+
   public void MoveItemFromQuickSlot(ItemData itemData)
   {
     if (itemData is EquipmentItemData equipmentItemData) {

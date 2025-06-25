@@ -127,17 +127,7 @@ namespace SHG
 
     void UseItem(IUsable usableItem)
     {
-      if (usableItem is RecoveryItem recoveryItem) {
-        //FIXME: 여기에 회복아이템 코드 작성
-        var recovery = recoveryItem.Recovery();
-        Debug.Log($"Use Item {recoveryItem.Data.Name}");
-        foreach (var data in recovery) {
-          Debug.Log($"Recover {data.Stat} - {data.Amount}");
-        }
-      }
-      else {
-        throw (new NotImplementedException());
-      }
+      Inventory.Instance.UseItem(usableItem);
     }
 
     void OnDragPointerButtonDown(PointerDownEvent pointerDownEvent, ItemBox boxElement, ItemAndCount itemAndCount)
