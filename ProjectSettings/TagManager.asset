@@ -8,8 +8,8 @@ TagManager:
   - TeleportPoint
   - LadderDownStart
   - LadderDownEnd
-  - ' LadderUpStart'
-  - ' LadderUpEnd '
+  - LadderUpStart
+  - LadderUpEnd
   layers:
   - Default
   - TransparentFX
