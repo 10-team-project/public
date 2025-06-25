@@ -7,6 +7,7 @@ namespace KSH
 {
     public class HP : MonoBehaviour
     {
+        [SerializeField] private ResourceDegenerator resourceDegenerator;
         [Header("Assign a script")] [Tooltip("No changes needed inside ResourceDecay")] 
         [SerializeField] private Resource resource;
         [SerializeField] private Hunger hunger;
@@ -68,6 +69,11 @@ namespace KSH
                     resource.Decrease(HpLossFromFatigue);
                 }
             }
+        }
+
+        public void Heal(float amount)
+        {
+            resourceDegenerator.Resource.Increase(amount);
         }
     }
 }

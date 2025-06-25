@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KSH;
 using UnityEngine;
 using Patterns;
 using SHG;
@@ -54,6 +55,39 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       throw (new ArgumentException($"{itemData.Name} is not equipment item, invalid move to quickslot"));
     }
   }
+
+  public void UseItem(IUsable item)
+  {
+    if (item is RecoveryItem recoveryItem)
+    {
+      var recoveryItemData = recoveryItem.Recovery();
+
+      foreach (var data in recoveryItemData)
+      {
+        switch (data.Stat)
+        {
+          case TempCharacter.Stat.Hp:
+            PlayerStatManager.Instance.HP.Heal(data.Amount);
+            break;
+          case TempCharacter.Stat.Hydration:
+            PlayerStatManager.Instance.Thirsty.Drink(data.Amount);
+            break;
+          case TempCharacter.Stat.Hunger:
+            PlayerStatManager.Instance.Hunger.Eat(data.Amount);
+            break;
+          case TempCharacter.Stat.Fatigue:
+            PlayerStatManager.Instance.Fatigue.Sleep(data.Amount);
+            break;
+        }
+      }
+    }
+
+    else {
+      throw (new NotImplementedException());
+    }
+
+  }
+
 
   public void MoveItemFromQuickSlot(ItemData itemData)
   {
@@ -226,6 +260,16 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
     this.OnChanged?.Invoke(this);
     return (item);
+  }
+
+  public Item PeakItem(ItemData itemData)
+  {
+    int itemCount = this.GetItemCount(itemData);
+    if (itemCount < 1) {
+      throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
+    }
+
+    return (Item.CreateItemFrom(itemData));
   }
 
   protected override void Awake()
