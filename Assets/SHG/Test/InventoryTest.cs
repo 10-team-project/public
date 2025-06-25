@@ -88,6 +88,7 @@ namespace SHG
     void PrintInventory(Inventory inventory)
     {
       Debug.Log("Inventory items");
+     #if UNITY_EDITOR
       for (int i = 0; i < Inventory.Instance.ItemNamesForDebugging.Count; i++) {
         var itemName = Inventory.Instance.ItemNamesForDebugging[i];
         Debug.Log($"{i + 1}: {itemName}"); 
@@ -97,6 +98,7 @@ namespace SHG
       for (int i = 0; i < quickslotItems.Count; i++) {
         Debug.Log($"{i + 1}: {quickslotItems[i]}"); 
       }
+      #endif
     }
 
     // Start is called before the first frame update
