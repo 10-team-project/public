@@ -12,5 +12,17 @@ namespace KSH
         [SerializeField] private GameObject NamePanel;
         [SerializeField] private Text dialogueText;
         [SerializeField] private Text NameText;
+        [SerializeField] private bool isAction;
+
+        public void Action()
+        {
+            if(isAction){isAction = false;}
+            else
+            {
+                isAction = true;
+                NameText.text = "Pikachu";
+                dialogueText.text = "Hi ! My name is Pikachu. Let's go together!!!!!";
+            }
+        }
     }   
 }
