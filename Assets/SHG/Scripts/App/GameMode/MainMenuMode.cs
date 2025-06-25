@@ -31,27 +31,35 @@ namespace SHG
       yield return (null);
     }
 
+    public void OnClickSelectCharacter()
+    {
+      App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
+    }
+
     public IEnumerator OnStart()
     {
       Debug.Log("MainMenuMode OnStart");
       //TODO: 스플래시 스크린 보여주기
       //      메인 메뉴 BGM 재생
       //      세이브 목록 불러오기
+
+      if (App.Instance.IsEditor && App.Instance.IsGamemodeControl &&
+        SceneManager.GetActiveScene().name != "MainMenuScene") {
+        var loadScene = App.Instance.SceneManager.GameLoadScene(this.SceneName);
+        while (!loadScene.isDone) {
+          yield return (null);
+        }
+      }
+
+      //FIXME: Change to main menu script
+      Button button = GameObject.Find("GameStartButton").GetComponent<Button>();
+      button.onClick.AddListener(this.OnClickSelectCharacter);
       yield return (null);
     }
 
     public void OnStartFromEditor()
     {
       Debug.Log("MainMenuMode OnStartFromEditor load MainMenuScene\nTo disable Click: App > Gamemode control > disable ");
-      if (SceneManager.GetActiveScene().name != "MainMenuScene") {
-        App.Instance.SceneManager.GameLoadScene(this.SceneName);
-      }
-      //FIXME: Change to main menu script
-      Debug.Log(GameObject.Find("GameStartButton"));
-      Button button = GameObject.Find("GameStartButton").GetComponent<Button>();
-      button.onClick.AddListener(() => {
-        App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
-        });
     }
   }
 }

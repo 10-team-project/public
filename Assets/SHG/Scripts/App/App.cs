@@ -21,6 +21,7 @@ namespace SHG
   public class App : SingletonBehaviour<App>
   {
     public bool IsEditor { get; private set; }
+    public bool IsGamemodeControl => IsGamemodeControlEnabled;
     static bool IsGamemodeControlEnabled;
     GameModeManager gameModeManager;
     public IGameMode CurrentMode => this.gameModeManager.CurrentMode;

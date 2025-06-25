@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using SHG;
 
 namespace KSH
 {
@@ -60,6 +61,9 @@ namespace KSH
 
         public void OnClickButton() //버튼 눌렀을 때
         {
+          var mode = App.Instance.CurrentMode as CharacterSelectMode;
+          mode.OnSelectCharacter(null);
+          return ;
             PlayerPrefs.SetInt("PlayerSelect", (int)CharacterType); // 클릭하면 해당 UI의 캐릭터 타입을 저장
             StartCoroutine(LoadScene());
         }

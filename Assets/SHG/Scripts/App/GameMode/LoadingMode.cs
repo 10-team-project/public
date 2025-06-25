@@ -34,7 +34,6 @@ namespace SHG
       Debug.Log("LoadingState OnEnd");
       // TODO: 로딩 스크린 숨기기
       yield return (null);
-      Debug.Log($"OnEnd {this.OnLoaded}");
       this.loadingUI.SetActive(false);
       this.OnLoaded?.Invoke();
       this.OnLoaded = null;
@@ -43,10 +42,19 @@ namespace SHG
     public IEnumerator OnStart()
     {
       Debug.Log("LoadingState OnStart");
-      // TODO: 로딩 스크린 보여주기
       this.loadingUI.SetActive(true);
-      yield return (new WaitForSeconds(2));
-      yield return (null);
+      if (this.SceneToLoad != null) {
+        var loadedScene = App.Instance.SceneManager.GameLoadScene(this.SceneToLoad);
+        while (!loadedScene.isDone) {
+          yield return null;
+        }
+        yield return (new WaitForSeconds(1));
+        yield return (this.OnEnd());
+      }
+      else {
+        yield return (this.OnEnd());
+        Debug.LogWarning("No Scene to load in LoadingMode");
+      }
     }
 
     public void OnStartFromEditor()
