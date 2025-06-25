@@ -7,8 +7,9 @@ namespace SHG
     public enum Stat
     {
       Hp,
-      Stamina,
-      Hydration
+      Hunger,
+      Hydration,
+      Fatigue,
     }
   }
 }
