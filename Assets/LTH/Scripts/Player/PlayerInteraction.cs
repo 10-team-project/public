@@ -36,7 +36,7 @@ public class PlayerInteraction : MonoBehaviour
             IInteractable interactable = hit.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                Debug.Log($"아이템 {hit.gameObject.name} E키를 눌러 줍기");
+                //Debug.Log($"아이템 {hit.gameObject.name} E키를 눌러 줍기");
 
                 if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractionTime > interactionCooldown)
                 {
