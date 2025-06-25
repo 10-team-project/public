@@ -1458,7 +1458,7 @@ GameObject:
   - component: {fileID: 1241448473}
   m_Layer: 15
   m_Name: UpEnd
-  m_TagString: LadderUpEnd
+  m_TagString: ' LadderUpEnd '
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1843,7 +1843,7 @@ GameObject:
   - component: {fileID: 1990747002}
   m_Layer: 15
   m_Name: UpStart
-  m_TagString: LadderUpStart
+  m_TagString: ' LadderUpStart'
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

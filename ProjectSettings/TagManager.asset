@@ -5,10 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ladder
+  - TeleportPoint
   - LadderDownStart
   - LadderDownEnd
-  - LadderUpStart
-  - LadderUpEnd
+  - ' LadderUpStart'
+  - ' LadderUpEnd '
   layers:
   - Default
   - TransparentFX
