@@ -1,4 +1,5 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/SHG/Scripts/UI/MainUIPlaceHolder.uss?fileID=7433441132597879392&amp;guid=7a9be6cca1d30d3acb61a758bd7b7b53&amp;type=3#MainUIPlaceHolder" />
     <Style src="project://database/Assets/SHG/Scripts/UI/InventoryWindow.uss?fileID=7433441132597879392&amp;guid=a01f0ec446f9e54e295096f794f0f3cf&amp;type=3#InventoryWindow" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/QuickSlotWindow.uss?fileID=7433441132597879392&amp;guid=fca7ca43f3296031e840eb21ad434e5e&amp;type=3#QuickSlotWindow" />
 </ui:UXML>
