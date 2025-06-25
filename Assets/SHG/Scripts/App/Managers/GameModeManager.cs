@@ -14,13 +14,13 @@ namespace SHG
     public void OnStartFromEditor();
   }
 
-  public class GameModeManager : MonoBehaviour
+  public class GameModeManager 
   {
     public bool IsSwitching { get; set; }
     public IGameMode CurrentMode { get; set; }
     WaitUntil WaitForSwitchable;
 
-    void Awake()
+    public GameModeManager()
     {
       this.IsSwitching = false;
       this.WaitForSwitchable = new WaitUntil(() => this.IsSwitching);
@@ -47,13 +47,11 @@ namespace SHG
       }
       this.IsSwitching = true;
 
-      //yield return (App.Backdrop.Required(true));
       
       if (this.CurrentMode != null) {
         yield return (this.CurrentMode.OnEnd());
       }
       this.CurrentMode = gameMode; 
-      //yield return (App.Backdrop.Release(true));
       this.IsSwitching = false;
     }
   }
