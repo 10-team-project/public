@@ -24,9 +24,14 @@ namespace NTJ
         private bool isSleeping = false;
         private float fadeDuration = 2f;
         public static int InitialDay = 1;
+        public Slider timeScaleSlider;
+        public TextMeshProUGUI timeScaleText;
 
         void Start()
         {
+            #if UNITY_EDITOR
+            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
+            #endif
             if (SaveManager.HasSavedData())
             {
                 SaveManager.LoadGame();
@@ -43,6 +48,9 @@ namespace NTJ
             fadePanel.gameObject.SetActive(false);
             fadePanel.color = new Color(0, 0, 0, 0);
             dayTextPanel.SetActive(false);
+            timeScaleSlider.onValueChanged.AddListener(OnTimeScaleChanged);
+            timeScaleSlider.value = timeScale;
+            timeScaleText.text = $"{timeScaleSlider.value}배속";
         }
 
         void Update()
@@ -64,8 +72,8 @@ namespace NTJ
 
         public void OnSleepButtonPressed()
         {
-            if (isSleeping)
-                StartCoroutine(SleepAndStartNextDay(true)); // 수동 수면
+            if (isSleeping) return;
+            StartCoroutine(SleepAndStartNextDay(true)); // 수동 수면
         }
 
         void UpdateDayText()
@@ -124,6 +132,11 @@ namespace NTJ
             fadePanel.gameObject.SetActive(false);
             dayTextPanel.SetActive(false);
             isSleeping = false;
+        }
+        public void OnTimeScaleChanged(float value)
+        {
+            timeScale = Mathf.RoundToInt(value);
+            timeScaleText.text = $"{timeScale}배속";
         }
     }
 }
