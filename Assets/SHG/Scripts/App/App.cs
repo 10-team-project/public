@@ -6,6 +6,7 @@ using UnityEditor;
 #endif
 using Patterns;
 using KSH;
+using LTH;
 
 namespace SHG
 {
@@ -27,6 +28,8 @@ namespace SHG
     public IGameMode CurrentMode => this.gameModeManager.CurrentMode;
     List<ISingleton<MonoBehaviour>> managers;
     public TestSceneManager SceneManager { get; private set; }
+    public InputManager InputManager { get; private set; }
+    public Inventory Inventory { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -36,7 +39,6 @@ namespace SHG
       if (app == null) {
         throw new ApplicationException("Create App");
       }
-      Inventory.CreateInstance();
       DontDestroyOnLoad(app);
       if (!IsGamemodeControlEnabled) {
         return ;
@@ -47,12 +49,14 @@ namespace SHG
     {
       base.Awake();
       this.IsEditor = false;
-      IsGamemodeControlEnabled = true;
+      IsGamemodeControlEnabled = false;
       #if UNITY_EDITOR
       this.IsEditor = true;
-      IsGamemodeControlEnabled = EditorPrefs.GetBool("IsAppEnabled");
+      IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
       this.managers = new ();
       this.SceneManager = TestSceneManager.CreateInstance();
+      this.Inventory = Inventory.CreateInstance();
+      this.InputManager = InputManager.CreateInstance();
       this.managers.Add(this.SceneManager as ISingleton<MonoBehaviour>);
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {
@@ -87,6 +91,8 @@ namespace SHG
           return (MainMenuMode.Instance);
         case GameMode.CharacterSelect:
           return (CharacterSelectMode.Instance);
+        case GameMode.Farming:
+          return (FarmingMode.Instance);
         default: 
           throw (new NotImplementedException());
       }
@@ -98,7 +104,7 @@ namespace SHG
     static void Enable()
     {
       IsGamemodeControlEnabled = true;
-      EditorPrefs.SetBool("IsAppEnabled", true);
+      EditorPrefs.SetBool("IsGamemodeControlEnabled", true);
     }
 
     [MenuItem("App/Gamemode control/enable", true)]

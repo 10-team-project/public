@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Patterns;
@@ -6,7 +7,7 @@ namespace SHG
 {
   public class ShelterMode :Singleton<ShelterMode>, IGameMode
   {
-    public string SceneName => "";
+    public string SceneName => throw new NotImplementedException();
 
     public bool Equals(IGameMode other)
     {

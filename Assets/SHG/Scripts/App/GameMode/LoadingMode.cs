@@ -34,9 +34,9 @@ namespace SHG
       Debug.Log("LoadingState OnEnd");
       // TODO: 로딩 스크린 숨기기
       yield return (null);
-      this.loadingUI.SetActive(false);
       this.OnLoaded?.Invoke();
       this.OnLoaded = null;
+      this.loadingUI.SetActive(false);
     }
 
     public IEnumerator OnStart()
@@ -44,11 +44,11 @@ namespace SHG
       Debug.Log("LoadingState OnStart");
       this.loadingUI.SetActive(true);
       if (this.SceneToLoad != null) {
+        yield return (new WaitForSeconds(1));
         var loadedScene = App.Instance.SceneManager.GameLoadScene(this.SceneToLoad);
         while (!loadedScene.isDone) {
           yield return null;
         }
-        yield return (new WaitForSeconds(1));
         yield return (this.OnEnd());
       }
       else {

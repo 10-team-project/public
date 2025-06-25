@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/SHG/Scenes/MainMenuScene.unity
     guid: f37b6e286d838e4adaf520e774dbb701
+  - enabled: 1
+    path: Assets/Scenes/FieldTest.unity
+    guid: fbb0da999ad94a5719905bcc12a1a412
   m_configObjects: {}

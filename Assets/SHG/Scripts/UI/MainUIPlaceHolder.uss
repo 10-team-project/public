@@ -1,18 +1,40 @@
-.window-container {
-    padding: 20px;
+.window-container 
+{
+  padding: 20px;
 }
 
-.window-label {
-    font-size: 30px;
-    -unity-text-align: middle-center;
-    align-self: center;
-    color: black;
-    margin-top: 20px;
-    margin-bottom: 20px;
+.window-label 
+{
+  font-size: 30px;
+  -unity-text-align: middle-center;
+  align-self: center;
+  color: black;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
-.window-close-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+.window-close-button 
+{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.test-button 
+{
+  width: 200px;
+  height: 100px;
+  font-size: 30px;
+  margin-top: 20px;
+}
+
+#stat-container {
+  background-color: lightgray;
+}
+
+#stat-container>Label 
+{
+  font-size: 25px;
+  color: black;
+  margin-top: 5px;
 }
