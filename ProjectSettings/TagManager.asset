@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ladder
+  - LadderDownStart
+  - LadderDownEnd
+  - LadderUpStart
+  - LadderUpEnd
   layers:
   - Default
   - TransparentFX
@@ -19,10 +23,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - NPC
+  - Ground
+  - Ladder
+  - Blocker
   - 
   - 
   - 
