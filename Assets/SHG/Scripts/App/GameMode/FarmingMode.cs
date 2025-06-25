@@ -6,6 +6,8 @@ namespace SHG
 {
   public class FarmingMode : Singleton<FarmingMode>, IGameMode
   {
+    public string SceneName => "";
+
     public bool Equals(IGameMode other)
     {
       if (other is FarmingMode) {

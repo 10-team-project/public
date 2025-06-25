@@ -3,18 +3,25 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Patterns;
 using UnityEngine.UI;
+using NTJ;
 
 namespace SHG
 {
   public class MainMenuMode : Singleton<MainMenuMode>, IGameMode 
   {
-    const string SCENE_NAME = "MainMenuScene";
+    public string SceneName =>  "MainMenuScene";
+
     public bool Equals(IGameMode other)
     {
       if (other is MainMenuMode) {
         return (true);
       }
       return (false);
+    }
+
+    public void OnLoadSaveData()
+    {
+      
     }
 
     public IEnumerator OnEnd()
@@ -37,12 +44,13 @@ namespace SHG
     {
       Debug.Log("MainMenuMode OnStartFromEditor load MainMenuScene\nTo disable Click: App > Gamemode control > disable ");
       if (SceneManager.GetActiveScene().name != "MainMenuScene") {
-        App.Instance.SceneManager.GameLoadScene(SCENE_NAME);
+        App.Instance.SceneManager.GameLoadScene(this.SceneName);
       }
       //FIXME: Change to main menu script
+      Debug.Log(GameObject.Find("GameStartButton"));
       Button button = GameObject.Find("GameStartButton").GetComponent<Button>();
       button.onClick.AddListener(() => {
-        App.Instance.ChangeMode(GameMode.CharacterSelect);
+        App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
         });
     }
   }

@@ -6,6 +6,8 @@ namespace SHG
 {
   public class ShelterMode :Singleton<ShelterMode>, IGameMode
   {
+    public string SceneName => "";
+
     public bool Equals(IGameMode other)
     {
       if (other is ShelterMode) {

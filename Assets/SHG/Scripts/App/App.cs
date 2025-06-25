@@ -13,7 +13,6 @@ namespace SHG
   {
     MainMenu,
     CharacterSelect,
-    Loading,
     Farming,
     Shelter,
     Ending
@@ -61,15 +60,22 @@ namespace SHG
           }
         }
       if (IsGamemodeControlEnabled) {
-        this.gameModeManager.CurrentMode = this.selectGameMode(this.startMode);
+        this.ChangeMode(this.startMode);
       }
       #endif
     }
 
-    public void ChangeMode(GameMode gameMode)
+    public void ChangeMode(GameMode gameMode, string nextScene = null)
     {
-      var nextGameMode = this.selectGameMode(gameMode); 
-      this.gameModeManager.CurrentMode = nextGameMode;
+      if (nextScene != null) {
+        LoadingMode.Instance.SceneToLoad = nextScene;
+        LoadingMode.Instance.OnLoaded = () => this.ChangeMode(gameMode);
+        this.gameModeManager.CurrentMode = LoadingMode.Instance; 
+      }
+      else {
+        var nextGameMode = this.selectGameMode(gameMode); 
+        this.gameModeManager.CurrentMode = nextGameMode;
+      }
     }
 
     IGameMode selectGameMode(GameMode gameMode)

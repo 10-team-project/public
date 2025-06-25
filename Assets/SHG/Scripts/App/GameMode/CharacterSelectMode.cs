@@ -6,7 +6,8 @@ namespace SHG
 {
   public class CharacterSelectMode : Singleton<CharacterSelectMode>, IGameMode
   {
-    const string SCENE_NAME = "CharactarChoiceScene";
+
+    public string SceneName => "CharactarChoiceScene";
 
     public bool Equals(IGameMode other)
     {
@@ -31,7 +32,6 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
-      App.Instance.SceneManager.GameLoadScene(SCENE_NAME);
       Debug.Log("CharacterSelectMode OnStart");
       // TODO: 선택 가능한 캐릭터 보여주기
       //       bgm 재생

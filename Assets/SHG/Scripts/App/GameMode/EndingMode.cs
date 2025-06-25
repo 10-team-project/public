@@ -6,6 +6,8 @@ namespace SHG
 {
   public class EndingMode : Singleton<EndingMode>, IGameMode
   {
+    public string SceneName => "";
+
     public bool Equals(IGameMode other)
     {
       if (other is EndingMode) {

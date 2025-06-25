@@ -9,6 +9,7 @@ namespace SHG
 {
   public interface IGameMode: IEquatable<IGameMode>
   {
+    public string SceneName { get; }
     public IEnumerator OnStart();
     public IEnumerator OnEnd();
     public void OnStartFromEditor();
