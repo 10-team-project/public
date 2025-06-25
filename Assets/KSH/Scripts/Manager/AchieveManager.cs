@@ -46,7 +46,7 @@ namespace KSH
      [Button("CheckAchieve")]
      public void CheckAchieve() //퍼블릭으로 바꾸어 나중에 게임매니저에서 엔딩이 진행되면 AchieveManager.Instance.CheckAchieve(); 호출
      {
-         if (PlayerPrefs.GetInt(Achieve) == 0) 
+         if (PlayerPrefs.GetInt(Achieve) == 0) // 만약 Achieve의 데이터가 0이라면
          {
              PlayerPrefs.SetInt(Achieve, 1); //1로 바꾸고
              UnlockCharacter(); //해금
