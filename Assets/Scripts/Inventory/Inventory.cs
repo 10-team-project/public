@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KSH;
 using UnityEngine;
 using Patterns;
 using SHG;
@@ -57,10 +58,29 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 
   public void UseItem(IUsable item)
   {
-    if (item is RecoveryItem recoveryItem) {
-      //FIXME: 여기에 회복아이템 코드 작성
-    }
+    if (item is RecoveryItem recoveryItem)
+    {
+      var recoveryItemData = recoveryItem.Recovery();
 
+      foreach (var data in recoveryItemData)
+      {
+        switch (data.Stat)
+        {
+          case TempCharacter.Stat.Hp:
+            PlayerStatManager.Instance.HP.Heal(data.Amount);
+            break;
+          case TempCharacter.Stat.Hydration:
+            PlayerStatManager.Instance.Thirsty.Drink(data.Amount);
+            break;
+          case TempCharacter.Stat.Hunger:
+            PlayerStatManager.Instance.Hunger.Eat(data.Amount);
+            break;
+          case TempCharacter.Stat.Fatigue:
+            PlayerStatManager.Instance.Fatigue.Sleep(data.Amount);
+            break;
+        }
+      }
+    }
 
     else {
       throw (new NotImplementedException());
