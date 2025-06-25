@@ -13,9 +13,9 @@ namespace KSH
             DontDestroyOnLoad(gameObject);
         }
 
-        public void MainGameScene(string sceneName)
+        public AsyncOperation GameLoadScene(string sceneName)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName); //sceneName 씬으로 이동
+            return SceneManager.LoadSceneAsync(sceneName); //sceneName 씬으로 이동
         }
     }   
 }
