@@ -8,7 +8,7 @@ namespace SHG
   {
     public Action<MapTeleportPoint, Transform> OnTrigger;
     public Vector3 TeleportPosition => this.teleportPosition.position;
-    [SerializeField]
+    [SerializeField, InspectorName ("Optional teleport position")]
     Transform teleportPosition;
 
     void Awake()
