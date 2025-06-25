@@ -61,7 +61,17 @@ namespace KSH
         public void OnClickButton() //버튼 눌렀을 때
         {
             PlayerPrefs.SetInt("PlayerSelect", (int)CharacterType); // 클릭하면 해당 UI의 캐릭터 타입을 저장
-            KSH.TestSceneManager.Instance.MainGameScene("Test"); // 게임 씬으로 전환
+            StartCoroutine(LoadScene());
+        }
+
+        IEnumerator LoadScene()
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Test");
+
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
         }
     }
 }
