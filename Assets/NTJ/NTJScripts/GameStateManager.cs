@@ -10,6 +10,11 @@ namespace NTJ
 
         public float maxHP = 100f;
         public float playerHP = 100f;
+
+        public Vector2 playerPosition;
+
+        public List<string> inventoryItems = new List<string>();
+        public List<string> completedQuests = new List<string>();
         void Awake()
         {
             if (Instance == null)

@@ -1,11 +1,19 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
+  enum MouseButton
+  {
+    Left = 0,
+    Right = 1
+  }
   public class InventoryWindow : VisualElement, IHideableWindow
   {
+    const MouseButton DRAG_BUTTON = MouseButton.Left;
+    const MouseButton USE_BUTTON = MouseButton.Right;
     public bool IsVisiable { get; private set; }
     VisualElement itemsContainer;
     VisualElement currentDraggingTarget;
@@ -94,26 +102,45 @@ namespace SHG
 
     void OnPointerDown(PointerDownEvent pointerDownEvent)
     {
-      if (!this.IsDraggingItem) {
-        var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
-        if (boxElement != null &&
-          this.itemBoxTable.TryGetValue(boxElement,
-            out ItemAndCount itemData)) {
-          this.dragStartPosition = pointerDownEvent.position;
-          boxElement.AddToClassList("inventory-item-box-inactive");
-          this.floatingItemBox.SetData(boxElement.ItemData);
-          this.floatingItemBox.style.left = this.dragStartPosition.x;
-          this.floatingItemBox.style.top = this.dragStartPosition.y;
-          this.floatingItemBox.Show();
-          this.currentDraggingTarget = boxElement;
-          boxElement.CapturePointer(pointerDownEvent.pointerId);
-        }
-        else {
-          Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
-        }
+      var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
+      if (boxElement == null ||
+        !this.itemBoxTable.TryGetValue(boxElement,
+          out ItemAndCount itemAndCount)) {
+        Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
+        return ;
+      }
+      if (pointerDownEvent.button == (int)DRAG_BUTTON) {
+        this.OnDragPointerButtonDown(pointerDownEvent, boxElement, itemAndCount);
       }
       else {
-        Debug.Log($"Already dragging item");
+        this.OnUsePointerButtonDown(boxElement, itemAndCount); 
+      }
+    }
+
+    void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
+    {
+      var item = Inventory.Instance.PeakItem(itemAndCount.Item); 
+      if (item is IUsable usableItem) {
+        this.UseItem(Inventory.Instance.GetItem(itemAndCount.Item) as IUsable);
+      }
+    }
+
+    void UseItem(IUsable usableItem)
+    {
+      Inventory.Instance.UseItem(usableItem);
+    }
+
+    void OnDragPointerButtonDown(PointerDownEvent pointerDownEvent, ItemBox boxElement, ItemAndCount itemAndCount)
+    {
+      if (!this.IsDraggingItem) {
+        this.dragStartPosition = pointerDownEvent.position;
+        boxElement.AddToClassList("inventory-item-box-inactive");
+        this.floatingItemBox.SetData(boxElement.ItemData);
+        this.floatingItemBox.style.left = this.dragStartPosition.x;
+        this.floatingItemBox.style.top = this.dragStartPosition.y;
+        this.floatingItemBox.Show();
+        this.currentDraggingTarget = boxElement;
+        boxElement.CapturePointer(pointerDownEvent.pointerId);
       }
     }
 

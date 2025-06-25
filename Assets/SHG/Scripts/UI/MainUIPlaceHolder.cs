@@ -78,7 +78,6 @@ namespace SHG
 
     void OnPointerUp(PointerUpEvent pointerUpEvent)
     {
-      Debug.Log($"PointerUp "); 
     
     }
 

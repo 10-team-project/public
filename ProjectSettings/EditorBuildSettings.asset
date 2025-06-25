@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   - enabled: 1
-    path: Assets/KSH/Scene/CharactarChoiceScene.unity
+    path: Assets/KSH/Scene/CharacterChoiceScene.unity
     guid: 7accbd76292cad34dba165e091f22c71
   - enabled: 1
     path: Assets/KSH/Scene/Test.unity
