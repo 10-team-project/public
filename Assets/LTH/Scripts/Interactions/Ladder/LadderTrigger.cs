@@ -78,7 +78,7 @@ public class LadderTrigger : MonoBehaviour, IInteractable
         {
             case LadderTriggerType.EnterBottom:
             case LadderTriggerType.EnterTop:
-                player.StartClimbing(transform.position, transform.forward);
+                player.StartClimbing(transform.position, transform.forward, triggerType);
                 break;
 
             case LadderTriggerType.ExitBottom:
