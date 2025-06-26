@@ -113,7 +113,7 @@ namespace SHG
         this.floatingItemBox.Hide();
 
         VisualElement target = this.panel.Pick(pointerUpEvent.position);
-        if (this.floatingItemBox.ItemData != null) {
+        if (this.floatingItemBox.ItemData != null && !this.Contains(target)) {
           bool isDropToTargetStorage = this.IsDropTargetStorage(target);
           var itemAndCount = this.floatingItemBox.ItemData;
           if (isDropToTargetStorage &&
