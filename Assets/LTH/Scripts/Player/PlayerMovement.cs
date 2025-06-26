@@ -27,6 +27,8 @@ namespace LTH
 
         private LadderClimber ladderClimber;
 
+        private Animator animator; // 애니메이션(테스트용 삭제 예정)
+
         [HideInInspector] public bool IsOnLadder => isOnLadder;
 
         private bool IsGrounded()
@@ -40,7 +42,8 @@ namespace LTH
             _rigid = GetComponent<Rigidbody>();
             _rigid.freezeRotation = true;
 
-            ladderClimber = new LadderClimber(_rigid, climbSpeed, EndClimb);
+            animator = GetComponent<Animator>(); // 애니메이션(테스트용 삭제 예정)
+            ladderClimber = new LadderClimber(_rigid, climbSpeed, EndClimb, EndClimbFromTop);
         }
 
         private void Update()
@@ -49,14 +52,7 @@ namespace LTH
 
             PlayerInput();
 
-            if (isLadderEnterZone && Input.GetKeyDown(KeyCode.F))
-            {
-                StartClimbing(ladderPosition, ladderDirection);
-            }
-            else if (isOnLadder && Input.GetKeyDown(KeyCode.F) && isLadderExitZone)
-            {
-                EndClimb();
-            }
+            HandleLadderInput();
         }
 
         private void FixedUpdate()
@@ -69,6 +65,8 @@ namespace LTH
             {
                 Move();
             }
+
+            UpdateAnimation();  // 애니메이션(테스트용 삭제 예정)
         }
 
         private void PlayerInput()
@@ -138,6 +136,20 @@ namespace LTH
             }
         }
 
+        private void HandleLadderInput()
+        {
+            if (isLadderEnterZone && Input.GetKeyDown(KeyCode.F))
+            {
+                float distance = Vector3.Distance(transform.position, ladderPosition);
+                if (distance < 1.2f)
+                    StartClimbing(ladderPosition, ladderDirection);
+            }
+            else if (isOnLadder && Input.GetKeyDown(KeyCode.F) && isLadderExitZone)
+            {
+                EndClimb();
+            }
+        }
+
         public void StartClimbing(Vector3 pos, Vector3 forward)
         {
             InputManager.Instance.StartInput(this);
@@ -145,19 +157,34 @@ namespace LTH
             _rigid.useGravity = false;
             _rigid.velocity = Vector3.zero;
 
-            Vector3 targetPos = new Vector3(pos.x, transform.position.y, pos.z) - forward * 0.3f;
+            Vector3 targetPos = new Vector3(pos.x, transform.position.y, pos.z);
             targetPos.y += 0.1f;
             transform.position = targetPos;
 
-            transform.rotation = Quaternion.LookRotation(forward);
+            transform.rotation = Quaternion.LookRotation(Vector3.right);
         }
+
+        public void EndClimbFromTop()
+        {
+            isOnLadder = false;
+            _rigid.useGravity = true;
+            InputManager.Instance.EndInput(this);
+
+            Vector3 offset = transform.forward * 0.7f + Vector3.up * 0.7f;
+            _rigid.MovePosition(transform.position + offset);
+        }
+
 
         public void EndClimb()
         {
             isOnLadder = false;
             _rigid.useGravity = true;
             InputManager.Instance.EndInput(this);
+
+            Vector3 offset = transform.forward * 0.5f;
+            _rigid.MovePosition(transform.position + offset);
         }
+
 
         private void OnTriggerEnter(Collider other)
         {
@@ -179,17 +206,39 @@ namespace LTH
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.CompareTag("Ladder"))
+            if (other.CompareTag("LadderDownStart") || other.CompareTag("LadderUpStart"))
             {
-                InputManager.Instance.EndInput(this);
-                isOnLadder = false;
-                _rigid.useGravity = true;
+                isLadderEnterZone = false;
+            }
+            else if (other.CompareTag("LadderDownEnd"))
+            {
+                isLadderExitZone = false;
             }
             else if (other.CompareTag("LadderUpEnd"))
             {
                 isAtLadderTop = false;
             }
         }
+
+        private void UpdateAnimation()  // 애니메이션(테스트용 삭제 예정)
+        {
+            if (isOnLadder || InputManager.Instance.IsBlocked(InputType.Move))
+            {
+                animator.SetBool("IsMoving", false);
+                animator.SetFloat("Speed", 0f);
+                return;
+            }
+
+            bool isMoving = Mathf.Abs(moveInput.x) > 0.01f;
+            animator.SetBool("IsMoving", isMoving);
+
+            float speedValue = 0f;
+            if (isMoving)
+                speedValue = isRunning ? 1f : 0.5f;
+
+            animator.SetFloat("Speed", speedValue);
+        }
+
 
         public bool IsInputBlocked(InputType inputType)
         {
@@ -207,4 +256,3 @@ namespace LTH
         }
     }
 }
-
