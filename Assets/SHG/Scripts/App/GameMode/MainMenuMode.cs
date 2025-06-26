@@ -9,7 +9,7 @@ namespace SHG
 {
   public class MainMenuMode : Singleton<MainMenuMode>, IGameMode 
   {
-    public string SceneName =>  "MainMenuScene";
+    public string SceneName => "MainMenuScene";
 
     public bool Equals(IGameMode other)
     {

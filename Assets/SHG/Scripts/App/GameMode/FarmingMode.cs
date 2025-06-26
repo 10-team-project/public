@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using Patterns;
@@ -28,7 +29,17 @@ namespace SHG
       // TODO: 필요하다면 로딩 화면 보여주기
       //       현재 상황에 맞는 scene 불러오기
       //       적절한 곳에 아이템 배치하기 
+
+      var gates = GameObject.FindObjectsOfType<MapGate>();
+      foreach (var gate in gates) {
+        gate.OnMove += this.OnEnterToShelterGate; 
+      }
       yield return (null);
+    }
+
+    void OnEnterToShelterGate(string sceneName)
+    {
+      App.Instance.ChangeMode(GameMode.Shelter, sceneName);
     }
 
     public void OnStartFromEditor()

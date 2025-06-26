@@ -7,7 +7,7 @@ namespace SHG
 {
   public class ShelterMode :Singleton<ShelterMode>, IGameMode
   {
-    public string SceneName => throw new NotImplementedException();
+    public string SceneName => "BaseTest";
 
     public bool Equals(IGameMode other)
     {
@@ -23,6 +23,11 @@ namespace SHG
       yield return (null);
     }
 
+    public void OnEnterFarmingGate(string sceneName)
+    {
+      App.Instance.ChangeMode(GameMode.Farming, sceneName);
+    }
+
     public IEnumerator OnStart()
     {
       Debug.Log("ShelterMode OnStart");
@@ -30,6 +35,10 @@ namespace SHG
       //       방공호 Scene 로드
       //       BGM 재생
       //       필요할 경우 튜토리얼 보여주기
+      var gates = GameObject.FindObjectsOfType<MapGate>();
+      foreach (var gate in gates) {
+        gate.OnMove += this.OnEnterFarmingGate; 
+      }
       yield return (null);
     }
 

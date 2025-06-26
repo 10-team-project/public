@@ -93,6 +93,8 @@ namespace SHG
           return (CharacterSelectMode.Instance);
         case GameMode.Farming:
           return (FarmingMode.Instance);
+        case GameMode.Shelter:
+          return (ShelterMode.Instance);
         default: 
           throw (new NotImplementedException());
       }
