@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Ladder
   - TeleportPoint
+  - LadderDownStart
+  - LadderDownEnd
+  - LadderUpStart
+  - LadderUpEnd
   layers:
   - Default
   - TransparentFX

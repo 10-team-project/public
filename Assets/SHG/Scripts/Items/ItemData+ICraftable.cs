@@ -13,6 +13,9 @@ public partial class ItemData
 
   protected bool IsRecipesProductValid()
   {
+    if (this.Recipes == null) {
+      return (false);
+    }
     foreach (var recipe in this.Recipes) {
       if (recipe == null || recipe.Product != this) {
         return (true);

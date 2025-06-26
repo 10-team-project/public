@@ -17,7 +17,7 @@ public class ItemSpawnTest : MonoBehaviour
   }
 
   [Button ("Spawn item")]
-  void SpawnItem(int count)
+  public void SpawnItem(int count)
   {
     this.itemSpawner.SpawnItemCount(count);
   }

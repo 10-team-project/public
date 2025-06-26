@@ -14,7 +14,7 @@ namespace SHG
     [SerializeField, ReadOnly]
     MapTeleportPoint pointB;
 
-    const float INTERACT_DISTANCE = 3f;
+    const float INTERACT_DISTANCE = 1.5f;
 
     MapTeleporter mapTeleporter;
 

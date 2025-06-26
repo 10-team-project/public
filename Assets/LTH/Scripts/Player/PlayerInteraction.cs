@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 using LTH;
 
 public class PlayerInteraction : MonoBehaviour
@@ -34,7 +34,7 @@ public class PlayerInteraction : MonoBehaviour
             IInteractable interactable = hit.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                Debug.Log($"{hit.gameObject.name} F키를 눌러 상호작용");
+                //Debug.Log($"{hit.gameObject.name} F키를 눌러 상호작용");
 
                 if (Input.GetKeyDown(KeyCode.F) && Time.time - lastInteractionTime > interactionCooldown)
                 {
