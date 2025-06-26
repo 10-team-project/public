@@ -2,16 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class testmove : MonoBehaviour
+namespace NTJ
 {
-    public float speed = 5f;
-
-    void Update()
+    public class testmove : MonoBehaviour
     {
-        float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical");
+        public float speed = 5f;
 
-        Vector3 move = new Vector3(h, 0, v) * speed * Time.deltaTime;
-        transform.Translate(move, Space.World);
+        void Update()
+        {
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+
+            Vector3 move = new Vector3(h, 0, v) * speed * Time.deltaTime;
+            transform.Translate(move, Space.World);
+        }
     }
 }
