@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-//using static UnityEditor.Progress;
 using LTH;
 
 public class PlayerInteraction : MonoBehaviour
@@ -27,22 +24,31 @@ public class PlayerInteraction : MonoBehaviour
 
     private void AllInteraction()
     {
+        if (InputManager.Instance.IsBlocked(InputType.Interaction)) return;
+
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
+
+        IInteractable closest = null;
+        float closestDist = float.MaxValue;
 
         foreach (var hit in hits)
         {
             IInteractable interactable = hit.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                //Debug.Log($"{hit.gameObject.name} F키를 눌러 상호작용");
-
-                if (Input.GetKeyDown(KeyCode.F) && Time.time - lastInteractionTime > interactionCooldown)
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < closestDist)
                 {
-                    lastInteractionTime = Time.time;
-                    interactable.Interact();
-                    break;
+                    closestDist = dist;
+                    closest = interactable;
                 }
             }
+        }
+
+        if (closest != null && Input.GetKeyDown(KeyCode.F) && Time.time - lastInteractionTime > interactionCooldown)
+        {
+            lastInteractionTime = Time.time;
+            closest.Interact();
         }
     }
 
