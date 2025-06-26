@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using EditorAttributes;
 using UnityEngine.SceneManagement;
 using KSH;
@@ -10,10 +11,13 @@ namespace SHG
   [RequireComponent (typeof(InteractUI))]
   public class MapGate : MonoBehaviour, IInteractable
   {
+    public string SceneToMove => this.sceneToMove;
+    public Action<string> OnMove;
     InteractUI interactUI;
     bool isPresentingUI;
     bool isMoved;
-    public Action<string> OnMove;
+    [SerializeField]
+    TextMeshProUGUI gateLabel;
     [SerializeField, FilePath(filters: "unity")] [Validate("Scene must in build settings", nameof(IsInvalidScene), MessageMode.Error, buildKiller: true)]
     string sceneToMove;
 
@@ -21,6 +25,13 @@ namespace SHG
     {
       this.isPresentingUI = false;
       this.interactUI = this.GetComponent<InteractUI>();
+    }
+
+    void Start()
+    {
+      if (this.gateLabel != null) {
+        this.gateLabel.text =  $"Move to: {this.sceneToMove}";
+      }
     }
 
     void OnEnable()
