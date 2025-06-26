@@ -16,18 +16,7 @@ namespace SHG
     { 
       this.ParentWindow = window;
       this.CreateUI();
-      this.AddToClassList("inventory-window-item-box");
-    }
-
-    public static ItemBox FindItemBoxFrom(VisualElement target)
-    {
-      if (target == null) {
-        return (null);
-      }
-      if (target is ItemBox itemBox) {
-        return (itemBox);
-      }
-      return (target.GetFirstAncestorOfType<ItemBox>());
+      this.AddToClassList("item-storage-item-box");
     }
 
     public void SetData(ItemAndCount itemData)
@@ -56,11 +45,11 @@ namespace SHG
 
     void CreateUI()
     {
-      this.AddToClassList("inventory-item-box");
+      this.AddToClassList("item-storage-item-box");
       this.itemImage = new VisualElement();
-      this.itemImage.AddToClassList("inventory-window-item-image"); 
+      this.itemImage.AddToClassList("item-box-item-image"); 
       this.itemLabel = new Label();
-      this.itemLabel.AddToClassList("inventory-window-item-label");
+      this.itemLabel.AddToClassList("item-box-item-label");
       this.Add(itemImage);
       this.Add(itemLabel);
     }
@@ -70,7 +59,6 @@ namespace SHG
       this.IsVisiable = true;
       this.style.display = DisplayStyle.Flex;
       this.BringToFront();
-
     }
 
     public void Hide()

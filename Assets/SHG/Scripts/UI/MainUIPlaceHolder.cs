@@ -83,13 +83,30 @@ namespace SHG
       this.spawnItemButton.RegisterCallback<ClickEvent>(click => {
         this.itemSpawner.SpawnItem(1);
         });
+
+      this.WireInventoryStoarges();
+    }
+
+    void WireInventoryStoarges()
+    {
+      this.inventoryWindow.SetDropTargets(new ItemStorageWindow[1] {
+        this.quickSlotWindow
+        });
+      this.quickSlotWindow.SetDropTargets(new ItemStorageWindow[1] {
+        this.inventoryWindow
+        });
     }
 
     void Start()
     {
-      this.itemSpawner = GameObject.Find("ItemSpawn").GetComponent<ItemSpawnTest>();
+      this.itemSpawner = GameObject.Find("ItemSpawn")?.GetComponent<ItemSpawnTest>();
       this.gameTimeUI = GameObject.Find("GameTimeUI");
-      this.gameTimeUI.SetActive(false);
+      if (this.gameTimeUI != null) {
+        this.gameTimeUI.SetActive(false);
+      }
+      if (GameObject.Find("HPResource") == null) {
+        return ;
+      }
       this.hp = GameObject.Find("HPResource").GetComponent<Resource>();
       this.thirst = GameObject.Find("ThirstyResource").GetComponent<Resource>();
       this.fatigue = GameObject.Find("FatigueResource").GetComponent<Resource>();
@@ -100,13 +117,16 @@ namespace SHG
     ItemBox CreateFloatingItemBox()
     {
       var floatingItemBox = new ItemBox(this.root);
-      floatingItemBox.AddToClassList("inventory-floating-itembox");
+      floatingItemBox.AddToClassList("item-box-floating");
       floatingItemBox.Hide();
       return (floatingItemBox);
     }
 
     void Update()
     {
+      if (this.hpLabel == null || this.hp == null) {
+        return ;
+      }
       this.hpLabel.text = $"HP: {this.hp.Cur}/{this.hp.Max}";
       this.hungerLabel.text = $"Hunger: {this.hunger.Cur}/{this.hunger.Max}";
       this.thirstLabel.text = $"Thirst : {this.thirst.Cur}/{this.thirst.Max}";

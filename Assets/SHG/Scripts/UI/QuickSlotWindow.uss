@@ -1,4 +1,4 @@
-#quick-slot-window
+#quick-slot-window-container
 {
   position: absolute;
   left: 5%;
@@ -7,12 +7,14 @@
   align-items: center;
   border-color: black;
   border-width: 2px;
+  width: 1000px;
+  height: 200px;
 }
 
-.quick-slot-window-item-container
+.quick-slot-window-item-box
 {
- border-color: grey; 
- border-width: 1px;
- width: 200px;
- height: 200px;
+  border-color: grey; 
+  border-width: 1px;
+  min-width: 180px;
+  min-height: 150px;
 }

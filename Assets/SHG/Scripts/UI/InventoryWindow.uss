@@ -1,24 +1,32 @@
-#inventory-window-container {
-  position: absolute;
+#inventory-window-container 
+{
   width: 70%;
   height: 60%;
   min-width: 60%;
   min-height: 50%;
   left: 15%;
   top: 10%;
+}
+
+.item-storage-container {
+  position: absolute;
   border-radius: 20px;
   background-color: white;
 }
 
-#inventory-window-items-container {
+.item-storage-items-container
+{
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
+  height: 100%;
   flex-direction: row;
   align-items: flex-start;
+  border-color: blue;
+  border-width: 2px;
 }
 
-.inventory-item-box {
+.item-storage-item-box {
   border-width: 2px;
   align-self: center;
   padding: 10px;
@@ -28,22 +36,22 @@
   visibility: visible;
 }
 
-.inventory-item-box-inactive {
+.item-box-inactive {
   visibility: hidden;
 }
 
-.inventory-window-item-image {
+.item-box-item-image {
   -unity-background-scale-mode: scale-to-fit;
   width: 150px;
   height: 150px;
 }
 
-.inventory-window-item-label {
+.item-box-item-label {
   font-size: 20px;
   color: green;
 }
 
-.inventory-floating-itembox {
+.item-box-floating {
   opacity: 0.5;
   position: absolute;
   border-color: red;

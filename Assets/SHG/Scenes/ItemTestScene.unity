@@ -760,7 +760,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemToAdd: {fileID: 11400000, guid: 529ee4b9d6364f094bf4cbe12fa88f4a, type: 2}
   itemToGet: {fileID: 0}
-  itemToMoveQuickSlot: {fileID: 0}
+  itemToMoveQuickSlot: {fileID: 11400000, guid: 529ee4b9d6364f094bf4cbe12fa88f4a,
+    type: 2}
   itemToGetFromQuickSlot: {fileID: 0}
 --- !u!1 &796038167
 GameObject:

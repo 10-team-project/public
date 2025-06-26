@@ -1,142 +1,82 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class QuickSlotWindow : VisualElement, IHideableWindow
+  public class QuickSlotWindow : ItemStorageWindow
   {
-    public bool IsVisiable { get; private set; }
-    public bool IsDraggingItem => this.currentDraggingTarget != null;
-
+    const MouseButton DRAG_BUTTON = MouseButton.Left;
+    const MouseButton USE_BUTTON = MouseButton.Right;
     ItemBox[] slots;
-    Vector2 dragStartPosition;
-    ItemBox currentDraggingTarget;
-    ItemBox floatingItemBox;
+    Dictionary<VisualElement, ItemAndCount> itemBoxTable;
+    protected override ItemStorageWindow[] DropTargets => this.dropTargets;
+    ItemStorageWindow[] dropTargets; 
 
-    public QuickSlotWindow(ItemBox floatingItemBox)
+    public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox)
     {
-      this.name = "quick-slot-window";     
-      this.floatingItemBox = floatingItemBox;
-      this.AddToClassList("window-container");
-      this.CreateUI();
-      Inventory.Instance.OnChanged += this.OnChangeInventory;
-      this.OnChangeInventory(Inventory.Instance);
+      this.name = "quick-slot-window-container";
+      this.Show();
     }
 
-    void OnChangeInventory(Inventory inventory)
+    public void SetDropTargets(ItemStorageWindow[] targets)
     {
-      var itemCount = inventory.QuickSlotItems.Count;
-      for (int i = 0; i < this.slots.Length; i++) {
-        this.slots[i].RemoveData();
-      }
-      for (int i = 0; i < itemCount; i++) {
-        var item = inventory.QuickSlotItems[i];
-        this.slots[i].SetData(new ItemAndCount { Item = item, Count = 1});
-      }
+      this.dropTargets = targets;
     }
 
-    void CreateUI()
+    protected override void CreateUI()
     {
       this.slots = new ItemBox[Inventory.QUICKSLOT_COUNT];
-      for (int i = 0; i < this.slots.Length; i++) {
-        this.slots[i] = new ItemBox(this);
-        this.slots[i].RegisterCallback<PointerDownEvent>(this.OnPointerDown);
-        this.slots[i].RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+      for (int i = 0; i < Inventory.QUICKSLOT_COUNT; i++)
+      {
+        this.slots[i]= new ItemBox(this);
+        this.slots[i].RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
         this.slots[i].RegisterCallback<PointerUpEvent>(this.OnPointerUp);
-        this.Add(this.slots[i]);
+        this.slots[i].RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+        this.slots[i].AddToClassList("quick-slot-window-item-box");
+        this.itemsContainer.Add(this.slots[i]); 
       }
     }
 
-    void OnPointerDown(PointerDownEvent pointerDownEvent)
+    protected override void ClearItems()
     {
-      if (!this.IsDraggingItem) {
-        var boxElement = ItemBox.FindItemBoxFrom(pointerDownEvent.target as VisualElement);
-        this.dragStartPosition = pointerDownEvent.position;
-        if (boxElement != null &&
-          boxElement.ItemData != ItemAndCount.None) {
-          this.floatingItemBox.SetData(boxElement.ItemData);
-          this.floatingItemBox.style.left = this.dragStartPosition.x;
-          this.floatingItemBox.style.top = this.dragStartPosition.y;
-          this.floatingItemBox.Show();
-          boxElement.AddToClassList("inventory-item-box-inactive");
-          this.currentDraggingTarget = boxElement;
-          boxElement.CapturePointer(pointerDownEvent.pointerId);
-        }
-        else {
-          Debug.LogError($"Pointer target is not in ItemBox or itemBoxTable");
-        }
-      }
-      else {
-        Debug.Log($"Already dragging item");
+      for (int i = 0; i < Inventory.QUICKSLOT_COUNT; i++) {
+        this.slots[i].RemoveData();  
       }
     }
 
-    ItemBox FindSelectedItemBox(VisualElement toFound)
+    protected override void FillItems(Inventory inventory)
     {
-      return (Array.Find(this.slots, slot => slot == toFound));
-    }
-
-    void OnPointerMove(PointerMoveEvent pointerMoveEvent)
-    {
-      if (this.IsDraggingItem) {
-        var offset = new Vector2(
-          pointerMoveEvent.position.x,
-          pointerMoveEvent.position.y) - this.dragStartPosition;
-        this.floatingItemBox.UpdateOffset(offset); 
+      Debug.Log("fill quickslot");
+      for (int i = 0; i < inventory.QuickSlotItems.Count; i++) {
+        Debug.Log(inventory.QuickSlotItems[i].Name);
+        this.slots[i].SetData(new ItemAndCount { Item = inventory.QuickSlotItems[i], Count = 1 }) ;
       }
     }
 
-    void OnPointerUp(PointerUpEvent pointerUpEvent)
+    protected override void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
     {
-      if (this.IsDraggingItem &&
-        pointerUpEvent.target == this.currentDraggingTarget) {
-        this.currentDraggingTarget.RemoveFromClassList("inventory-item-box-inactive");
-        this.floatingItemBox.UpdateOffset(Vector2.zero);
-        this.floatingItemBox.Hide();
-        VisualElement target = this.panel.Pick(pointerUpEvent.position);
-        bool isDroppingToInventory = this.IsDroppingToInventory(target);
-        if (isDroppingToInventory &&
-          this.currentDraggingTarget.ItemData.Item is EquipmentItemData equipmentItemData) {
-          this.OnDropItemToInventory(equipmentItemData); 
-        }
-        this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
-        this.currentDraggingTarget = null;
-        this.dragStartPosition = Vector2.zero;
-      }
+      return ;
     }
 
-    void OnDropItemToInventory(EquipmentItemData equipmentItemData)
+    protected override bool IsAbleToDropItem(ItemData item)
     {
-      Debug.Log("OnDropItemToInventory");
-      Inventory.Instance.MoveItemFromQuickSlot(equipmentItemData);
+      return (item as EquipmentItemData);
     }
 
-    bool IsDroppingToInventory(VisualElement target)
+    protected override void DropItem(ItemAndCount itemAndCount)
     {
-      if (target is InventoryWindow) {
-        return (true);
-      }
-      ItemBox destBox = ItemBox.FindItemBoxFrom(target);
-      if (destBox != null &&
-        destBox.ParentWindow is InventoryWindow) {
-        return (true);
-      }
+      Inventory.Instance.MoveItemFromQuickSlot(itemAndCount.Item);
+    }
+
+    protected override void DropItemOutSide(ItemAndCount itemAndCount)
+    {
+    }
+
+    protected override bool IsAbleToDropOutSide(ItemData item)
+    {
       return (false);
-    }
-
-    public void Show()
-    {
-      this.IsVisiable = true;
-      this.style.display = DisplayStyle.Flex;
-      this.BringToFront();
-    }
-
-    public void Hide()
-    {
-      this.IsVisiable = false;
-      this.style.display = DisplayStyle.None;
-      this.SendToBack();
     }
   }
 }
