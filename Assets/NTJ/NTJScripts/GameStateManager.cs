@@ -32,9 +32,8 @@ namespace NTJ
                 savedDay = day,
                 playerHP = playerHP,
                 maxHP = maxHP,
-                // 기타 저장할 데이터 추가 가능
             };
-            return data; // ← 꼭 있어야 합니다!
+            return data;
         }
 
         public void LoadFromData(GameData data)
