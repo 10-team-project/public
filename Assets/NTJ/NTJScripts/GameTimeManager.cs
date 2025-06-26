@@ -15,30 +15,31 @@ namespace NTJ
         public GameObject dayTextPanel;            // 중앙에 띄울 "Day - X" 패널
         public TextMeshProUGUI dayTextDisplay;     // 중앙 텍스트 ("Day - X")
         public CanvasGroup topUITextGroup;
-        public Slider timeScaleSlider;
-        public TextMeshProUGUI timeScaleText;
 
         [Header("Time Settings")]
         public int timeScale = 30; // 현실 1초 = 게임 1분
         private float gameTime;    // 누적된 게임 시간
         private int currentDay = 1;
+
         private bool isSleeping = false;
         private float fadeDuration = 2f;
-
+        public static int InitialDay = 1;
+        public Slider timeScaleSlider;
+        public TextMeshProUGUI timeScaleText;
 
         void Start()
         {
             #if UNITY_EDITOR
             SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
-#endif
+            #endif
             if (SaveManager.HasSavedData())
             {
-                GameData data = SaveManager.LoadData();
-                if (data != null)
-                {
-                    currentDay = data.savedDay;
-                    GameStateManager.Instance.LoadFromData(data);
-                }
+                SaveManager.LoadGame();
+                currentDay = InitialDay;
+            }
+            else
+            {
+                currentDay = 1;
             }
 
             gameTime = 9 * 3600f;
@@ -115,8 +116,7 @@ namespace NTJ
                 maxHP * 0.7f : maxHP * 0.3f;
 
             // 자동 저장
-            GameData saveData = GameStateManager.Instance.CreateSaveData(currentDay);
-            SaveManager.SaveData(saveData);
+            SaveManager.SaveGame(currentDay);
 
             // Fade Out
             t = 0;
