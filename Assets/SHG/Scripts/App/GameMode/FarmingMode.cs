@@ -6,6 +6,8 @@ namespace SHG
 {
   public class FarmingMode : Singleton<FarmingMode>, IGameMode
   {
+    public string SceneName => "FieldTest";
+
     public bool Equals(IGameMode other)
     {
       if (other is FarmingMode) {
@@ -33,6 +35,8 @@ namespace SHG
     {
       Debug.Log("FarmingMode OnStartFromEditor");
       // TODO: 테스트 할 수 있는 위치에 아이템 배치하기
+      ItemSpawnTest itemSpawnTester = GameObject.Find("ItemSpawn").GetComponent<ItemSpawnTest>();
+      itemSpawnTester.SpawnItem(3);
     }
   }
 }
