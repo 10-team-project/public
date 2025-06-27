@@ -49,14 +49,14 @@ namespace SHG
       this.AddToClassList("window-container");
       this.floatingBox = floatingBox;
       this.CreateUI();
-      this.ChangeTabTo(this.NormalItemTab);
     }
 
     public void AddDropTarget(ItemStorageWindow target)
     {
       var normalItemTab = this.NormalItemTab.Content as FilteredItemStorageWindow;
       normalItemTab.AddDropTarget(target);
-      
+      var storyItemTab = this.StoryItemTab.Content as FilteredItemStorageWindow; 
+      storyItemTab.AddDropTarget(target);
     }
 
     public void Hide()
@@ -93,7 +93,9 @@ namespace SHG
         new FilteredItemStorageWindow(this.IsStoryItem, this.floatingBox)
         );
       this.CurrentTab = new (this.NormalItemTab);
+      this.StoryItemTab.Hide();
       this.Add(this.NormalItemTab.Content);
+      this.Add(this.StoryItemTab.Content);
       var closeButton = new Button();
       closeButton.text = "close";
       closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
