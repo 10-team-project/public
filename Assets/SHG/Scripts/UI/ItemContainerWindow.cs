@@ -15,17 +15,18 @@ namespace SHG
     const MouseButton DRAG_BUTTON = MouseButton.Left;
     const MouseButton USE_BUTTON = MouseButton.Right;
     public bool IsVisiable { get; protected set; }
-    protected string label;
     protected VisualElement itemsContainer;
     protected VisualElement currentDraggingTarget;
     protected bool IsDraggingItem => this.currentDraggingTarget != null;
     protected Vector2 dragStartPosition;
     protected ItemBox floatingItemBox;
     public List<ItemConatinerWindow> DropTargets { get; protected set; }
+    public ItemStorageBase ItemSource { get; protected set; }
 
-    public ItemConatinerWindow(ItemBox floatingItemBox)
+    public ItemConatinerWindow(ItemBox floatingItemBox, ItemStorageBase itemSource)
     {
       this.floatingItemBox = floatingItemBox;
+      this.ItemSource = itemSource;
       this.DropTargets = new ();
       this.AddToClassList("item-storage-container");
       this.AddToClassList("window-container");
@@ -33,7 +34,7 @@ namespace SHG
       this.itemsContainer.AddToClassList("item-storage-items-container");
       this.Add(this.itemsContainer);
       this.CreateUI();
-      this.OnInventoryUpdated(App.Instance.Inventory);
+      this.OnItemSourceUpdated(this.ItemSource);
     }
 
     public void AddDropTargets(IEnumerable<ItemConatinerWindow> targets)
@@ -48,30 +49,30 @@ namespace SHG
 
     public void Show()
     {
-      App.Instance.Inventory.OnChanged += this.OnInventoryUpdated;
-      this.OnInventoryUpdated(App.Instance.Inventory);
+      this.ItemSource.OnChanged += this.OnItemSourceUpdated;
+      this.OnItemSourceUpdated(this.ItemSource);
       this.IsVisiable = true;
       Utils.ShowVisualElement(this);
     }
 
     public void Hide()
     {
-      App.Instance.Inventory.OnChanged -= this.OnInventoryUpdated;
+      this.ItemSource.OnChanged -= this.OnItemSourceUpdated;
       this.IsVisiable = false;
       Utils.HideVisualElement(this);
     }
 
-    protected void OnInventoryUpdated(ItemStorageBase inventory)
+    protected void OnItemSourceUpdated(ItemStorageBase itemSource)
     {
       this.ClearItems();
-      this.FillItems(inventory);
+      this.FillItems(itemSource);
     }
 
     protected abstract void FillItems(ItemStorageBase inventory);
 
     protected abstract void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount);
-    protected abstract bool IsAbleToDropItem(ItemData item);
-    protected abstract void DropItem(ItemAndCount itemAndCount);
+    protected abstract bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer);
+    protected abstract void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer);
     protected abstract void DropItemOutSide(ItemAndCount itemAndCount);
     protected abstract bool IsAbleToDropOutSide(ItemData item);
 
@@ -130,11 +131,11 @@ namespace SHG
         if (this != target && !this.Contains(target) &&
           this.floatingItemBox.ItemData != ItemAndCount.None) {
 
-          bool isDropToTargetStorage = this.IsDropTargetStorage(target);
+          bool isDropToTargetStorage = this.IsDropTargetStorage(target, out ItemConatinerWindow targetContainer);
           var itemAndCount = this.floatingItemBox.ItemData;
           if (isDropToTargetStorage &&
-            this.IsAbleToDropItem(itemAndCount.Item)) {
-            this.DropItem(itemAndCount); 
+            this.IsAbleToDropItem(itemAndCount.Item, targetContainer)) {
+            this.DropItem(itemAndCount, targetContainer); 
           }
           else if (!isDropToTargetStorage && this.IsAbleToDropOutSide(itemAndCount.Item)) {
             Debug.Log($"target: {target}");
@@ -158,17 +159,20 @@ namespace SHG
       return (false);
     }
 
-    protected bool IsDropTargetStorage(VisualElement target)
+    protected bool IsDropTargetStorage(VisualElement target, out ItemConatinerWindow targetContainer)
     {
       ItemBox foundBox = Utils.FindUIElementFrom<ItemBox>(target);
       if (foundBox != null &&
         foundBox.ParentWindow is ItemConatinerWindow parentWindow) {
+        targetContainer = parentWindow;
         return (this.IsDropTarget(parentWindow));
       } 
       ItemConatinerWindow storageWindow = Utils.FindUIElementFrom<ItemConatinerWindow>(target);
       if (storageWindow != null) {
+        targetContainer = storageWindow;
         return (this.IsDropTarget(storageWindow));
       }
+      targetContainer = null;
       return (false);
     }
   }

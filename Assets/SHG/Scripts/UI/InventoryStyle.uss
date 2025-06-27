@@ -2,7 +2,7 @@
 {
   width: 40%;
   height: 70%;
-  left: 5%;
+  left: 50%;
   top: 10%;
   padding-top: 100px;
   position: absolute;
@@ -28,7 +28,7 @@
 
 #item-storage-window-container
 {
-  width: 70%;
+  width: 40%;
   height: 70%;
   left: 5%;
   top: 10%;

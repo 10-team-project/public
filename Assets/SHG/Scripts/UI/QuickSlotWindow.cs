@@ -11,7 +11,7 @@ namespace SHG
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     ItemConatinerWindow[] dropTargets; 
 
-    public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox)
+    public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
       this.name = "quick-slot-window-container";
       this.Show();
@@ -50,14 +50,22 @@ namespace SHG
       return ;
     }
 
-    protected override bool IsAbleToDropItem(ItemData item)
+    protected override bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer)
     {
-      return (item as EquipmentItemData);
+      if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
+        return (item as EquipmentItemData);
+      }
+      return (false);
     }
 
-    protected override void DropItem(ItemAndCount itemAndCount)
+    protected override void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer)
     {
-      App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);
+      if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
+        App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);
+      }
+      else {
+
+      }
     }
 
     protected override void DropItemOutSide(ItemAndCount itemAndCount)

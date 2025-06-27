@@ -10,11 +10,11 @@ namespace SHG
   public class MainUIPlaceHolder : MonoBehaviour
   {
     VisualElement root;
-    InventoryWindow inventoryWindow;
+    InventoryContainerWindow inventoryWindow;
     QuickSlotWindow quickSlotWindow;
     CraftWindow craftWindow;
     ItemBox floatingItemBox;
-    ItemStorageWindow itemStorageWindow;
+    ItemStorageContainerWindow itemStorageWindow;
 
     ItemSpawnTest itemSpawner;
 
@@ -108,19 +108,21 @@ namespace SHG
     {
       if (this.itemStorageWindow.IsVisiable) {
         this.itemStorageWindow.Hide();
+        this.inventoryWindow.Hide();
       }
       else {
         this.itemStorageWindow.Show();
+        this.inventoryWindow.Show();
       }
     }
 
     void CreateItemUI()
     {
       this.floatingItemBox = this.CreateFloatingItemBox();
-      this.inventoryWindow = new InventoryWindow(this.floatingItemBox);
+      this.inventoryWindow = new InventoryContainerWindow(this.floatingItemBox);
       this.quickSlotWindow = new QuickSlotWindow(this.floatingItemBox);
       this.craftWindow = new CraftWindow(this.floatingItemBox);
-      this.itemStorageWindow = new ItemStorageWindow(this.floatingItemBox);
+      this.itemStorageWindow = new ItemStorageContainerWindow(this.floatingItemBox);
       this.inventoryWindow.Hide();
       this.craftWindow.Hide();
       this.itemStorageWindow.Hide();
@@ -135,8 +137,16 @@ namespace SHG
     void WireInventoryStoarges()
     {
       this.inventoryWindow.AddDropTargets(
-         new ItemConatinerWindow[] { this.quickSlotWindow }
-        
+        new ItemConatinerWindow[] { 
+        this.quickSlotWindow,
+        this.itemStorageWindow.ItemContainer
+        }
+        );
+      this.itemStorageWindow.ItemContainer.AddDropTargets(
+        new ItemConatinerWindow[] {
+          this.inventoryWindow.NormalItemTab.Content as InventoryWindow,
+          this.inventoryWindow.StoryItemTab.Content as InventoryWindow
+        }
         );
       this.quickSlotWindow.AddDropTargets(
         new ItemConatinerWindow[] { 

@@ -1,138 +1,110 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 using UnityEngine.UIElements;
-using Patterns;
 
 namespace SHG
 {
-  public struct WindowTab : IHideableUI
+  public class InventoryWindow : ItemConatinerWindow
   {
-    public bool IsVisiable => this.inner.IsVisiable;
-    IHideableUI inner;
-    public VisualElement Content { get; private set; }
+    const MouseButton DRAG_BUTTON = ItemConatinerWindow.MouseButton.Left;
+    const MouseButton USE_BUTTON = ItemConatinerWindow.MouseButton.Right;
+    Func<ItemData, bool> filterItem;
+    Label label;
 
-    public WindowTab(VisualElement content)
+    public InventoryWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
-      if (!(content is IHideableUI)) {
-        throw (new ArgumentException("Content for window tab need to be IHideableUI"));
+      this.filterItem = filterItem;
+    }
+
+    protected override void CreateUI()
+    {
+      this.label = new Label();
+      this.label.AddToClassList("window-label");
+      this.Add(this.label);
+    }
+
+    //TODO: 각 아이템 UI를 objectpool에 보관
+    ItemBox CreateItembox(ItemAndCount itemAndCount)
+    {
+      ItemBox itemBox = new ItemBox(this);
+      itemBox.SetData(itemAndCount);
+      itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
+      itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
+      itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+      return (itemBox);
+    }
+
+    protected override void FillItems(ItemStorageBase inventory)
+    {
+      foreach (var pair in inventory.Items) {
+        var (item, count) = pair;
+        if (count > 0 && this.filterItem(item)) {
+          var box = this.CreateItembox(
+            new ItemAndCount { Item = item, Count = count });
+          this.itemsContainer.Add(box);
+        }
+      } 
+    }
+
+    // TODO: return to Obejctpool
+    protected override void ClearItems()
+    {
+      this.itemsContainer.Clear();
+    }
+
+    protected override void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
+    {
+      var item = App.Instance.Inventory.PeakItem(itemAndCount.Item); 
+      if (item is IUsable usableItem) {
+        this.UseItem(App.Instance.Inventory.GetItem(itemAndCount.Item) as IUsable);
       }
-      this.Content = content;
-      content.AddToClassList("window-tab-container");
-      this.inner = (this.Content as IHideableUI);
     }
 
-    public void Hide()
+    void UseItem(IUsable usableItem)
     {
-      this.inner.Hide();
+      App.Instance.Inventory.UseItem(usableItem);
     }
 
-    public void Show()
+    protected override bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer)
     {
-      this.inner.Show();
-    }
-  }
-
-  public class InventoryWindow : VisualElement, IHideableUI
-  {
-    public bool IsVisiable { get; private set; }
-    public WindowTab StoryItemTab { get; private set; } 
-    public WindowTab NormalItemTab { get; private set; }
-    public ObservableValue<WindowTab> CurrentTab;
-    ItemBox floatingBox;
-    Button normalItemTabButton;
-    Button storyItemTabButton;
-
-    public InventoryWindow(ItemBox floatingBox)
-    {
-      this.name = "inventory-window-container";
-      this.AddToClassList("window-container");
-      this.floatingBox = floatingBox;
-      this.CreateUI();
-      this.StoryItemTab.Hide();
-      this.StoryItemTab.Content.SetEnabled(false);
-      this.CurrentTab = new (this.NormalItemTab);
-      this.CurrentTab.Value.Show();
+      if (targetContainer is QuickSlotWindow quickSlotWindow) {
+        return (item as EquipmentItemData);
+      }
+      else if (targetContainer is ItemStorageWindow itemStorageWindow) {
+        return (true);
+      }
+      return (false);
     }
 
-    public void AddDropTargets(IEnumerable<ItemConatinerWindow> targets)
+    protected override void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer)
     {
-
-      var normalItemTab = this.NormalItemTab.Content as InventoryItemContainerWindow;
-      var storyItemTab = this.StoryItemTab.Content as InventoryItemContainerWindow; 
-      normalItemTab.AddDropTargets(targets);
-      storyItemTab.AddDropTargets(targets);
+      if (targetContainer is QuickSlotWindow) {
+        App.Instance.Inventory.MoveItemToQuickSlot(itemAndCount.Item);
+      }
+      else if (targetContainer is ItemStorageWindow itemStorageWindow) {
+        if (itemAndCount.Count == 1) {
+          var item = this.ItemSource.GetItem(itemAndCount.Item);
+          targetContainer.ItemSource.AddItem(item);
+        } 
+        else {
+          var (item, count) = this.ItemSource.GetItems(itemAndCount.Item, itemAndCount.Count);
+          targetContainer.ItemSource.AddItems(item, count);
+        }
+      }
+      else {
+        throw (new NotImplementedException());
+      }
     }
 
-    public void Hide()
+    protected override void DropItemOutSide(ItemAndCount itemAndCount)
     {
-      this.IsVisiable = false;
-      Utils.HideVisualElement(this);
+      //FIXME: drop item count?
+      App.Instance.Inventory.GetItem(itemAndCount.Item);
     }
 
-    public void Show()
+    protected override bool IsAbleToDropOutSide(ItemData item)
     {
-      this.IsVisiable = false;
-      Utils.ShowVisualElement(this);
-    }
-
-    void CreateUI()
-    {
-      var tabButtonContainer = new VisualElement();
-      tabButtonContainer.name = "inventory-window-tab-button-container";
-      this.storyItemTabButton = new Button();
-      this.storyItemTabButton.text = "Story";
-      this.storyItemTabButton.AddToClassList("inventory-window-tab-button");
-      this.storyItemTabButton.RegisterCallback<ClickEvent>(this.OnClickStoryTab);
-      this.normalItemTabButton = new Button();
-      this.normalItemTabButton.text = "Normal";
-      this.normalItemTabButton.AddToClassList("inventory-window-tab-button");
-      this.normalItemTabButton.RegisterCallback<ClickEvent>(this.OnClickNormalTab);
-      tabButtonContainer.Add(this.storyItemTabButton);
-      tabButtonContainer.Add(this.normalItemTabButton);
-      this.Add(tabButtonContainer);
-      this.NormalItemTab = new WindowTab(
-        new InventoryItemContainerWindow(this.IsNormalItem, this.floatingBox)
-        );
-      this.StoryItemTab = new WindowTab(
-        new InventoryItemContainerWindow(this.IsStoryItem, this.floatingBox)
-        );
-      this.Add(this.NormalItemTab.Content);
-      this.Add(this.StoryItemTab.Content);
-      var closeButton = new Button();
-      closeButton.text = "close";
-      closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
-      closeButton.AddToClassList("window-close-button"); 
-      this.Add(closeButton);
-    }
-
-    void OnClickNormalTab(ClickEvent click)
-    {
-      this.ChangeTabTo(this.NormalItemTab);
-    }
-
-    void OnClickStoryTab(ClickEvent click)
-    {
-      this.ChangeTabTo(this.StoryItemTab);
-    }
-
-    bool IsNormalItem(ItemData item)
-    {
-      return (!item.IsStoryItem);
-    }
-
-    bool IsStoryItem(ItemData item)
-    {
-      return (item.IsStoryItem);
-    }
-
-    void ChangeTabTo(WindowTab tab)
-    {
-      this.CurrentTab.Value.Hide();
-      this.CurrentTab.Value.Content.SetEnabled(false);
-      this.CurrentTab.Value = tab;
-      this.CurrentTab.Value.Show();
-      this.CurrentTab.Value.Content.SetEnabled(true);
+      return (true);
     }
   }
 }

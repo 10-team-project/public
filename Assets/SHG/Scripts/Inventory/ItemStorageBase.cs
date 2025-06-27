@@ -76,6 +76,29 @@ namespace SHG
       this.OnChanged?.Invoke(this);
     }
 
+    public void AddItems(Item item, int count)
+    {
+      if (count < 1) {
+        throw (new ArgumentException($"Add {item.Data.Name} {count}"));
+      }
+      this.WillChange?.Invoke(this);
+      #if UNITY_EDITOR
+      for (int i = 0; i < count; i++) {
+        this.AddItemName(item.Data);
+      }
+      if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = count})) {
+        throw (new ApplicationException($"Unable to add {count} more {item.Data.Name}"));
+      }
+      #endif
+      if (this.Items.TryGetValue(item.Data, out int itemCount)) {
+        this.Items[item.Data] = itemCount + count;
+      }
+      else {
+        this.Items.Add(item.Data, count);
+      }
+      this.OnChanged?.Invoke(this);
+    }
+
 #if UNITY_EDITOR
     void AddItemName(ItemData data) 
     {
@@ -105,6 +128,29 @@ namespace SHG
       }
     }
 #endif
+
+    public (Item item, int count) GetItems(ItemData itemData, int count)
+    {
+      int itemCount = this.GetItemCount(itemData);
+      if (itemCount < count) {
+        throw (new ApplicationException($"GetItem: Not enough {itemData.Name} required: {count} ")); 
+      }
+      this.WillChange?.Invoke(this);
+      Item item = Item.CreateItemFrom(itemData);
+      #if UNITY_EDITOR
+      for (int i = 0; i < count; i++) {
+        this.RemoveItemName(itemData);
+      }
+      #endif
+      if (itemCount < count + 1) {
+        this.Items.Remove(itemData);
+      }
+      else {
+        this.Items[itemData] = itemCount - count;
+      }
+      this.OnChanged?.Invoke(this);
+      return (item, count);
+    }
 
     public Item GetItem(ItemData itemData)
     {
