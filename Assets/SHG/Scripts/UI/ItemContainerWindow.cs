@@ -33,7 +33,7 @@ namespace SHG
       this.itemsContainer.AddToClassList("item-storage-items-container");
       this.Add(this.itemsContainer);
       this.CreateUI();
-      this.OnInventoryUpdated(Inventory.Instance);
+      this.OnInventoryUpdated(App.Instance.Inventory);
     }
 
     public void AddDropTarget(ItemConatinerWindow target)
@@ -46,26 +46,26 @@ namespace SHG
 
     public void Show()
     {
-      Inventory.Instance.OnChanged += this.OnInventoryUpdated;
-      this.OnInventoryUpdated(Inventory.Instance);
+      App.Instance.Inventory.OnChanged += this.OnInventoryUpdated;
+      this.OnInventoryUpdated(App.Instance.Inventory);
       this.IsVisiable = true;
       Utils.ShowVisualElement(this);
     }
 
     public void Hide()
     {
-      Inventory.Instance.OnChanged -= this.OnInventoryUpdated;
+      App.Instance.Inventory.OnChanged -= this.OnInventoryUpdated;
       this.IsVisiable = false;
       Utils.HideVisualElement(this);
     }
 
-    protected void OnInventoryUpdated(Inventory inventory)
+    protected void OnInventoryUpdated(ItemStorageBase inventory)
     {
       this.ClearItems();
       this.FillItems(inventory);
     }
 
-    protected abstract void FillItems(Inventory inventory);
+    protected abstract void FillItems(ItemStorageBase inventory);
 
     protected abstract void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount);
     protected abstract bool IsAbleToDropItem(ItemData item);

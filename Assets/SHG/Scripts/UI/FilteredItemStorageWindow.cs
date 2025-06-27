@@ -37,7 +37,7 @@ namespace SHG
       return (itemBox);
     }
 
-    protected override void FillItems(Inventory inventory)
+    protected override void FillItems(ItemStorageBase inventory)
     {
       foreach (var pair in inventory.Items) {
         var (item, count) = pair;
@@ -57,20 +57,20 @@ namespace SHG
 
     protected override void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
     {
-      var item = Inventory.Instance.PeakItem(itemAndCount.Item); 
+      var item = App.Instance.Inventory.PeakItem(itemAndCount.Item); 
       if (item is IUsable usableItem) {
-        this.UseItem(Inventory.Instance.GetItem(itemAndCount.Item) as IUsable);
+        this.UseItem(App.Instance.Inventory.GetItem(itemAndCount.Item) as IUsable);
       }
     }
 
     void UseItem(IUsable usableItem)
     {
-      Inventory.Instance.UseItem(usableItem);
+      App.Instance.Inventory.UseItem(usableItem);
     }
 
     void OnDropItemToQuickSlot(EquipmentItemData equipmentItemData)
     {
-      Inventory.Instance.MoveItemToQuickSlot(equipmentItemData);
+      App.Instance.Inventory.MoveItemToQuickSlot(equipmentItemData);
     }
 
     protected override bool IsAbleToDropItem(ItemData item)
@@ -80,13 +80,13 @@ namespace SHG
 
     protected override void DropItem(ItemAndCount itemAndCount)
     {
-      Inventory.Instance.MoveItemToQuickSlot(itemAndCount.Item);
+      App.Instance.Inventory.MoveItemToQuickSlot(itemAndCount.Item);
     }
 
     protected override void DropItemOutSide(ItemAndCount itemAndCount)
     {
       //FIXME: drop item count?
-      Inventory.Instance.GetItem(itemAndCount.Item);
+      App.Instance.Inventory.GetItem(itemAndCount.Item);
     }
 
     protected override bool IsAbleToDropOutSide(ItemData item)

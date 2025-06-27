@@ -25,7 +25,7 @@ namespace SHG
         return ;
       }
       var item = Item.CreateItemFrom(this.itemToAdd);
-      Inventory.Instance.AddItem(item);
+      App.Instance.Inventory.AddItem(item);
     }
 
     [Button ("Test get item")]
@@ -35,18 +35,18 @@ namespace SHG
         Debug.Log("itemToGet is none");
         return ;
       }
-      if (Inventory.Instance.GetItemCount(this.itemToGet) < 1) {
+      if (App.Instance.Inventory.GetItemCount(this.itemToGet) < 1) {
         Debug.Log($"No {this.itemToGet.Name} in Inventory");
         return ;
       }
-      var item = Inventory.Instance.GetItem(this.itemToGet);
+      var item = App.Instance.Inventory.GetItem(this.itemToGet);
       Item.CreateItemObjectFrom(item.Data);
     }
 
     [Button ("Test print Inventory items")]
     void TestPrintInventory()
     {
-      this.PrintInventory(Inventory.Instance);
+      this.PrintInventory(App.Instance.Inventory);
     }
 
     [Button ("Move item to quickslot")]
@@ -56,12 +56,12 @@ namespace SHG
         Debug.Log($"not selected item to move to quickslot");
         return ;
       }
-      if (Inventory.Instance.GetItemCount(this.itemToMoveQuickSlot) == 0) {
+      if (App.Instance.Inventory.GetItemCount(this.itemToMoveQuickSlot) == 0) {
         Debug.Log($"{this.itemToMoveQuickSlot.Name} is not in Inventory");
         return ;
       }
       try {
-        Inventory.Instance.MoveItemToQuickSlot(this.itemToMoveQuickSlot);
+        App.Instance.Inventory.MoveItemToQuickSlot(this.itemToMoveQuickSlot);
       }
       catch (Exception e) {
         Debug.LogError(e.Message);
@@ -75,29 +75,29 @@ namespace SHG
         Debug.Log($"not selected item to get from quickslot");
         return ;
       }
-      if (Inventory.Instance.GetItemCouontInQuickSlot(
+      if (App.Instance.Inventory.GetItemCouontInQuickSlot(
           this.itemToGetFromQuickSlot) == 0) {
         Debug.Log($"{this.itemToGetFromQuickSlot.Name} is not in quickslot");
         return ;
       }
       try {
-        Inventory.Instance.MoveItemFromQuickSlot(this.itemToGetFromQuickSlot); 
+        App.Instance.Inventory.MoveItemFromQuickSlot(this.itemToGetFromQuickSlot); 
       } catch (Exception e) {
         Debug.LogError(e.Message);
       }
     }
 
-    void PrintInventory(Inventory inventory)
+    void PrintInventory(ItemStorageBase inventory)
     {
      #if UNITY_EDITOR
       Debug.Log("Inventory items");
-      this.inventorySlot = $"{inventory.CountUsedSlot()} / {Inventory.MAX_SLOT_COUNT}";
-      for (int i = 0; i < Inventory.Instance.ItemNamesForDebugging.Count; i++) {
-        var itemName = Inventory.Instance.ItemNamesForDebugging[i];
+      this.inventorySlot = $"{inventory.CountUsedSlot()} / {App.Instance.Inventory.MAX_SLOT_COUNT}";
+      for (int i = 0; i < App.Instance.Inventory.ItemNamesForDebugging.Count; i++) {
+        var itemName = App.Instance.Inventory.ItemNamesForDebugging[i];
         Debug.Log($"{i + 1}: {itemName}"); 
       }
       Debug.Log("Quick slot items");
-      var quickslotItems = Inventory.Instance.ItemNamesForDebuggingInQuickSlot;
+      var quickslotItems = App.Instance.Inventory.ItemNamesForDebuggingInQuickSlot;
       for (int i = 0; i < quickslotItems.Count; i++) {
         Debug.Log($"{i + 1}: {quickslotItems[i]}"); 
       }
@@ -107,13 +107,13 @@ namespace SHG
     // Start is called before the first frame update
     void OnEnable()
     {
-      Inventory.Instance.OnChanged += this.PrintInventory;
+      App.Instance.Inventory.OnChanged += this.PrintInventory;
     }
 
     void OnDisable()
     {
-      if (Inventory.Instance != null) {
-        Inventory.Instance.OnChanged -= this.PrintInventory;
+      if (App.Instance.Inventory != null) {
+        App.Instance.Inventory.OnChanged -= this.PrintInventory;
       }
     }
   }

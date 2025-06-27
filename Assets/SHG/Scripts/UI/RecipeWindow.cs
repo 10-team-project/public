@@ -25,8 +25,8 @@ namespace SHG
     void OnClickCraft(ItemRecipe recipe)
     {
       try {
-        var craftedItem = Inventory.Instance.CraftItem(recipe);
-        Inventory.Instance.AddItem(craftedItem);
+        var craftedItem = App.Instance.Inventory.CraftItem(recipe);
+        App.Instance.Inventory.AddItem(craftedItem);
       }
       catch (Exception e) {
         Debug.LogError($"Fail to craf {recipe.RecipeData.Product.Name} {e.Message}");

@@ -41,13 +41,6 @@ namespace SHG
       this.LoadAllRecipes();
     }
 
-    void Start()
-    {
-      if (Inventory.Instance == null) {
-        Debug.LogError("Inventory is null");
-      }
-    }
-
     void LoadAllRecipes()
     {
       ItemRecipeData[] recipeData = Utils.LoadAllFrom<ItemRecipeData>(RECIPE_DIR);

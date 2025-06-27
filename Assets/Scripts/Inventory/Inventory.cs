@@ -5,60 +5,27 @@ using UnityEngine;
 using Patterns;
 using SHG;
 
-public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Inventory>
+public class Inventory : ItemStorageBase
 {
-
   public const int QUICKSLOT_COUNT = 4;
-  public const int MAX_STACK_COUNT = 20;
-  public const int MAX_SLOT_COUNT = 20;
-  public Dictionary<ItemData, int> Items { get; private set; }
-  public Action<Inventory> WillChange { get; set; }
-  public Action<Inventory> OnChanged { get; set; }
   public List<ItemData> QuickSlotItems { get; private set;}
 
 #if UNITY_EDITOR
   [SerializeField]
-  public List<string> ItemNamesForDebugging;
-  [SerializeField]
   public List<string> ItemNamesForDebuggingInQuickSlot;
 #endif
+
+  public Inventory(): base()
+  {
+    this.QuickSlotItems = new ();
+    this.ItemNamesForDebuggingInQuickSlot = new();
+  }
 
   public ItemData[] PeakItemsInQuickSlot()
   {
     var items = new ItemData[this.QuickSlotItems.Count];
     this.QuickSlotItems.CopyTo(items);
     return (items);
-  }
-
-  public bool IsAbleToAddItem(ItemAndCount itemAndCount)
-  {
-    var currentSlotCount = this.CountUsedSlot();
-    if (currentSlotCount < MAX_SLOT_COUNT) {
-      return (true);
-    }
-    if (currentSlotCount == MAX_SLOT_COUNT) {
-      var currentItemCount = this.GetItemCount(itemAndCount.Item);
-      if ((currentItemCount % MAX_STACK_COUNT) + itemAndCount.Count <
-        MAX_STACK_COUNT) {
-        return (true);
-      }
-    }
-    return (false);
-  }
-
-  public int CountUsedSlot()
-  {
-    int count = 0;   
-    foreach (var itemAndCount in this.Items) {
-      var itemCount = itemAndCount.Value;
-      if (itemCount % MAX_STACK_COUNT == 0) {
-        count += (itemCount / MAX_STACK_COUNT);
-      }
-      else {
-        count += (itemCount / MAX_STACK_COUNT) + 1;
-      }
-    }
-    return (count);
   }
 
   public void MoveItemToQuickSlot(ItemData itemData)
@@ -197,24 +164,6 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     return (Item.CreateItemFrom(recipe.RecipeData.Product));
   }
 
-  public void AddItem(Item item)
-  {
-    this.WillChange?.Invoke(this);
-#if UNITY_EDITOR
-    this.AddItemName(item.Data);
-    if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {
-      throw (new ApplicationException($"Unable to add more {item.Data.Name}"));
-    }
-#endif
-    if (this.Items.TryGetValue(item.Data, out int itemCount)) {
-      this.Items[item.Data] = itemCount + 1;
-    }
-    else {
-      this.Items.Add(item.Data, 1);
-    }
-    this.OnChanged?.Invoke(this);
-  }
-
   public int GetItemCouontInQuickSlot(ItemData itemData)
   {
     int count = 0;
@@ -225,6 +174,25 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
     return (count);
   }
+#if UNITY_EDITOR
+    void AddQuickSlotItemName(ItemData data) 
+    {
+      this.ItemNamesForDebuggingInQuickSlot.Add(data.Name);
+      this.ItemNamesForDebuggingInQuickSlot.Sort();
+    }
+#endif
+
+#if UNITY_EDITOR
+    void RemoveQuickSlotItemName(ItemData itemData)
+    {
+      var index = this.ItemNamesForDebuggingInQuickSlot.FindIndex(
+        name => name == itemData.Name);
+      if (index != -1) {
+        this.ItemNamesForDebuggingInQuickSlot.RemoveAt(index);
+      }
+    }
+#endif
+
 
 #if UNITY_EDITOR
   void AddItemName(ItemData data) 
@@ -233,24 +201,6 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     this.ItemNamesForDebugging.Sort();
   }
 #endif
-
-#if UNITY_EDITOR
-  void AddQuickSlotItemName(ItemData data) 
-  {
-    this.ItemNamesForDebuggingInQuickSlot.Add(data.Name);
-    this.ItemNamesForDebuggingInQuickSlot.Sort();
-  }
-#endif
-
-  public int GetItemCount(ItemData itemData)
-  {
-    if (this.Items.TryGetValue(itemData, out int itemCount)) {
-      return (itemCount);
-    }
-    else {
-      return (0);
-    }
-  }
 
 #if UNITY_EDITOR
   void RemoveItemName(ItemData itemData)
@@ -262,57 +212,4 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     }
   }
 #endif
-
-#if UNITY_EDITOR
-  void RemoveQuickSlotItemName(ItemData itemData)
-  {
-    var index = this.ItemNamesForDebuggingInQuickSlot.FindIndex(
-      name => name == itemData.Name);
-    if (index != -1) {
-      this.ItemNamesForDebuggingInQuickSlot.RemoveAt(index);
-    }
-  }
-#endif
-
-  public Item GetItem(ItemData itemData)
-  {
-    int itemCount = this.GetItemCount(itemData);
-    if (itemCount < 1) {
-      throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
-    }
-    this.WillChange?.Invoke(this);
-    Item item = Item.CreateItemFrom(itemData);
-#if UNITY_EDITOR
-    this.RemoveItemName(itemData);
-#endif
-    if (itemCount > 0) {
-      this.Items.Remove(itemData);
-    }
-    else {
-      this.Items[itemData] = itemCount - 1;
-    }
-    this.OnChanged?.Invoke(this);
-    return (item);
-  }
-
-  public Item PeakItem(ItemData itemData)
-  {
-    int itemCount = this.GetItemCount(itemData);
-    if (itemCount < 1) {
-      throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
-    }
-
-    return (Item.CreateItemFrom(itemData));
-  }
-
-  protected override void Awake()
-  {
-    base.Awake();
-    this.Items = new ();
-    this.QuickSlotItems = new ();
-#if UNITY_EDITOR
-    this.ItemNamesForDebugging = new();
-    this.ItemNamesForDebuggingInQuickSlot = new();
-#endif
-  }
 }

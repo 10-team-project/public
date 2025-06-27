@@ -35,7 +35,7 @@ namespace SHG
       bool isCraftable = true;
       foreach (var itemAndCount in recipe.RequiredItems) {
         ItemBox itemBox = new ItemBox(this);
-        var currentItemCount = Inventory.Instance.GetItemCount(itemAndCount.Item);
+        var currentItemCount = App.Instance.Inventory.GetItemCount(itemAndCount.Item);
         itemBox.SetData(itemAndCount);
         if (currentItemCount < itemAndCount.Count) {
           isCraftable = false;

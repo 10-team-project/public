@@ -36,7 +36,7 @@ namespace SHG
       this.Add(this.recipeWindow);
     }
 
-    void OnInventoryUpdated(Inventory inventory)
+    void OnInventoryUpdated(ItemStorageBase inventory)
     {
       this.productListWindow.UpdateProductsEnable();
       if (this.productListWindow.SelectedItem != null &&
@@ -52,14 +52,14 @@ namespace SHG
       Utils.HideVisualElement(this);
       this.productListWindow.SelectedItem = null;
       this.recipeWindow.ClearPresentingData();
-      Inventory.Instance.OnChanged -= this.OnInventoryUpdated;
+      App.Instance.Inventory.OnChanged -= this.OnInventoryUpdated;
     }
 
     public void Show()
     {
       this.IsVisiable = true;
       Utils.ShowVisualElement(this);
-      Inventory.Instance.OnChanged += this.OnInventoryUpdated;
+      App.Instance.Inventory.OnChanged += this.OnInventoryUpdated;
     }
   }
 }

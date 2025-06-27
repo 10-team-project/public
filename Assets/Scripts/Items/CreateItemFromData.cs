@@ -44,7 +44,7 @@ public partial class Item
     }
     #endif
     var itemObject = gameObject.AddComponent<ItemObject>();
-    itemObject.OnPickedUp += Inventory.Instance.AddItem;
+    itemObject.OnPickedUp += App.Instance.Inventory.AddItem;
     itemObject.SetItem(item);
     return (itemObject);
   }

@@ -38,12 +38,10 @@ namespace SHG
       }
     }
 
-    protected override void FillItems(Inventory inventory)
+    protected override void FillItems(ItemStorageBase inventoryBase)
     {
-      Debug.Log("fill quickslot");
-      for (int i = 0; i < inventory.QuickSlotItems.Count; i++) {
-        Debug.Log(inventory.QuickSlotItems[i].Name);
-        this.slots[i].SetData(new ItemAndCount { Item = inventory.QuickSlotItems[i], Count = 1 }) ;
+      for (int i = 0; i < App.Instance.Inventory.QuickSlotItems.Count; i++) {
+        this.slots[i].SetData(new ItemAndCount { Item = App.Instance.Inventory.QuickSlotItems[i], Count = 1 }) ;
       }
     }
 
@@ -59,7 +57,7 @@ namespace SHG
 
     protected override void DropItem(ItemAndCount itemAndCount)
     {
-      Inventory.Instance.MoveItemFromQuickSlot(itemAndCount.Item);
+      App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);
     }
 
     protected override void DropItemOutSide(ItemAndCount itemAndCount)
