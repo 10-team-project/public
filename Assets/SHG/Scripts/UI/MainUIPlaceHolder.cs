@@ -112,12 +112,12 @@ namespace SHG
 
     void WireInventoryStoarges()
     {
-      this.inventoryWindow.SetDropTargets(new ItemStorageWindow[1] {
+      this.inventoryWindow.AddDropTarget(
         this.quickSlotWindow
-        });
-      this.quickSlotWindow.SetDropTargets(new ItemStorageWindow[1] {
-        this.inventoryWindow
-        });
+        );
+      this.quickSlotWindow.AddDropTarget(
+        this.inventoryWindow.NormalItemTab.Content as ItemStorageWindow
+        );
     }
 
     void Start()

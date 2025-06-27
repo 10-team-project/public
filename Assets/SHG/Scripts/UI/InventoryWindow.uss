@@ -1,8 +1,28 @@
 #inventory-window-container 
 {
-  width: 60%;
-  height: 50%;
+  width: 70%;
+  height: 70%;
   left: 15%;
   top: 10%;
   padding-top: 100px;
+}
+
+#inventory-window-tab-button-container
+{
+  position: absolute;
+  top: 0;
+  left: 40%;
+  flex-direction: row;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.inventory-window-tab-button
+{
+  border-color: green;
+  border-width: 1px;
+  color: black;
+  font-size: 20px;
+  margin: 5px;
 }

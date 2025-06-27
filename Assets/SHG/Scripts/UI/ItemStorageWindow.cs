@@ -21,11 +21,12 @@ namespace SHG
     protected bool IsDraggingItem => this.currentDraggingTarget != null;
     protected Vector2 dragStartPosition;
     protected ItemBox floatingItemBox;
-    protected abstract ItemStorageWindow[] DropTargets { get; }
+    public List<ItemStorageWindow> DropTargets { get; protected set; }
 
     public ItemStorageWindow(ItemBox floatingItemBox)
     {
       this.floatingItemBox = floatingItemBox;
+      this.DropTargets = new ();
       this.AddToClassList("item-storage-container");
       this.AddToClassList("window-container");
       this.itemsContainer = new VisualElement();
@@ -33,6 +34,14 @@ namespace SHG
       this.Add(this.itemsContainer);
       this.CreateUI();
       this.OnInventoryUpdated(Inventory.Instance);
+    }
+
+    public void AddDropTarget(ItemStorageWindow target)
+    {
+      if (target == this) {
+        throw (new ArgumentException($"drop target same window {target}"));
+      }
+      this.DropTargets.Add(target);
     }
 
     public void Show()

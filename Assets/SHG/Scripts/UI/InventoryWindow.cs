@@ -1,33 +1,99 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
+using Patterns;
 
 namespace SHG
 {
-  public class InventoryWindow : ItemStorageWindow
+  public struct WindowTab : IHideableUI
   {
-    const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
-    const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
-    Dictionary<VisualElement, ItemAndCount> itemBoxTable;
-    protected override ItemStorageWindow[] DropTargets => this.dropTargets;
-    ItemStorageWindow[] dropTargets; 
+    public bool IsVisiable => this.inner.IsVisiable;
+    IHideableUI inner;
+    public VisualElement Content { get; private set; }
 
-    public InventoryWindow(ItemBox floatingItemBox): base (floatingItemBox)
+    public WindowTab(VisualElement content)
     {
-      this.itemBoxTable = new ();
+      if (!(content is IHideableUI)) {
+        throw (new ArgumentException("Content for window tab need to be IHideableUI"));
+      }
+      this.Content = content;
+      content.AddToClassList("window-tab-container");
+      this.inner = (this.Content as IHideableUI);
+    }
+
+    public void Hide()
+    {
+      this.inner.Hide();
+    }
+
+    public void Show()
+    {
+      this.inner.Show();
+    }
+  }
+
+  public class InventoryWindow : VisualElement, IHideableUI
+  {
+    public bool IsVisiable { get; private set; }
+    public WindowTab StoryItemTab { get; private set; } 
+    public WindowTab NormalItemTab { get; private set; }
+    public ObservableValue<WindowTab> CurrentTab;
+    ItemBox floatingBox;
+    Button normalItemTabButton;
+    Button storyItemTabButton;
+
+    public InventoryWindow(ItemBox floatingBox)
+    {
       this.name = "inventory-window-container";
+      this.AddToClassList("window-container");
+      this.floatingBox = floatingBox;
+      this.CreateUI();
+      this.ChangeTabTo(this.NormalItemTab);
     }
 
-    public void SetDropTargets(ItemStorageWindow[] targets)
+    public void AddDropTarget(ItemStorageWindow target)
     {
-      this.dropTargets = targets;
+      var normalItemTab = this.NormalItemTab.Content as FilteredItemStorageWindow;
+      normalItemTab.AddDropTarget(target);
+      
     }
 
-    protected override void CreateUI()
+    public void Hide()
     {
-      var label = new Label();
-      label.text = this.label;
-      label.AddToClassList("window-label");
-      this.Add(label);
+      this.IsVisiable = false;
+      Utils.HideVisualElement(this);
+    }
+
+    public void Show()
+    {
+      this.IsVisiable = false;
+      Utils.ShowVisualElement(this);
+    }
+
+    void CreateUI()
+    {
+      var tabButtonContainer = new VisualElement();
+      tabButtonContainer.name = "inventory-window-tab-button-container";
+      this.storyItemTabButton = new Button();
+      this.storyItemTabButton.text = "Story";
+      this.storyItemTabButton.AddToClassList("inventory-window-tab-button");
+      this.storyItemTabButton.RegisterCallback<ClickEvent>(this.OnClickStoryTab);
+      this.normalItemTabButton = new Button();
+      this.normalItemTabButton.text = "Normal";
+      this.normalItemTabButton.AddToClassList("inventory-window-tab-button");
+      this.normalItemTabButton.RegisterCallback<ClickEvent>(this.OnClickNormalTab);
+      tabButtonContainer.Add(this.storyItemTabButton);
+      tabButtonContainer.Add(this.normalItemTabButton);
+      this.Add(tabButtonContainer);
+      this.NormalItemTab = new WindowTab(
+        new FilteredItemStorageWindow(this.IsNormalItem, this.floatingBox)
+        );
+      this.StoryItemTab = new WindowTab(
+        new FilteredItemStorageWindow(this.IsStoryItem, this.floatingBox)
+        );
+      this.CurrentTab = new (this.NormalItemTab);
+      this.Add(this.NormalItemTab.Content);
       var closeButton = new Button();
       closeButton.text = "close";
       closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
@@ -35,74 +101,31 @@ namespace SHG
       this.Add(closeButton);
     }
 
-    //TODO: 각 아이템 UI를 objectpool에 보관
-    ItemBox CreateItembox(ItemAndCount itemAndCount)
+    void OnClickNormalTab(ClickEvent click)
     {
-      ItemBox itemBox = new ItemBox(this);
-      itemBox.SetData(itemAndCount);
-      itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
-      itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
-      itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
-      this.itemBoxTable[itemBox] = itemAndCount;
-      return (itemBox);
+      this.ChangeTabTo(this.NormalItemTab);
     }
 
-
-    protected override void FillItems(Inventory inventory)
+    void OnClickStoryTab(ClickEvent click)
     {
-      foreach (var pair in inventory.Items) {
-        var (item, count) = pair;
-        if (count > 0) {
-          var box = this.CreateItembox(
-            new ItemAndCount { Item = item, Count = count });
-          this.itemsContainer.Add(box);
-        }
-      } 
+      this.ChangeTabTo(this.StoryItemTab);
     }
 
-    // TODO: return to Obejctpool
-    protected override void ClearItems()
+    bool IsNormalItem(ItemData item)
     {
-      this.itemsContainer.Clear();
+      return (!item.IsStoryItem);
     }
 
-    protected override void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
+    bool IsStoryItem(ItemData item)
     {
-      var item = Inventory.Instance.PeakItem(itemAndCount.Item); 
-      if (item is IUsable usableItem) {
-        this.UseItem(Inventory.Instance.GetItem(itemAndCount.Item) as IUsable);
-      }
+      return (item.IsStoryItem);
     }
 
-    void UseItem(IUsable usableItem)
+    void ChangeTabTo(WindowTab tab)
     {
-      Inventory.Instance.UseItem(usableItem);
-    }
-
-    void OnDropItemToQuickSlot(EquipmentItemData equipmentItemData)
-    {
-      Inventory.Instance.MoveItemToQuickSlot(equipmentItemData);
-    }
-
-    protected override bool IsAbleToDropItem(ItemData item)
-    {
-      return (item as EquipmentItemData);
-    }
-
-    protected override void DropItem(ItemAndCount itemAndCount)
-    {
-      Inventory.Instance.MoveItemToQuickSlot(itemAndCount.Item);
-    }
-
-    protected override void DropItemOutSide(ItemAndCount itemAndCount)
-    {
-      //FIXME: drop item count?
-      Inventory.Instance.GetItem(itemAndCount.Item);
-    }
-
-    protected override bool IsAbleToDropOutSide(ItemData item)
-    {
-      return (true);
+      this.CurrentTab.Value.Hide();
+      this.CurrentTab.Value = tab;
+      this.CurrentTab.Value.Show();
     }
   }
 }

@@ -21,6 +21,14 @@
   right: 20px;
 }
 
+.window-tab-container
+{
+  width: 90%;
+  height: 80%;
+  border-color: green;
+  border-width: 2px;
+}
+
 .test-button 
 {
   width: 200px;

@@ -9,18 +9,12 @@ namespace SHG
   {
     ItemBox[] slots;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
-    protected override ItemStorageWindow[] DropTargets => this.dropTargets;
     ItemStorageWindow[] dropTargets; 
 
     public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox)
     {
       this.name = "quick-slot-window-container";
       this.Show();
-    }
-
-    public void SetDropTargets(ItemStorageWindow[] targets)
-    {
-      this.dropTargets = targets;
     }
 
     protected override void CreateUI()

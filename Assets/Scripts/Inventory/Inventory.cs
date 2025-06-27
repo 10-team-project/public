@@ -9,6 +9,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 {
 
   public const int QUICKSLOT_COUNT = 4;
+  public const int MAX_STACK_COUNT = 20;
   public Dictionary<ItemData, int> Items { get; private set; }
   public Action<Inventory> WillChange { get; set; }
   public Action<Inventory> OnChanged { get; set; }
@@ -26,6 +27,21 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     var items = new ItemData[this.QuickSlotItems.Count];
     this.QuickSlotItems.CopyTo(items);
     return (items);
+  }
+
+  public int CountUsedSlot()
+  {
+    int count = 0;   
+    foreach (var itemAndCount in this.Items) {
+      var itemCount = itemAndCount.Value;
+      if (itemCount % MAX_STACK_COUNT == 0) {
+        count += (itemCount / MAX_STACK_COUNT);
+      }
+      else {
+        count += (itemCount / MAX_STACK_COUNT) + 1;
+      }
+    }
+    return (count);
   }
 
   public void MoveItemToQuickSlot(ItemData itemData)
@@ -81,13 +97,10 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
         }
       }
     }
-
     else {
       throw (new NotImplementedException());
     }
-
   }
-
 
   public void MoveItemFromQuickSlot(ItemData itemData)
   {
