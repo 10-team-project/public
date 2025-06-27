@@ -5,12 +5,13 @@ public class PlayerInteraction : MonoBehaviour
 {
     [SerializeField] float interactRange;
 
+    [SerializeField] Transform interactPoint;
+
     [SerializeField] string[] interactLayerNames;
     private LayerMask interactLayer;
 
     [SerializeField] float interactionCooldown = 0.5f;
     private float lastInteractionTime = float.MinValue;
-
 
     private void Start()
     {
@@ -25,6 +26,18 @@ public class PlayerInteraction : MonoBehaviour
     private void AllInteraction()
     {
         if (InputManager.Instance.IsBlocked(InputType.Interaction)) return;
+
+
+        Vector3 center;
+
+        if (interactPoint != null)
+        {
+            center = interactPoint.position;
+        }
+        else
+        {
+            center = transform.position;
+        }
 
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
 
@@ -54,8 +67,18 @@ public class PlayerInteraction : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Vector3 center;
+        if (interactPoint != null)
+        {
+            center = interactPoint.position;
+        }
+        else
+        {
+            center = transform.position;
+        }
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, interactRange);
+        Gizmos.DrawWireSphere(center, interactRange);
     }
 }
 
