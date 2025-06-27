@@ -52,7 +52,7 @@ namespace SHG
   }
 
   [Serializable]
-  public class ItemRecipe: UnityEngine.Object
+  public class ItemRecipe
   {
     public ItemRecipeData RecipeData { get; private set; }
     public List<ItemAndCount> RequiredItems { get; private set; }

@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class ItemBox: VisualElement, IHideableWindow
+  public class ItemBox: VisualElement, IHideableUI
   {
     public ItemAndCount ItemData { get; private set; }
     VisualElement itemImage;
@@ -24,11 +24,16 @@ namespace SHG
       this.ItemData = itemData;
       this.itemImage.style.backgroundImage = new StyleBackground(this.ItemData.Item.Image);
       if (this.ItemData.Count < 2) {
-        itemLabel.text = this.ItemData.Item.Name;
+        this.itemLabel.text = this.ItemData.Item.Name;
       }
       else {
-        itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
+        this.itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
       }
+    }
+
+    public void SetLabelText(string text)
+    {
+      this.itemLabel.text = text; 
     }
 
     public void RemoveData()
@@ -57,15 +62,13 @@ namespace SHG
     public void Show()
     {
       this.IsVisiable = true;
-      this.style.display = DisplayStyle.Flex;
-      this.BringToFront();
+      Utils.ShowVisualElement(this);
     }
 
     public void Hide()
     {
       this.IsVisiable = false;
-      this.style.display = DisplayStyle.None;
-      this.SendToBack();
+      Utils.HideVisualElement(this);
     }
   }
 }

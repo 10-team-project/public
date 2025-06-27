@@ -1,18 +1,12 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public enum MouseButton
-  {
-    Left = 0,
-    Right = 1
-  }
   public class InventoryWindow : ItemStorageWindow
   {
-    const MouseButton DRAG_BUTTON = MouseButton.Left;
-    const MouseButton USE_BUTTON = MouseButton.Right;
+    const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
+    const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     protected override ItemStorageWindow[] DropTargets => this.dropTargets;
     ItemStorageWindow[] dropTargets; 

@@ -1,6 +1,7 @@
 .window-container 
 {
   padding: 20px;
+  background-color: white;
 }
 
 .window-label 

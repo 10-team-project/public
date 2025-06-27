@@ -7,8 +7,6 @@ namespace SHG
 {
   public class QuickSlotWindow : ItemStorageWindow
   {
-    const MouseButton DRAG_BUTTON = MouseButton.Left;
-    const MouseButton USE_BUTTON = MouseButton.Right;
     ItemBox[] slots;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     protected override ItemStorageWindow[] DropTargets => this.dropTargets;

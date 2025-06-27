@@ -14,6 +14,11 @@ namespace SHG
     #if UNITY_EDITOR
     List<ItemRecipe> recipes = new ();
     #endif
+    
+    public IEnumerable<ItemData> GetAllProducts()
+    {
+      return (this.recipeTable.Keys);
+    }
 
     public List<ItemRecipe> GetRecipes(ItemData craftableItem)
     {

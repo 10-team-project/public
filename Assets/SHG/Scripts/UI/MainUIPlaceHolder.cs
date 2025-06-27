@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using EditorAttributes;
 using Patterns;
 using KSH;
+using System;
 
 namespace SHG
 {
@@ -11,12 +12,14 @@ namespace SHG
     VisualElement root;
     InventoryWindow inventoryWindow;
     QuickSlotWindow quickSlotWindow;
-    Button inventoryButton;
-    ObservableValue<(ItemAndCount, VisualElement)> currentDragging;
+    CraftWindow craftWindow;
     ItemBox floatingItemBox;
     ItemSpawnTest itemSpawner;
+
+    Button inventoryButton;
     Button spawnItemButton;
     Button toggleGameTimeButton;
+    Button craftButton;
     GameObject gameTimeUI;
 
     Label hpLabel;
@@ -30,14 +33,9 @@ namespace SHG
 
     void Awake()
     {
-      this.currentDragging = new ((ItemAndCount.None, null));
       this.root = this.GetComponent<UIDocument>().rootVisualElement;
       this.root.style.width = Length.Percent(100);
       this.root.style.height = Length.Percent(100);
-      this.floatingItemBox = this.CreateFloatingItemBox();
-      this.inventoryWindow = new InventoryWindow(this.floatingItemBox);
-      this.inventoryWindow.Hide();
-      this.root.Add(this.inventoryWindow);
       var buttonContainer = new VisualElement();
       buttonContainer.style.position = Position.Absolute;
       buttonContainer.style.left = Length.Percent(5);
@@ -46,7 +44,6 @@ namespace SHG
       this.inventoryButton.text = "Inventory";
       this.inventoryButton.AddToClassList("test-button");
       buttonContainer.Add(this.inventoryButton);
-      this.quickSlotWindow = new QuickSlotWindow(this.floatingItemBox);
       this.spawnItemButton = new Button();
       this.spawnItemButton.text = "SpawnItem";
       this.spawnItemButton.AddToClassList("test-button");
@@ -55,6 +52,10 @@ namespace SHG
       this.toggleGameTimeButton.text = "Game Time";
       this.toggleGameTimeButton.AddToClassList("test-button");
       buttonContainer.Add(this.toggleGameTimeButton);
+      this.craftButton = new Button();
+      this.craftButton.text = "Craft";
+      this.craftButton.AddToClassList("test-button");
+      buttonContainer.Add(this.craftButton);
 
       var statContainer = new VisualElement();
       statContainer.style.position = Position.Absolute;
@@ -70,20 +71,42 @@ namespace SHG
       statContainer.Add(this.fatigueLabel);
       statContainer.Add(this.hungerLabel);
       statContainer.name = "stat-container";
-
       this.root.Add(statContainer);
-      this.root.Add(this.quickSlotWindow);
-      this.root.Add(this.floatingItemBox);
       this.root.Add(buttonContainer);
 
       this.inventoryButton.RegisterCallback<ClickEvent>(this.OnClickInventoryButton);
+      this.craftButton.RegisterCallback<ClickEvent>(this.OnClickCraftButton);
       this.toggleGameTimeButton.RegisterCallback<ClickEvent>(click => {
         this.gameTimeUI.SetActive(!this.gameTimeUI.activeSelf);
         });
       this.spawnItemButton.RegisterCallback<ClickEvent>(click => {
         this.itemSpawner.SpawnItem(1);
         });
+      this.CreateItemUI();
+    }
 
+    void OnClickCraftButton(ClickEvent click)
+    {
+      if (craftWindow.IsVisiable) {
+        this.craftWindow.Hide();
+      }
+      else {
+        this.craftWindow.Show(); 
+      }
+    }
+
+    void CreateItemUI()
+    {
+      this.floatingItemBox = this.CreateFloatingItemBox();
+      this.inventoryWindow = new InventoryWindow(this.floatingItemBox);
+      this.quickSlotWindow = new QuickSlotWindow(this.floatingItemBox);
+      this.craftWindow = new CraftWindow(this.floatingItemBox);
+      this.inventoryWindow.Hide();
+      this.craftWindow.Hide();
+      this.root.Add(this.inventoryWindow);
+      this.root.Add(this.quickSlotWindow);
+      this.root.Add(this.floatingItemBox);
+      this.root.Add(this.craftWindow);
       this.WireInventoryStoarges();
     }
 
@@ -133,26 +156,6 @@ namespace SHG
       this.fatigueLabel.text = $"Fatigue: {this.fatigue.Cur}/{this.fatigue.Max}";
     }
 
-    void OnEnable()
-    {
-      this.quickSlotWindow.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
-      this.inventoryWindow.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
-    }
-
-    void OnDisable()
-    {
-    }
-
-    void OnStartDragItem(ItemAndCount itemAndCount, VisualElement window)
-    {
-      this.currentDragging.Value = (itemAndCount, window);
-    }
-
-    void OnEndDragItem(ItemAndCount itemAndCount, VisualElement window)
-    {
-
-    }
-
     void OnClickInventoryButton(ClickEvent click)
     {
       if (inventoryWindow.IsVisiable) {
@@ -161,11 +164,6 @@ namespace SHG
       else {
         inventoryWindow.Show();
       }
-    }
-
-    void OnPointerUp(PointerUpEvent pointerUpEvent)
-    {
-    
     }
 
     [Button ("Show inventory")]

@@ -5,8 +5,13 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public abstract class ItemStorageWindow: VisualElement, IHideableWindow
+  public abstract class ItemStorageWindow: VisualElement, IHideableUI
   {
+    public enum MouseButton
+    {
+      Left = 0,
+      Right = 1
+    }
     const MouseButton DRAG_BUTTON = MouseButton.Left;
     const MouseButton USE_BUTTON = MouseButton.Right;
     public bool IsVisiable { get; protected set; }
@@ -35,16 +40,14 @@ namespace SHG
       Inventory.Instance.OnChanged += this.OnInventoryUpdated;
       this.OnInventoryUpdated(Inventory.Instance);
       this.IsVisiable = true;
-      this.style.display = DisplayStyle.Flex;
-      this.BringToFront();
+      Utils.ShowVisualElement(this);
     }
 
     public void Hide()
     {
       Inventory.Instance.OnChanged -= this.OnInventoryUpdated;
       this.IsVisiable = false;
-      this.style.display = DisplayStyle.None;
-      this.SendToBack();
+      Utils.HideVisualElement(this);
     }
 
     protected void OnInventoryUpdated(Inventory inventory)
