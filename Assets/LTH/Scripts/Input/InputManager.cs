@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
-using LTH;
 using Patterns;
-using UnityEngine;
 
 namespace LTH
 {
