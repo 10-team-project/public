@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class QuickSlotWindow : ItemStorageWindow
+  public class QuickSlotWindow : ItemConatinerWindow
   {
     ItemBox[] slots;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
-    ItemStorageWindow[] dropTargets; 
+    ItemConatinerWindow[] dropTargets; 
 
     public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox)
     {

@@ -5,7 +5,7 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public abstract class ItemStorageWindow: VisualElement, IHideableUI
+  public abstract class ItemConatinerWindow: VisualElement, IHideableUI
   {
     public enum MouseButton
     {
@@ -21,9 +21,9 @@ namespace SHG
     protected bool IsDraggingItem => this.currentDraggingTarget != null;
     protected Vector2 dragStartPosition;
     protected ItemBox floatingItemBox;
-    public List<ItemStorageWindow> DropTargets { get; protected set; }
+    public List<ItemConatinerWindow> DropTargets { get; protected set; }
 
-    public ItemStorageWindow(ItemBox floatingItemBox)
+    public ItemConatinerWindow(ItemBox floatingItemBox)
     {
       this.floatingItemBox = floatingItemBox;
       this.DropTargets = new ();
@@ -36,7 +36,7 @@ namespace SHG
       this.OnInventoryUpdated(Inventory.Instance);
     }
 
-    public void AddDropTarget(ItemStorageWindow target)
+    public void AddDropTarget(ItemConatinerWindow target)
     {
       if (target == this) {
         throw (new ArgumentException($"drop target same window {target}"));
@@ -95,7 +95,7 @@ namespace SHG
 
     protected virtual void OnDragPointerButtonDown(PointerDownEvent pointerDownEvent, ItemBox boxElement, ItemAndCount itemAndCount)
     {
-      if (!this.IsDraggingItem && boxElement.ItemData != null) {
+      if (!this.IsDraggingItem && boxElement.ItemData != ItemAndCount.None) {
         this.dragStartPosition = pointerDownEvent.position;
         boxElement.AddToClassList("inventory-item-box-inactive");
         this.floatingItemBox.SetData(boxElement.ItemData);
@@ -125,7 +125,9 @@ namespace SHG
         this.floatingItemBox.Hide();
 
         VisualElement target = this.panel.Pick(pointerUpEvent.position);
-        if (this.floatingItemBox.ItemData != null && !this.Contains(target)) {
+        if (this != target && !this.Contains(target) &&
+          this.floatingItemBox.ItemData != ItemAndCount.None) {
+
           bool isDropToTargetStorage = this.IsDropTargetStorage(target);
           var itemAndCount = this.floatingItemBox.ItemData;
           if (isDropToTargetStorage &&
@@ -133,8 +135,10 @@ namespace SHG
             this.DropItem(itemAndCount); 
           }
           else if (!isDropToTargetStorage && this.IsAbleToDropOutSide(itemAndCount.Item)) {
+            Debug.Log($"target: {target}");
             this.DropItemOutSide(itemAndCount); 
           }
+
         }
         this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
         this.currentDraggingTarget = null;
@@ -142,7 +146,7 @@ namespace SHG
       }
     }
 
-    bool IsDropTarget(ItemStorageWindow window)
+    bool IsDropTarget(ItemConatinerWindow window)
     {
       foreach (var dropTarget in this.DropTargets) {
         if (window == dropTarget) {
@@ -156,10 +160,10 @@ namespace SHG
     {
       ItemBox foundBox = Utils.FindUIElementFrom<ItemBox>(target);
       if (foundBox != null &&
-        foundBox.ParentWindow is ItemStorageWindow parentWindow) {
+        foundBox.ParentWindow is ItemConatinerWindow parentWindow) {
         return (this.IsDropTarget(parentWindow));
       } 
-      ItemStorageWindow storageWindow = Utils.FindUIElementFrom<ItemStorageWindow>(target);
+      ItemConatinerWindow storageWindow = Utils.FindUIElementFrom<ItemConatinerWindow>(target);
       if (storageWindow != null) {
         return (this.IsDropTarget(storageWindow));
       }

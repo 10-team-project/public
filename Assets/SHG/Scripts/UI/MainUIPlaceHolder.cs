@@ -116,7 +116,7 @@ namespace SHG
         this.quickSlotWindow
         );
       this.quickSlotWindow.AddDropTarget(
-        this.inventoryWindow.NormalItemTab.Content as ItemStorageWindow
+        this.inventoryWindow.NormalItemTab.Content as ItemConatinerWindow
         );
     }
 

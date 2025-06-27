@@ -4,10 +4,10 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class FilteredItemStorageWindow : ItemStorageWindow
+  public class FilteredItemStorageWindow : ItemConatinerWindow
   {
-    const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
-    const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
+    const MouseButton DRAG_BUTTON = ItemConatinerWindow.MouseButton.Left;
+    const MouseButton USE_BUTTON = ItemConatinerWindow.MouseButton.Right;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     Func<ItemData, bool> filterItem;
 

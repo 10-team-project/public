@@ -10,6 +10,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
 
   public const int QUICKSLOT_COUNT = 4;
   public const int MAX_STACK_COUNT = 20;
+  public const int MAX_SLOT_COUNT = 20;
   public Dictionary<ItemData, int> Items { get; private set; }
   public Action<Inventory> WillChange { get; set; }
   public Action<Inventory> OnChanged { get; set; }
@@ -27,6 +28,22 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     var items = new ItemData[this.QuickSlotItems.Count];
     this.QuickSlotItems.CopyTo(items);
     return (items);
+  }
+
+  public bool IsAbleToAddItem(ItemAndCount itemAndCount)
+  {
+    var currentSlotCount = this.CountUsedSlot();
+    if (currentSlotCount < MAX_SLOT_COUNT) {
+      return (true);
+    }
+    if (currentSlotCount == MAX_SLOT_COUNT) {
+      var currentItemCount = this.GetItemCount(itemAndCount.Item);
+      if ((currentItemCount % MAX_STACK_COUNT) + itemAndCount.Count <
+        MAX_STACK_COUNT) {
+        return (true);
+      }
+    }
+    return (false);
   }
 
   public int CountUsedSlot()
@@ -185,6 +202,9 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
     this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
     this.AddItemName(item.Data);
+    if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {
+      throw (new ApplicationException($"Unable to add more {item.Data.Name}"));
+    }
 #endif
     if (this.Items.TryGetValue(item.Data, out int itemCount)) {
       this.Items[item.Data] = itemCount + 1;

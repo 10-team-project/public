@@ -14,6 +14,8 @@ namespace SHG
     ItemData itemToMoveQuickSlot;
     [SerializeField]
     ItemData itemToGetFromQuickSlot;
+    [SerializeField, ReadOnly]
+    string inventorySlot;
 
     [Button ("Test add item")]
     void AddItemTest()
@@ -87,8 +89,9 @@ namespace SHG
 
     void PrintInventory(Inventory inventory)
     {
-      Debug.Log("Inventory items");
      #if UNITY_EDITOR
+      Debug.Log("Inventory items");
+      this.inventorySlot = $"{inventory.CountUsedSlot()} / {Inventory.MAX_SLOT_COUNT}";
       for (int i = 0; i < Inventory.Instance.ItemNamesForDebugging.Count; i++) {
         var itemName = Inventory.Instance.ItemNamesForDebugging[i];
         Debug.Log($"{i + 1}: {itemName}"); 
