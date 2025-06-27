@@ -112,7 +112,7 @@ namespace SHG
 
     void OnDisable()
     {
-      if (App.Instance.Inventory != null) {
+      if (App.Instance?.Inventory != null) {
         App.Instance.Inventory.OnChanged -= this.PrintInventory;
       }
     }

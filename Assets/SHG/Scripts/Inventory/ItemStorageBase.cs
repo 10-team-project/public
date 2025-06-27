@@ -117,7 +117,7 @@ namespace SHG
 #if UNITY_EDITOR
       this.RemoveItemName(itemData);
 #endif
-      if (itemCount > 0) {
+      if (itemCount < 2) {
         this.Items.Remove(itemData);
       }
       else {

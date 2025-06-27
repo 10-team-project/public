@@ -65,7 +65,7 @@ namespace SHG
 
     void OnDisable()
     {
-      if (App.Instance.ItemStorage != null) {
+      if (App.Instance?.ItemStorage != null) {
         App.Instance.ItemStorage.OnChanged -= this.PrintStorage;
       }
     }
