@@ -126,7 +126,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         }
     }
 
-    public void StartClimbing(Vector3 pos, Vector3 forward)
+    public void StartClimbing(Vector3 pos, Vector3 forward, LadderTriggerType type)
     {
         InputManager.Instance.StartInput(this);
         isOnLadder = true;
@@ -139,15 +139,30 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         transform.position = targetPos;
 
         transform.rotation = Quaternion.LookRotation(Vector3.right);
+
+        // 애니메이션(테스트용 삭제 예정)
+        animator.SetBool("Ladder", true);
+
+        if (type == LadderTriggerType.EnterBottom)
+            animator.SetTrigger("LadderUpStart");
+        else if (type == LadderTriggerType.EnterTop)
+            animator.SetTrigger("LadderDownStart");
     }
 
     public void EndClimbFromTop()
     {
+        // 애니메이션(테스트용 삭제 예정)
+        animator.SetTrigger("LadderUpEnd");
+        animator.SetBool("Ladder", false);
         ExitLadder(transform.forward * 0.7f + Vector3.up * 0.7f);
     }
 
     public void EndClimb()
     {
+        // 애니메이션(테스트용 삭제 예정)
+        animator.SetTrigger("LadderDownEnd");
+        animator.SetBool("Ladder", false);
+
         ExitLadder(transform.forward * 0.5f);
     }
 
@@ -176,7 +191,34 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
 
     private void UpdateAnimation()  // 애니메이션(테스트용 삭제 예정)
     {
-        if (isOnLadder || InputManager.Instance.IsBlocked(InputType.Move))
+        if (animator == null) return;
+
+        animator.SetBool("Ladder", isOnLadder);
+
+        if (isOnLadder)
+        {
+            float vertical = moveInput.y;
+
+            if (vertical > 0.01f)
+            {
+                animator.SetBool("LadderUpPlay", true);
+                animator.SetBool("LadderDownPlay", false);
+            }
+            else if (vertical < -0.01f)
+            {
+                animator.SetBool("LadderUpPlay", false);
+                animator.SetBool("LadderDownPlay", true);
+            }
+            else
+            {
+                animator.SetBool("LadderUpPlay", false);
+                animator.SetBool("LadderDownPlay", false);
+            }
+            return;
+        }
+
+
+        if (InputManager.Instance.IsBlocked(InputType.Move))
         {
             animator.SetBool("IsMoving", false);
             animator.SetFloat("Speed", 0f);
