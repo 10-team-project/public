@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class ItemBox: VisualElement, IHideableWindow
+  public class ItemBox: VisualElement, IHideableUI
   {
     public ItemAndCount ItemData { get; private set; }
     VisualElement itemImage;
@@ -16,18 +16,7 @@ namespace SHG
     { 
       this.ParentWindow = window;
       this.CreateUI();
-      this.AddToClassList("inventory-window-item-box");
-    }
-
-    public static ItemBox FindItemBoxFrom(VisualElement target)
-    {
-      if (target == null) {
-        return (null);
-      }
-      if (target is ItemBox itemBox) {
-        return (itemBox);
-      }
-      return (target.GetFirstAncestorOfType<ItemBox>());
+      this.AddToClassList("item-storage-item-box");
     }
 
     public void SetData(ItemAndCount itemData)
@@ -35,11 +24,16 @@ namespace SHG
       this.ItemData = itemData;
       this.itemImage.style.backgroundImage = new StyleBackground(this.ItemData.Item.Image);
       if (this.ItemData.Count < 2) {
-        itemLabel.text = this.ItemData.Item.Name;
+        this.itemLabel.text = this.ItemData.Item.Name;
       }
       else {
-        itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
+        this.itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
       }
+    }
+
+    public void SetLabelText(string text)
+    {
+      this.itemLabel.text = text; 
     }
 
     public void RemoveData()
@@ -56,11 +50,11 @@ namespace SHG
 
     void CreateUI()
     {
-      this.AddToClassList("inventory-item-box");
+      this.AddToClassList("item-storage-item-box");
       this.itemImage = new VisualElement();
-      this.itemImage.AddToClassList("inventory-window-item-image"); 
+      this.itemImage.AddToClassList("item-box-item-image"); 
       this.itemLabel = new Label();
-      this.itemLabel.AddToClassList("inventory-window-item-label");
+      this.itemLabel.AddToClassList("item-box-item-label");
       this.Add(itemImage);
       this.Add(itemLabel);
     }
@@ -68,16 +62,13 @@ namespace SHG
     public void Show()
     {
       this.IsVisiable = true;
-      this.style.display = DisplayStyle.Flex;
-      this.BringToFront();
-
+      Utils.ShowVisualElement(this);
     }
 
     public void Hide()
     {
       this.IsVisiable = false;
-      this.style.display = DisplayStyle.None;
-      this.SendToBack();
+      Utils.HideVisualElement(this);
     }
   }
 }

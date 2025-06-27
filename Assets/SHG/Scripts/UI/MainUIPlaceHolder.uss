@@ -1,6 +1,7 @@
 .window-container 
 {
   padding: 20px;
+  background-color: white;
 }
 
 .window-label 
@@ -18,6 +19,14 @@
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+.window-tab-container
+{
+  width: 90%;
+  height: 80%;
+  border-color: green;
+  border-width: 2px;
 }
 
 .test-button 

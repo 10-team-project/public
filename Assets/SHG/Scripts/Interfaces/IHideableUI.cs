@@ -1,7 +1,7 @@
 
 namespace SHG
 {
-  public interface IHideableWindow
+  public interface IHideableUI
   {
     public bool IsVisiable { get; }
     public void Show();

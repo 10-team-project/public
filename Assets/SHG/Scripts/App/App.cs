@@ -26,10 +26,12 @@ namespace SHG
     static bool IsGamemodeControlEnabled;
     GameModeManager gameModeManager;
     public IGameMode CurrentMode => this.gameModeManager.CurrentMode;
-    List<ISingleton<MonoBehaviour>> managers;
+    ISingleton<MonoBehaviour>[] managers;
     public TestSceneManager SceneManager { get; private set; }
+    public RecipeRegistry RecipeRegistry { get; private set; }
     public InputManager InputManager { get; private set; }
     public Inventory Inventory { get; private set; }
+    public ItemStorage ItemStorage { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -53,11 +55,18 @@ namespace SHG
       #if UNITY_EDITOR
       this.IsEditor = true;
       IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
-      this.managers = new ();
       this.SceneManager = TestSceneManager.CreateInstance();
-      this.Inventory = Inventory.CreateInstance();
+      this.Inventory = new Inventory();
+      this.ItemStorage = new ItemStorage();
       this.InputManager = InputManager.CreateInstance();
-      this.managers.Add(this.SceneManager as ISingleton<MonoBehaviour>);
+      this.RecipeRegistry = RecipeRegistry.CreateInstance();
+      this.managers = new ISingleton<MonoBehaviour>[] {
+        this.SceneManager as ISingleton<MonoBehaviour>,
+        this.InputManager as ISingleton<MonoBehaviour>,
+        this.RecipeRegistry as ISingleton<MonoBehaviour>,
+        this.Inventory as ISingleton<MonoBehaviour>,
+        this.ItemStorage as ISingleton<MonoBehaviour>
+      };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {
           if (manager is MonoBehaviour singletonBehaviour) {

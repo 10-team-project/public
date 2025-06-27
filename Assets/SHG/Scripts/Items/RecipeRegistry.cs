@@ -14,6 +14,11 @@ namespace SHG
     #if UNITY_EDITOR
     List<ItemRecipe> recipes = new ();
     #endif
+    
+    public IEnumerable<ItemData> GetAllProducts()
+    {
+      return (this.recipeTable.Keys);
+    }
 
     public List<ItemRecipe> GetRecipes(ItemData craftableItem)
     {
@@ -34,13 +39,6 @@ namespace SHG
       this.recipeTable = new ();
       this.LoadAllItems();
       this.LoadAllRecipes();
-    }
-
-    void Start()
-    {
-      if (Inventory.Instance == null) {
-        Debug.LogError("Inventory is null");
-      }
     }
 
     void LoadAllRecipes()

@@ -13,6 +13,7 @@ public abstract partial class ItemData : ScriptableObject
   public GameObject Prefab => this.prefab;
   [HideInInspector]
   public string Description => this.description;
+  public virtual bool IsStoryItem => false;
 
   [SerializeField, Validate("Empty item name", nameof(IsNameEmpty), MessageMode.Error, buildKiller: true)]
   protected string itemName;
