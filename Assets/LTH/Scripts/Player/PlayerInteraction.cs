@@ -81,6 +81,3 @@ public class PlayerInteraction : MonoBehaviour
         Gizmos.DrawWireSphere(center, interactRange);
     }
 }
-
-
-
