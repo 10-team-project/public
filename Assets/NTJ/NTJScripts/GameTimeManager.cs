@@ -15,31 +15,34 @@ namespace NTJ
         public GameObject dayTextPanel;            // 중앙에 띄울 "Day - X" 패널
         public TextMeshProUGUI dayTextDisplay;     // 중앙 텍스트 ("Day - X")
         public CanvasGroup topUITextGroup;
+        public Slider timeScaleSlider;
+        public TextMeshProUGUI timeScaleText;
+        public Animator playerAnimator;            // Project 창에서 우클릭 → Create → Animator Controller
+                                                   // Player에 Animator 컴포넌트를 연결 없으면 Add Component → Animator
 
         [Header("Time Settings")]
         public int timeScale = 30; // 현실 1초 = 게임 1분
         private float gameTime;    // 누적된 게임 시간
         private int currentDay = 1;
-
-        private bool isSleeping = false;
         private float fadeDuration = 2f;
-        public static int InitialDay = 1;
-        public Slider timeScaleSlider;
-        public TextMeshProUGUI timeScaleText;
+        private bool isSleeping = false;
+        private bool sleepRequested = false;
+
+
 
         void Start()
         {
-            #if UNITY_EDITOR
+#if UNITY_EDITOR
             SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
-            #endif
+#endif
             if (SaveManager.HasSavedData())
             {
-                SaveManager.LoadGame();
-                currentDay = InitialDay;
-            }
-            else
-            {
-                currentDay = 1;
+                GameData data = SaveManager.LoadData();
+                if (data != null)
+                {
+                    currentDay = data.savedDay;
+                    GameStateManager.Instance.LoadFromData(data);
+                }
             }
 
             gameTime = 9 * 3600f;
@@ -65,16 +68,39 @@ namespace NTJ
             timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
 
             if (hours >= 24 || hours < 9)
-            {
-                StartCoroutine(SleepAndStartNextDay(false)); // 강제 수면
+            {                
+                if (!sleepRequested)
+                    StartCoroutine(SleepWithAnimation(false)); // 강제 수면
             }
         }
 
-        public void OnSleepButtonPressed()
+        public void RequestManualSleep()
         {
-            if (isSleeping) return;
-            StartCoroutine(SleepAndStartNextDay(true)); // 수동 수면
+            if (isSleeping || sleepRequested) return;
+            StartCoroutine(SleepWithAnimation(true));
         }
+
+        private IEnumerator SleepWithAnimation(bool isManual)
+        {
+            sleepRequested = true;
+
+            if (playerAnimator != null)
+            {
+                if (isManual)
+                    playerAnimator.SetTrigger("SleepStart");  // 수동 수면 애니메이션 트리거
+                else
+                    playerAnimator.SetTrigger("FallAsleep");  // 강제 수면(쓰러짐) 애니메이션 트리거
+
+                // 애니메이션 길이에 맞게 대기 
+                yield return new WaitForSeconds(3f);
+            }
+
+            // 실제 수면 처리 (Day 증가, 체력 회복, 저장 등)
+            yield return StartCoroutine(SleepAndStartNextDay(isManual));
+
+            sleepRequested = false;
+        }
+
 
         void UpdateDayText()
         {
@@ -116,7 +142,8 @@ namespace NTJ
                 maxHP * 0.7f : maxHP * 0.3f;
 
             // 자동 저장
-            SaveManager.SaveGame(currentDay);
+            GameData saveData = GameStateManager.Instance.CreateSaveData(currentDay);
+            SaveManager.SaveData(saveData);
 
             // Fade Out
             t = 0;
@@ -137,6 +164,6 @@ namespace NTJ
         {
             timeScale = Mathf.RoundToInt(value);
             timeScaleText.text = $"{timeScale}배속";
-        }
+        } 
     }
 }
