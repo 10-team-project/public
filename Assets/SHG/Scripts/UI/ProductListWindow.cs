@@ -20,6 +20,21 @@ namespace SHG
       this.FillProducts();
     }
 
+    public void UpdateProductsEnable()
+    {
+      foreach (var productBox in this.productBoxes) {
+        if (productBox.ItemData != ItemAndCount.None) {
+          var recipes = Inventory.Instance.GetCraftableRecipes(productBox.ItemData.Item);
+          if (recipes.Count == 0) {
+            productBox.AddToClassList("product-list-item-box-inactive");
+          }
+          else {
+            productBox.RemoveFromClassList("product-list-item-box-inactive");
+          }
+        } 
+      }
+    }
+
     void CreateUI()
     {
       for (int i = 0; i < NUMBER_OF_PRODUCTS; i++) {
