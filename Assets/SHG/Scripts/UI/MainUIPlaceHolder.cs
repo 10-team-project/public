@@ -14,11 +14,14 @@ namespace SHG
     QuickSlotWindow quickSlotWindow;
     CraftWindow craftWindow;
     ItemBox floatingItemBox;
+    ItemStorageWindow itemStorageWindow;
+
     ItemSpawnTest itemSpawner;
 
     Button inventoryButton;
     Button spawnItemButton;
     Button toggleGameTimeButton;
+    Button storageButton;
     Button craftButton;
     GameObject gameTimeUI;
 
@@ -57,6 +60,11 @@ namespace SHG
       this.craftButton.AddToClassList("test-button");
       buttonContainer.Add(this.craftButton);
 
+      this.storageButton = new Button();
+      this.storageButton.text = "Storage";
+      this.storageButton.AddToClassList("test-button");
+      buttonContainer.Add(this.storageButton);
+
       var statContainer = new VisualElement();
       statContainer.style.position = Position.Absolute;
       statContainer.style.top = Length.Percent(5);
@@ -76,12 +84,13 @@ namespace SHG
 
       this.inventoryButton.RegisterCallback<ClickEvent>(this.OnClickInventoryButton);
       this.craftButton.RegisterCallback<ClickEvent>(this.OnClickCraftButton);
-      this.toggleGameTimeButton.RegisterCallback<ClickEvent>(click => {
-        this.gameTimeUI.SetActive(!this.gameTimeUI.activeSelf);
-        });
-      this.spawnItemButton.RegisterCallback<ClickEvent>(click => {
-        this.itemSpawner.SpawnItem(1);
-        });
+      this.storageButton.RegisterCallback<ClickEvent>(this.OnClickStorageButton);
+      this.toggleGameTimeButton.RegisterCallback<ClickEvent>(click => 
+        this.gameTimeUI.SetActive(!this.gameTimeUI.activeSelf)
+        );
+      this.spawnItemButton.RegisterCallback<ClickEvent>(click => 
+        this.itemSpawner.SpawnItem(1)
+        );
       this.CreateItemUI();
     }
 
@@ -95,14 +104,27 @@ namespace SHG
       }
     }
 
+    void OnClickStorageButton(ClickEvent click)
+    {
+      if (this.itemStorageWindow.IsVisiable) {
+        this.itemStorageWindow.Hide();
+      }
+      else {
+        this.itemStorageWindow.Show();
+      }
+    }
+
     void CreateItemUI()
     {
       this.floatingItemBox = this.CreateFloatingItemBox();
       this.inventoryWindow = new InventoryWindow(this.floatingItemBox);
       this.quickSlotWindow = new QuickSlotWindow(this.floatingItemBox);
       this.craftWindow = new CraftWindow(this.floatingItemBox);
+      this.itemStorageWindow = new ItemStorageWindow(this.floatingItemBox);
       this.inventoryWindow.Hide();
       this.craftWindow.Hide();
+      this.itemStorageWindow.Hide();
+      this.root.Add(this.itemStorageWindow);
       this.root.Add(this.inventoryWindow);
       this.root.Add(this.quickSlotWindow);
       this.root.Add(this.floatingItemBox);
@@ -112,11 +134,14 @@ namespace SHG
 
     void WireInventoryStoarges()
     {
-      this.inventoryWindow.AddDropTarget(
-        this.quickSlotWindow
+      this.inventoryWindow.AddDropTargets(
+         new ItemConatinerWindow[] { this.quickSlotWindow }
+        
         );
-      this.quickSlotWindow.AddDropTarget(
+      this.quickSlotWindow.AddDropTargets(
+        new ItemConatinerWindow[] { 
         this.inventoryWindow.NormalItemTab.Content as ItemConatinerWindow
+        }
         );
     }
 

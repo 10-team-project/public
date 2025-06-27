@@ -55,12 +55,13 @@ namespace SHG
       this.CurrentTab.Value.Show();
     }
 
-    public void AddDropTarget(ItemConatinerWindow target)
+    public void AddDropTargets(IEnumerable<ItemConatinerWindow> targets)
     {
-      var normalItemTab = this.NormalItemTab.Content as FilteredItemStorageWindow;
-      normalItemTab.AddDropTarget(target);
-      var storyItemTab = this.StoryItemTab.Content as FilteredItemStorageWindow; 
-      storyItemTab.AddDropTarget(target);
+
+      var normalItemTab = this.NormalItemTab.Content as InventoryItemContainerWindow;
+      var storyItemTab = this.StoryItemTab.Content as InventoryItemContainerWindow; 
+      normalItemTab.AddDropTargets(targets);
+      storyItemTab.AddDropTargets(targets);
     }
 
     public void Hide()
@@ -91,10 +92,10 @@ namespace SHG
       tabButtonContainer.Add(this.normalItemTabButton);
       this.Add(tabButtonContainer);
       this.NormalItemTab = new WindowTab(
-        new FilteredItemStorageWindow(this.IsNormalItem, this.floatingBox)
+        new InventoryItemContainerWindow(this.IsNormalItem, this.floatingBox)
         );
       this.StoryItemTab = new WindowTab(
-        new FilteredItemStorageWindow(this.IsStoryItem, this.floatingBox)
+        new InventoryItemContainerWindow(this.IsStoryItem, this.floatingBox)
         );
       this.Add(this.NormalItemTab.Content);
       this.Add(this.StoryItemTab.Content);

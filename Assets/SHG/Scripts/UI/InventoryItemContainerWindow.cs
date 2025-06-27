@@ -4,14 +4,14 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class FilteredItemStorageWindow : ItemConatinerWindow
+  public class InventoryItemContainerWindow : ItemConatinerWindow
   {
     const MouseButton DRAG_BUTTON = ItemConatinerWindow.MouseButton.Left;
     const MouseButton USE_BUTTON = ItemConatinerWindow.MouseButton.Right;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
     Func<ItemData, bool> filterItem;
 
-    public FilteredItemStorageWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox)
+    public InventoryItemContainerWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox)
     {
       this.itemBoxTable = new ();
       this.filterItem = filterItem;

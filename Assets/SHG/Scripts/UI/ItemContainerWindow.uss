@@ -1,5 +1,4 @@
 .item-storage-container {
-  position: absolute;
   border-radius: 20px;
 }
 

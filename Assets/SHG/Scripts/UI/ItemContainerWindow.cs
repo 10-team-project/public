@@ -36,12 +36,14 @@ namespace SHG
       this.OnInventoryUpdated(App.Instance.Inventory);
     }
 
-    public void AddDropTarget(ItemConatinerWindow target)
+    public void AddDropTargets(IEnumerable<ItemConatinerWindow> targets)
     {
-      if (target == this) {
-        throw (new ArgumentException($"drop target same window {target}"));
+      foreach (var target in targets) {
+        if (target == this) {
+          throw (new ArgumentException($"drop target same window {target}"));
+        }
+        this.DropTargets.Add(target);
       }
-      this.DropTargets.Add(target);
     }
 
     public void Show()
