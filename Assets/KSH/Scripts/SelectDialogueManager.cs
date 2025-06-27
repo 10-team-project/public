@@ -1,17 +1,14 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-
-public class DialogueManager : MonoBehaviour
+public class SelectDialogueManager : MonoBehaviour
 {
-    [SerializeField] private GameObject go_dialogueBar;
+    [SerializeField] private GameObject Se_dialogueBar;
     [SerializeField] private GameObject go_dialogueNameBar;
     
-    [SerializeField] private TMP_Text txt_dialogue;
-    [SerializeField] private TMP_Text txt_Name;
+    [SerializeField] private Text txt_dialogue;
+    [SerializeField] private Text txt_Name;
 
     [SerializeField] private float AutoTime;
     
@@ -82,7 +79,6 @@ public class DialogueManager : MonoBehaviour
 
         string t_ReplaceText = dialogues[lineCount].contexts[contextCount];
         t_ReplaceText = t_ReplaceText.Replace("'", ",");
-        t_ReplaceText = t_ReplaceText.Replace("|", "\n"); // '|'를 줄바꿈으로
         
         txt_dialogue.text = t_ReplaceText;
         txt_Name.text = dialogues[lineCount].Charactername;
@@ -104,7 +100,7 @@ public class DialogueManager : MonoBehaviour
 
     private void SettingUI(bool p_flag)
     {
-        go_dialogueBar.SetActive(p_flag);
+        //go_dialogueBar.SetActive(p_flag);
         go_dialogueNameBar.SetActive(p_flag);
     }
 }
