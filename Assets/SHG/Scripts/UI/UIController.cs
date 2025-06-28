@@ -15,6 +15,18 @@ namespace SHG
       this.MainUI = ui;
     }
 
+    public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
+    {
+      if (this.MainUI != null) {
+        return (this.MainUI.TryGetQuickSlotItem(slotNumber, out item));
+      }
+      #if UNITY_EDITOR
+      Debug.LogError("TryGetQuickSlotItem: Main UI is not set");
+      #endif
+      item = null;
+      return (false);
+    }
+
     public void OnInteractLocker()
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&

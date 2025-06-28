@@ -74,6 +74,21 @@ namespace SHG
       }
     }
 
+    public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
+    {
+      if (this.quickSlotWindow.IsVisiable) {
+
+        return (this.quickSlotWindow.TryGetQuickslotItem(slotNumber, out item));
+      }
+      else {
+        #if UNITY_EDITOR
+        Debug.LogError("TryGetQuickslotItem: quick slot is not visible");
+        #endif
+        item = null;
+        return (false);
+      }
+    }
+
     void Awake()
     {
       this.root = this.GetComponent<UIDocument>().rootVisualElement;

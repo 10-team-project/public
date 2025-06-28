@@ -4,6 +4,7 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
+  [CreateAssetMenu (menuName = "ScriptableObjects/Map/Construrct point")]
   public class MapConstructPointData : MapObjectData
   {
     [SerializeField, ReadOnly, Validate("some required item is not for construct", nameof(HasInvalidRequiredItem), MessageMode.Error)] 
