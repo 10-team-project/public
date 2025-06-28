@@ -16,6 +16,7 @@ public class LadderClimber
         this.onClimbEndFromTop = onClimbEndFromTop;
     }
 
+
     public void Climb(Vector3 moveInput, bool isGrounded, bool isAtTop)
     {
         Vector3 targetVelocity = Vector3.up * moveInput.y * _climbSpeed;
