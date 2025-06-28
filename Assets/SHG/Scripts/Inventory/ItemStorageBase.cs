@@ -33,10 +33,10 @@ namespace SHG
       if (currentSlotCount < MAX_SLOT_COUNT) {
         return (true);
       }
-      if (currentSlotCount == MAX_SLOT_COUNT) {
+      if ( currentSlotCount == MAX_SLOT_COUNT) {
         var currentItemCount = this.GetItemCount(itemAndCount.Item);
-        if ((currentItemCount % MAX_STACK_COUNT) + itemAndCount.Count <
-          MAX_STACK_COUNT) {
+        if (currentSlotCount != 0 &&
+          currentSlotCount % this.MAX_STACK_COUNT != 0) {
           return (true);
         }
       }

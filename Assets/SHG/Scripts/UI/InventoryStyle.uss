@@ -26,6 +26,14 @@
   margin: 5px;
 }
 
+.item-container-scroll-view
+{
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+}
+
 #item-storage-window-container
 {
   width: 50%;

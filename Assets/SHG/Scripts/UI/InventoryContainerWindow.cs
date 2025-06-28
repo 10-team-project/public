@@ -91,14 +91,18 @@ namespace SHG
       tabButtonContainer.Add(this.storyItemTabButton);
       tabButtonContainer.Add(this.normalItemTabButton);
       this.Add(tabButtonContainer);
+
       this.NormalItemTab = new WindowTab(
         new InventoryWindow(this.IsNormalItem, this.floatingBox)
         );
       this.StoryItemTab = new WindowTab(
         new InventoryWindow(this.IsStoryItem, this.floatingBox)
         );
-      this.Add(this.NormalItemTab.Content);
-      this.Add(this.StoryItemTab.Content);
+      var scrollView = new ScrollView(ScrollViewMode.Vertical);
+      scrollView.AddToClassList("item-container-scroll-view");
+      scrollView.Add(this.NormalItemTab.Content);
+      scrollView.Add(this.StoryItemTab.Content);
+      this.Add(scrollView);
       var closeButton = new Button();
       closeButton.text = "close";
       closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
