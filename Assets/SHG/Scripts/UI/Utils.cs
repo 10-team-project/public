@@ -7,7 +7,7 @@ namespace SHG
 {
   public static partial class Utils 
   {
-    public static void ShowVisualElement<T>(T element) where T: VisualElement, IHideableUI
+    public static void ShowVisualElement(VisualElement element) 
     {
       element.style.display = DisplayStyle.Flex;
       element.BringToFront();

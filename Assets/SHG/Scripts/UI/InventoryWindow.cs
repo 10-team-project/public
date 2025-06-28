@@ -1,15 +1,18 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class InventoryWindow : ItemConatinerWindow
+  public class InventoryWindow : ItemStorageWindow
   {
-    const MouseButton DRAG_BUTTON = ItemConatinerWindow.MouseButton.Left;
-    const MouseButton USE_BUTTON = ItemConatinerWindow.MouseButton.Right;
+    const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
+    const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
     Func<ItemData, bool> filterItem;
     Label label;
+    protected override Vector2 DescriptionOffset => DESCRIPTION_OFFSET;
+    readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0f, 150f);
 
     public InventoryWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
@@ -21,6 +24,13 @@ namespace SHG
       this.label = new Label();
       this.label.AddToClassList("window-label");
       this.Add(this.label);
+      this.itemDescriptionContainer = new VisualElement();
+      this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
+      this.itemDescription = new Label();
+      this.itemDescription.AddToClassList("item-storage-item-description");
+      this.itemDescriptionContainer.Add(this.itemDescription);
+      this.Add(this.itemDescriptionContainer);
+      Utils.HideVisualElement(this.itemDescriptionContainer);
     }
 
     //TODO: 각 아이템 UI를 objectpool에 보관
@@ -31,7 +41,14 @@ namespace SHG
       itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
       itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
       itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
+      itemBox.RegisterCallback<PointerOverEvent>(this.OnPointerOver);
+      itemBox.RegisterCallback<PointerLeaveEvent>(this.OnPointerLeave);
       return (itemBox);
+    }
+
+    void UseItem(IUsable usableItem)
+    {
+      App.Instance.Inventory.UseItem(usableItem);
     }
 
     protected override void FillItems(ItemStorageBase inventory)
@@ -82,28 +99,23 @@ namespace SHG
       }
     }
 
-    void UseItem(IUsable usableItem)
-    {
-      App.Instance.Inventory.UseItem(usableItem);
-    }
-
-    protected override bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer)
+    protected override bool IsAbleToDropItem(ItemData item, ItemStorageWindow targetContainer)
     {
       if (targetContainer is QuickSlotWindow quickSlotWindow) {
         return (item as EquipmentItemData);
       }
-      else if (targetContainer is ItemStorageWindow itemStorageWindow) {
+      else if (targetContainer is ItemLockerWindow itemStorageWindow) {
         return (true);
       }
       return (false);
     }
 
-    protected override void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer)
+    protected override void DropItem(ItemAndCount itemAndCount, ItemStorageWindow targetContainer)
     {
       if (targetContainer is QuickSlotWindow) {
         App.Instance.Inventory.MoveItemToQuickSlot(itemAndCount.Item);
       }
-      else if (targetContainer is ItemStorageWindow itemStorageWindow) {
+      else if (targetContainer is ItemLockerWindow itemStorageWindow) {
         if (itemAndCount.Count == 1) {
           var item = this.ItemSource.GetItem(itemAndCount.Item);
           targetContainer.ItemSource.AddItem(item);

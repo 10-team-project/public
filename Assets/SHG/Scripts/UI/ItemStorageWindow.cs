@@ -1,160 +1,214 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class ItemStorageWindow : ItemConatinerWindow
+  public abstract class ItemStorageWindow: VisualElement, IHideableUI
   {
-    public ItemStorageWindow(ItemBox floatingItemBox) : base(floatingItemBox, App.Instance.ItemStorage)
+    public enum MouseButton
     {
+      Left = 0,
+      Right = 1
     }
+    const MouseButton DRAG_BUTTON = MouseButton.Left;
+    const MouseButton USE_BUTTON = MouseButton.Right;
+    public bool IsVisiable { get; protected set; }
+    public List<ItemStorageWindow> DropTargets { get; protected set; }
+    public ItemStorageBase ItemSource { get; protected set; }
+    protected VisualElement itemsContainer;
+    protected VisualElement currentDraggingTarget;
+    protected bool IsDraggingItem => this.currentDraggingTarget != null;
+    protected Vector2 dragStartPosition;
+    protected ItemBox floatingItemBox;
+    protected Label itemDescription;
+    protected VisualElement itemDescriptionContainer;
+    protected virtual Vector2 DescriptionOffset => Vector2.zero;
 
-    protected override void ClearItems()
+    public ItemStorageWindow(ItemBox floatingItemBox, ItemStorageBase itemSource)
     {
-      this.itemsContainer.Clear();
-    }
-
-    protected override void CreateUI()
-    {
-    }
-
-    protected override void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer)
-    {
-      if (targetContainer is InventoryWindow inventoryItemContainer) {
-
-        if (itemAndCount.Count > 1) {
-          var (item, count) = this.ItemSource.GetItems(itemAndCount.Item, itemAndCount.Count);
-          targetContainer.ItemSource.AddItems(item, count);
-        }
-        else {
-          var item = this.ItemSource.GetItem(itemAndCount.Item);
-          targetContainer.ItemSource.AddItem(item);
-        }
-      }
-    }
-
-    protected override void DropItemOutSide(ItemAndCount itemAndCount)
-    {
-      throw new NotImplementedException();
-    }
-
-    protected override void FillItems(ItemStorageBase inventory)
-    {
-      foreach (var pair in inventory.Items) {
-        var (item, count) = pair;
-        if (item.IsStoryItem) {
-          for (int i = 0; i < count; i++) {
-          var box = this.CreateItembox(
-            new ItemAndCount { Item = item, Count = 1 });
-          this.itemsContainer.Add(box);
-          } 
-        }
-        else {
-          var stackCount = count / inventory.MAX_STACK_COUNT; 
-          var restCount = count % inventory.MAX_STACK_COUNT;
-          for (int i = 0; i < stackCount; i++) {
-            var box = this.CreateItembox(
-              new ItemAndCount { 
-              Item = item, Count = inventory.MAX_STACK_COUNT });
-            this.itemsContainer.Add(box);
-             
-          }
-          if (restCount != 0) {
-            var box = this.CreateItembox(
-              new ItemAndCount { 
-              Item = item, Count = restCount });
-            this.itemsContainer.Add(box);
-          }
-        }
-      } 
-    }
-    //TODO: 각 아이템 UI를 objectpool에 보관
-    ItemBox CreateItembox(ItemAndCount itemAndCount)
-    {
-      ItemBox itemBox = new ItemBox(this);
-      itemBox.SetData(itemAndCount);
-      itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
-      itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
-      itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
-      return (itemBox);
-    }
-
-    protected override bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer)
-    {
-      if (targetContainer is InventoryWindow inventoryItemContainer) {
-        return (true);
-      }
-      return (false);
-    }
-
-    protected override bool IsAbleToDropOutSide(ItemData item)
-    {
-      return (false);
-    }
-
-    protected override void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount)
-    {
-      throw new NotImplementedException();
-    }
-  }
-
-  public class ItemStorageContainerWindow : VisualElement, IHideableUI
-  {
-    public bool IsVisiable { get; private set; }
-    public ItemStorageWindow ItemContainer { get; private set; }
-    ItemBox floatingBox;
-
-    public ItemStorageContainerWindow(ItemBox floatingBox)
-    {
-      this.floatingBox = floatingBox;
-      this.name = "item-storage-window-container";
+      this.floatingItemBox = floatingItemBox;
+      this.ItemSource = itemSource;
+      this.DropTargets = new ();
+      this.AddToClassList("item-storage-container");
       this.AddToClassList("window-container");
+      this.itemsContainer = new VisualElement();
+      this.itemsContainer.AddToClassList("item-storage-items-container");
+      this.Add(this.itemsContainer);
       this.CreateUI();
+      this.OnItemSourceUpdated(this.ItemSource);
     }
 
-    public void Hide()
+    public void AddDropTargets(IEnumerable<ItemStorageWindow> targets)
     {
-      this.IsVisiable = false;
-      Utils.HideVisualElement(this);
-      this.ItemContainer.Hide();
+      foreach (var target in targets) {
+        if (target == this) {
+          throw (new ArgumentException($"drop target same window {target}"));
+        }
+        this.DropTargets.Add(target);
+      }
     }
 
     public void Show()
     {
+      this.ItemSource.OnChanged += this.OnItemSourceUpdated;
+      this.OnItemSourceUpdated(this.ItemSource);
       this.IsVisiable = true;
       Utils.ShowVisualElement(this);
-      this.ItemContainer.Show(); 
     }
 
-    void CreateUI()
+    public void Hide()
     {
-      var label = new Label();
-      label.text = "Item Storage";
-      label.AddToClassList("window-label");
-      this.Add(label);
-      var closeButton = new Button();
-      closeButton.text = "close";
-      closeButton.AddToClassList("window-close-button");
-      closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
-      this.Add(closeButton); 
-      this.ItemContainer = new ItemStorageWindow(
-        this.floatingBox
-        );
-      this.ItemContainer.name = "item-storage-item-container";
-      this.Add(this.ItemContainer);
+      this.ItemSource.OnChanged -= this.OnItemSourceUpdated;
+      this.IsVisiable = false;
+      Utils.HideVisualElement(this);
     }
 
-    bool IsStorable(ItemData item)
+    protected void OnItemSourceUpdated(ItemStorageBase itemSource)
     {
-      return (true);
+      this.ClearItems();
+      this.FillItems(itemSource);
     }
 
-    void OnClickClose(ClickEvent click)
+    protected abstract void FillItems(ItemStorageBase inventory);
+
+    protected abstract void OnUsePointerButtonDown(ItemBox boxElement, ItemAndCount itemAndCount);
+    protected abstract bool IsAbleToDropItem(ItemData item, ItemStorageWindow targetContainer);
+    protected abstract void DropItem(ItemAndCount itemAndCount, ItemStorageWindow targetContainer);
+    protected abstract void DropItemOutSide(ItemAndCount itemAndCount);
+    protected abstract bool IsAbleToDropOutSide(ItemData item);
+    protected virtual void OnHoverItemBox(ItemBox boxElement, PointerOverEvent pointerOverEvent) {
+      if (boxElement.ItemData != ItemAndCount.None) {
+        this.itemDescription.text = boxElement.ItemData.Item.Description;
+        var pos = boxElement.localBound.position;
+        this.itemDescriptionContainer.style.left = pos.x + this.DescriptionOffset.x;
+         this.itemDescriptionContainer.style.top = pos.y + this.DescriptionOffset.y;
+        Utils.ShowVisualElement(this.itemDescriptionContainer);
+      }
+
+    }
+
+    protected virtual void OnLeaveItemBox(ItemBox boxElement, PointerLeaveEvent pointerLeaveEvent) { 
+      if (boxElement.ItemData != ItemAndCount.None)
+      {
+        Utils.HideVisualElement(this.itemDescriptionContainer);
+      }
+    }
+
+    protected abstract void CreateUI();
+
+    // TODO: return to Obejctpool
+    protected abstract void ClearItems();
+
+
+    protected virtual void OnPointerOver(PointerOverEvent pointerOverEvent)
     {
-      this.Hide();
+      var boxElement = Utils.FindUIElementFrom<ItemBox>(pointerOverEvent.target as VisualElement);
+      if (boxElement != null) {
+        this.OnHoverItemBox(boxElement, pointerOverEvent);
+      }
+    }
+
+    protected virtual void OnPointerLeave(PointerLeaveEvent pointerLeaveEvent)
+    {
+      var boxElement = Utils.FindUIElementFrom<ItemBox>(pointerLeaveEvent.target as VisualElement);
+      if (boxElement != null) {
+        this.OnLeaveItemBox(boxElement, pointerLeaveEvent);
+      }
+    }
+    protected void OnPointerDown(PointerDownEvent pointerDownEvent)
+    {
+      var boxElement = Utils.FindUIElementFrom<ItemBox>(pointerDownEvent.target as VisualElement);
+      if (boxElement == null) {
+        return ;
+      }
+      var itemAndCount = boxElement.ItemData;
+      if (pointerDownEvent.button == (int)DRAG_BUTTON) {
+        this.OnDragPointerButtonDown(pointerDownEvent, boxElement, itemAndCount);
+      }
+      else if (pointerDownEvent.button == (int)USE_BUTTON) {
+        this.OnUsePointerButtonDown(boxElement, itemAndCount); 
+      }
+    }
+
+    protected virtual void OnDragPointerButtonDown(PointerDownEvent pointerDownEvent, ItemBox boxElement, ItemAndCount itemAndCount)
+    {
+      if (!this.IsDraggingItem && boxElement.ItemData != ItemAndCount.None) {
+        this.dragStartPosition = pointerDownEvent.position;
+        boxElement.AddToClassList("inventory-item-box-inactive");
+        this.floatingItemBox.SetData(boxElement.ItemData);
+        this.floatingItemBox.style.left = this.dragStartPosition.x;
+        this.floatingItemBox.style.top = this.dragStartPosition.y;
+        this.floatingItemBox.Show();
+        this.currentDraggingTarget = boxElement;
+        boxElement.CapturePointer(pointerDownEvent.pointerId);
+      }
+    }
+
+    protected virtual void OnPointerMove(PointerMoveEvent pointerMoveEvent)
+    {
+      if (this.IsDraggingItem) {
+        var offset = new Vector2(
+          pointerMoveEvent.position.x,
+          pointerMoveEvent.position.y) - this.dragStartPosition;
+        this.floatingItemBox.UpdateOffset(offset); 
+      } 
+    }
+
+    protected virtual void OnPointerUp(PointerUpEvent pointerUpEvent)
+    {
+      if (this.IsDraggingItem) {
+        this.floatingItemBox.UpdateOffset(Vector2.zero);
+        this.currentDraggingTarget.RemoveFromClassList("inventory-item-box-inactive");
+        this.floatingItemBox.Hide();
+
+        VisualElement target = this.panel.Pick(pointerUpEvent.position);
+        if (this != target && !this.Contains(target) &&
+          this.floatingItemBox.ItemData != ItemAndCount.None) {
+
+          bool isDropToTargetStorage = this.IsDropTargetStorage(target, out ItemStorageWindow targetContainer);
+          var itemAndCount = this.floatingItemBox.ItemData;
+          if (isDropToTargetStorage &&
+            this.IsAbleToDropItem(itemAndCount.Item, targetContainer)) {
+            this.DropItem(itemAndCount, targetContainer); 
+          }
+          else if (!isDropToTargetStorage && this.IsAbleToDropOutSide(itemAndCount.Item)) {
+            this.DropItemOutSide(itemAndCount); 
+          }
+
+        }
+        this.currentDraggingTarget.ReleasePointer(pointerUpEvent.pointerId);
+        this.currentDraggingTarget = null;
+        this.dragStartPosition = Vector2.zero;
+      }
+    }
+
+    bool IsDropTarget(ItemStorageWindow window)
+    {
+      foreach (var dropTarget in this.DropTargets) {
+        if (window == dropTarget) {
+          return (true);
+        }
+      }
+      return (false);
+    }
+
+    protected bool IsDropTargetStorage(VisualElement target, out ItemStorageWindow targetContainer)
+    {
+      ItemBox foundBox = Utils.FindUIElementFrom<ItemBox>(target);
+      if (foundBox != null &&
+        foundBox.ParentWindow is ItemStorageWindow parentWindow) {
+        targetContainer = parentWindow;
+        return (this.IsDropTarget(parentWindow));
+      } 
+      ItemStorageWindow storageWindow = Utils.FindUIElementFrom<ItemStorageWindow>(target);
+      if (storageWindow != null) {
+        targetContainer = storageWindow;
+        return (this.IsDropTarget(storageWindow));
+      }
+      targetContainer = null;
+      return (false);
     }
   }
 }

@@ -6,7 +6,7 @@ using Patterns;
 
 namespace SHG
 {
-  public struct WindowTab : IHideableUI
+  public struct WindowTab : IHideableUI, IEquatable<WindowTab>
   {
     public bool IsVisiable => this.inner.IsVisiable;
     IHideableUI inner;
@@ -31,6 +31,11 @@ namespace SHG
     {
       this.inner.Show();
     }
+
+    public bool Equals(WindowTab other)
+    {
+      return (other.Content == this.Content);
+    }
   }
 
   public class InventoryContainerWindow : VisualElement, IHideableUI
@@ -42,6 +47,7 @@ namespace SHG
     ItemBox floatingBox;
     Button normalItemTabButton;
     Button storyItemTabButton;
+    Label title;
 
     public InventoryContainerWindow(ItemBox floatingBox)
     {
@@ -51,11 +57,15 @@ namespace SHG
       this.CreateUI();
       this.StoryItemTab.Hide();
       this.StoryItemTab.Content.SetEnabled(false);
+      this.title.text = "Normal Item";
+      this.storyItemTabButton.SetEnabled(true);
       this.CurrentTab = new (this.NormalItemTab);
       this.CurrentTab.Value.Show();
+      this.CurrentTab.Value.Content.SetEnabled(true);
+      this.normalItemTabButton.SetEnabled(false);
     }
 
-    public void AddDropTargets(IEnumerable<ItemConatinerWindow> targets)
+    public void AddDropTargets(IEnumerable<ItemStorageWindow> targets)
     {
 
       var normalItemTab = this.NormalItemTab.Content as InventoryWindow;
@@ -78,6 +88,9 @@ namespace SHG
 
     void CreateUI()
     {
+      this.title = new Label();
+      title.AddToClassList("window-label");
+      this.Add(title);
       var tabButtonContainer = new VisualElement();
       tabButtonContainer.name = "inventory-window-tab-button-container";
       this.storyItemTabButton = new Button();
@@ -132,6 +145,16 @@ namespace SHG
 
     void ChangeTabTo(WindowTab tab)
     {
+      if (tab.Equals(this.StoryItemTab)) {
+        this.title.text = "Story Item"; 
+        this.storyItemTabButton.SetEnabled(false);
+        this.normalItemTabButton.SetEnabled(true);
+      }
+      else {
+        this.title.text = "Normal Item";
+        this.storyItemTabButton.SetEnabled(true);
+        this.normalItemTabButton.SetEnabled(false);
+      }
       this.CurrentTab.Value.Hide();
       this.CurrentTab.Value.Content.SetEnabled(false);
       this.CurrentTab.Value = tab;

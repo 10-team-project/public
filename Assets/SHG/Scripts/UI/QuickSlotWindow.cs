@@ -5,11 +5,11 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class QuickSlotWindow : ItemConatinerWindow
+  public class QuickSlotWindow : ItemStorageWindow
   {
     ItemBox[] slots;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
-    ItemConatinerWindow[] dropTargets; 
+    ItemStorageWindow[] dropTargets; 
 
     public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
@@ -50,7 +50,7 @@ namespace SHG
       return ;
     }
 
-    protected override bool IsAbleToDropItem(ItemData item, ItemConatinerWindow targetContainer)
+    protected override bool IsAbleToDropItem(ItemData item, ItemStorageWindow targetContainer)
     {
       if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
         return (item as EquipmentItemData);
@@ -58,7 +58,7 @@ namespace SHG
       return (false);
     }
 
-    protected override void DropItem(ItemAndCount itemAndCount, ItemConatinerWindow targetContainer)
+    protected override void DropItem(ItemAndCount itemAndCount, ItemStorageWindow targetContainer)
     {
       if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
         App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);

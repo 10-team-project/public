@@ -7,7 +7,6 @@ namespace SHG
 {
   public class ProductListWindow: VisualElement
   {
-    const int NUMBER_OF_PRODUCTS = 10;
     public Action<ItemData> OnClickItem;
     List<ItemBox> productBoxes;
     public ItemBox SelectedItem;
@@ -37,7 +36,7 @@ namespace SHG
 
     void CreateUI()
     {
-      for (int i = 0; i < NUMBER_OF_PRODUCTS; i++) {
+      for (int i = 0; i < RecipeRegistry.NUMBER_OF_PRODUCTS; i++) {
         var itemBox = this.CreateItemBox();
         this.productBoxes.Add(itemBox);
         this.Add(itemBox); 
@@ -57,9 +56,13 @@ namespace SHG
       var products = RecipeRegistry.Instance.GetAllProducts();
       int index = 0;
       foreach (var product in products) {
-        if (index >= this.productBoxes.Count) {
-          Debug.LogError("number of products is out of range");
-          break;
+        if (index >= this.productBoxes.Count - 1) {
+          #if UNITY_EDITOR
+          Debug.LogError($"number of products is more than {RecipeRegistry.NUMBER_OF_PRODUCTS}");
+          #endif
+          var newBox = this.CreateItemBox();
+          this.productBoxes.Add(newBox);
+          this.Add(newBox);
         }
         this.productBoxes[index].SetData(new ItemAndCount {
           Item = product, Count = 1
@@ -71,6 +74,7 @@ namespace SHG
         else {
           this.productBoxes[index].RemoveFromClassList("product-list-item-box-inactive");
         }
+        index += 1;
       }
     }
 
@@ -78,7 +82,11 @@ namespace SHG
     {
       var itemBox = Utils.FindUIElementFrom<ItemBox>(click.target as VisualElement);
       if (itemBox != null && itemBox.ItemData != ItemAndCount.None) {
+        if (this.SelectedItem != null) {
+          this.SelectedItem.RemoveFromClassList("product-list-item-box-selected");
+        }
         this.SelectedItem = itemBox;
+        this.SelectedItem.AddToClassList("product-list-item-box-selected");
         this.OnClickItem?.Invoke(itemBox.ItemData.Item); 
       }
     }

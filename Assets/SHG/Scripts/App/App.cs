@@ -31,7 +31,7 @@ namespace SHG
     public RecipeRegistry RecipeRegistry { get; private set; }
     public InputManager InputManager { get; private set; }
     public Inventory Inventory { get; private set; }
-    public ItemStorage ItemStorage { get; private set; }
+    public ItemLocker ItemStorage { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -57,7 +57,7 @@ namespace SHG
       IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
       this.SceneManager = TestSceneManager.CreateInstance();
       this.Inventory = new Inventory();
-      this.ItemStorage = new ItemStorage();
+      this.ItemStorage = new ItemLocker();
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.managers = new ISingleton<MonoBehaviour>[] {

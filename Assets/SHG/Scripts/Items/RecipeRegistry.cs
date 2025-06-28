@@ -6,6 +6,7 @@ namespace SHG
 {
   public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>
   {
+    public const int NUMBER_OF_PRODUCTS = 20;
     const string ITEM_DIR = "Assets/SHG/Test/Items";
     const string RECIPE_DIR = "Assets/SHG/Test/Recipes";
     public static readonly List<ItemRecipe> EMPTY_RECIPES = new (0);

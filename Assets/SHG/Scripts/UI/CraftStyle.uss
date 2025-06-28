@@ -19,11 +19,9 @@
 
 #product-list-window-container
 {
-  border-color: brown;
-  border-width: 1px;
   flex-direction: row;
   flex-wrap: wrap;
-  min-width: 270px;
+  width: 280px;
   max-width: 280px;
   height: 100%;
   padding: 10px;
@@ -41,16 +39,23 @@
   opacity: 0.5;
 }
 
+.product-list-item-box-selected
+{
+  border-color: brown;
+  border-width: 2px;
+}
+
 #recipes-window
 {
-  width: 100%;
-  height: 100%;
+  flex: 2;
+  flex-shrink: 1;
 }
 
 .recipe-view-container
 {
-  min-width: 300px;
-  min-height: 300px;
+  width: 300px;
+  max-width: 300px;
+  height: 100%;
 }
 
 .recipe-view-product-box-container
@@ -81,8 +86,6 @@
   font-size: 20px;
   color: black;
   padding: 5px;
-  border-color: black;
-  border-width: 1px;
   margin: 20px;
 }
 
@@ -95,8 +98,6 @@
 .recipe-view-craft-button
 {
   align-self: flex-end;
-  border-color: black;
-  border-width: 1px;
   color: black;
   width: 200px;
   height: 80px;

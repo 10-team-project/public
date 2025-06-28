@@ -139,20 +139,20 @@ namespace SHG
     void WireInventoryStoarges()
     {
       this.inventoryWindow.AddDropTargets(
-        new ItemConatinerWindow[] { 
+        new ItemStorageWindow[] { 
         this.quickSlotWindow,
         this.itemStorageWindow.ItemContainer
         }
         );
       this.itemStorageWindow.ItemContainer.AddDropTargets(
-        new ItemConatinerWindow[] {
+        new ItemStorageWindow[] {
           this.inventoryWindow.NormalItemTab.Content as InventoryWindow,
           this.inventoryWindow.StoryItemTab.Content as InventoryWindow
         }
         );
       this.quickSlotWindow.AddDropTargets(
-        new ItemConatinerWindow[] { 
-        this.inventoryWindow.NormalItemTab.Content as ItemConatinerWindow
+        new ItemStorageWindow[] { 
+        this.inventoryWindow.NormalItemTab.Content as ItemStorageWindow
         }
         );
     }
