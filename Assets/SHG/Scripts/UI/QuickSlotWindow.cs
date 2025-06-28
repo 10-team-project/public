@@ -16,6 +16,17 @@ namespace SHG
       this.name = "quick-slot-window-container";
       this.Show();
     }
+    
+    public bool TryGetQuickslotItem(int slotNumber, out ItemData item)
+    {
+      var itemInSlot = this.slots[slotNumber].ItemData;
+      if (itemInSlot != ItemAndCount.None) {
+        item = itemInSlot.Item;
+        return (true);
+      }  
+      item = null;
+      return (false);
+    }
 
     protected override void CreateUI()
     {

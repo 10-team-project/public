@@ -82,7 +82,7 @@ namespace SHG
 
     public void Show()
     {
-      this.IsVisiable = false;
+      this.IsVisiable = true;
       Utils.ShowVisualElement(this);
     }
 

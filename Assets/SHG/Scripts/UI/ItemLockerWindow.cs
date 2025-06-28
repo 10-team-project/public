@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,6 +10,7 @@ namespace SHG
     readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0, 150f);
     public ItemLockerWindow(ItemBox floatingItemBox) : base(floatingItemBox, App.Instance.ItemStorage)
     {
+      this.name = "item-locker-window";
     }
 
     protected override void ClearItems()
@@ -112,13 +111,13 @@ namespace SHG
     }
   }
 
-  public class ItemStorageContainerWindow : VisualElement, IHideableUI
+  public class ItemLockerContainerWindow : VisualElement, IHideableUI
   {
     public bool IsVisiable { get; private set; }
     public ItemLockerWindow ItemContainer { get; private set; }
     ItemBox floatingBox;
 
-    public ItemStorageContainerWindow(ItemBox floatingBox)
+    public ItemLockerContainerWindow(ItemBox floatingBox)
     {
       this.floatingBox = floatingBox;
       this.name = "item-locker-window-container";

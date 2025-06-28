@@ -1,17 +1,17 @@
 
 namespace SHG
 {
-  public enum MountingType
+  public enum EquipmentItemPurpose
   {
-    SingleHand,
-    BothHands,
-    SingleOrBothHand
+    Construct,
+    Destruct
   }
 
   public class EquipmentItem : Item
   {
-    public bool IsWeapon => ((EquipmentItemData)(this.Data)).IsWeapon;
-    public MountingType Mounting => ((EquipmentItemData)(this.Data)).Mounting;
-    public EquipmentItem(EquipmentItemData data) : base(data) { }
+    public EquipmentItemPurpose Purpose { get; private set; }
+    public EquipmentItem(EquipmentItemData data) : base(data) { 
+      this.Purpose = data.Purpose;
+    }
   }
 }

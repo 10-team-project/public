@@ -32,6 +32,7 @@ namespace SHG
     public InputManager InputManager { get; private set; }
     public Inventory Inventory { get; private set; }
     public ItemLocker ItemStorage { get; private set; }
+    public UIController UIController { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -60,12 +61,14 @@ namespace SHG
       this.ItemStorage = new ItemLocker();
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
+      this.UIController = UIController.CreateInstance();
       this.managers = new ISingleton<MonoBehaviour>[] {
         this.SceneManager as ISingleton<MonoBehaviour>,
         this.InputManager as ISingleton<MonoBehaviour>,
         this.RecipeRegistry as ISingleton<MonoBehaviour>,
         this.Inventory as ISingleton<MonoBehaviour>,
-        this.ItemStorage as ISingleton<MonoBehaviour>
+        this.ItemStorage as ISingleton<MonoBehaviour>,
+        this.UIController as ISingleton<MonoBehaviour>
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {
