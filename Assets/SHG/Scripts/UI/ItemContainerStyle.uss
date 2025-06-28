@@ -1,5 +1,7 @@
 .item-storage-container {
   border-radius: 20px;
+  border-color: green;
+  border-width: 1px;
 }
 
 .item-storage-items-container

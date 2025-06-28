@@ -1,8 +1,8 @@
 #inventory-window-container 
 {
-  width: 40%;
+  width: 35%;
   height: 70%;
-  left: 50%;
+  left: 60%;
   top: 10%;
   padding-top: 100px;
   position: absolute;
@@ -28,7 +28,7 @@
 
 #item-storage-window-container
 {
-  width: 40%;
+  width: 50%;
   height: 70%;
   left: 5%;
   top: 10%;

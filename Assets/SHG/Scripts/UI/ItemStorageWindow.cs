@@ -43,14 +43,33 @@ namespace SHG
 
     protected override void FillItems(ItemStorageBase inventory)
     {
-      foreach (var itemAndCount in inventory.Items) {
-        var (item, count) = itemAndCount;
-        if (count > 0) {
+      foreach (var pair in inventory.Items) {
+        var (item, count) = pair;
+        if (item.IsStoryItem) {
+          for (int i = 0; i < count; i++) {
           var box = this.CreateItembox(
-            new ItemAndCount { Item = item, Count = count });
+            new ItemAndCount { Item = item, Count = 1 });
           this.itemsContainer.Add(box);
+          } 
         }
-      }
+        else {
+          var stackCount = count / inventory.MAX_STACK_COUNT; 
+          var restCount = count % inventory.MAX_STACK_COUNT;
+          for (int i = 0; i < stackCount; i++) {
+            var box = this.CreateItembox(
+              new ItemAndCount { 
+              Item = item, Count = inventory.MAX_STACK_COUNT });
+            this.itemsContainer.Add(box);
+             
+          }
+          if (restCount != 0) {
+            var box = this.CreateItembox(
+              new ItemAndCount { 
+              Item = item, Count = restCount });
+            this.itemsContainer.Add(box);
+          }
+        }
+      } 
     }
     //TODO: 각 아이템 UI를 objectpool에 보관
     ItemBox CreateItembox(ItemAndCount itemAndCount)

@@ -30,10 +30,20 @@ namespace SHG
       label.AddToClassList("window-label");
       label.text = "Craft";
       this.Add(label);
+      var closeButton = new Button();
+      closeButton.text = "close";
+      closeButton.AddToClassList("window-close-button");
+      closeButton.RegisterCallback<ClickEvent>(this.OnClickCloseButton);
+      this.Add(closeButton);
       this.productListWindow = new ProductListWindow();   
       this.Add(this.productListWindow);
       this.recipeWindow = new RecipesWindow();
       this.Add(this.recipeWindow);
+    }
+
+    void OnClickCloseButton(ClickEvent click)
+    {
+      this.Hide();
     }
 
     void OnInventoryUpdated(ItemStorageBase inventory)

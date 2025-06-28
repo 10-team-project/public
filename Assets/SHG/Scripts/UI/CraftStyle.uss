@@ -2,11 +2,11 @@
 {
   flex-direction: row;
   justify-content: space-around;
-  width: 70%;
+  width: 45%;
   height: 70%;
   position: absolute;
-  left: 15%;
-  top: 5%;
+  left: 10%;
+  top: 10%;
   padding-top: 100px;
 }
 
@@ -19,8 +19,8 @@
 
 #product-list-window-container
 {
-  border-color: green;
-  border-width: 2px;
+  border-color: brown;
+  border-width: 1px;
   flex-direction: row;
   flex-wrap: wrap;
   min-width: 270px;
@@ -31,8 +31,6 @@
 
 .product-list-item-box
 {
-  border-color: red;
-  border-width: 2px;
   width: 120px;
   height: 120px;
   opacity: 1;
@@ -45,16 +43,12 @@
 
 #recipes-window
 {
-  border-color: blue;
-  border-width: 2px;
   width: 100%;
   height: 100%;
 }
 
 .recipe-view-container
 {
-  border-color: dimgray;
-  border-width: 2px;
   min-width: 300px;
   min-height: 300px;
 }
@@ -67,8 +61,6 @@
 
 .recipe-view-product-box
 {
-  border-color: brown;
-  border-width: 2px;
 }
 
 .recipe-view-material-list

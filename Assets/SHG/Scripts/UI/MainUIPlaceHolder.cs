@@ -98,9 +98,11 @@ namespace SHG
     {
       if (craftWindow.IsVisiable) {
         this.craftWindow.Hide();
+        this.inventoryWindow.Hide();
       }
       else {
         this.craftWindow.Show(); 
+        this.inventoryWindow.Show();
       }
     }
 

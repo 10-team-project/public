@@ -48,7 +48,10 @@ namespace SHG
       int count = 0;   
       foreach (var itemAndCount in this.Items) {
         var itemCount = itemAndCount.Value;
-        if (itemCount % MAX_STACK_COUNT == 0) {
+        if (itemAndCount.Key.IsStoryItem) {
+          count += itemAndCount.Value;
+        }
+        else if (itemCount % MAX_STACK_COUNT == 0) {
           count += (itemCount / MAX_STACK_COUNT);
         }
         else {
@@ -62,10 +65,10 @@ namespace SHG
     {
       this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
-      this.AddItemName(item.Data);
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {
         throw (new ApplicationException($"Unable to add more {item.Data.Name}"));
       }
+      this.AddItemName(item.Data);
 #endif
       if (this.Items.TryGetValue(item.Data, out int itemCount)) {
         this.Items[item.Data] = itemCount + 1;
@@ -80,6 +83,9 @@ namespace SHG
     {
       if (count < 1) {
         throw (new ArgumentException($"Add {item.Data.Name} {count}"));
+      }
+      if (item.Data.IsStoryItem) {
+        throw (new ApplicationException($"Stroy items are not able to added at once"));
       }
       this.WillChange?.Invoke(this);
       #if UNITY_EDITOR
