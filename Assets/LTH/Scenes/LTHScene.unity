@@ -2617,21 +2617,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 21908281371710282, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: isLeftLadder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1510158399109688200, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_Center.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1893380573205794118, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: isLeftLadder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3289674125148539319, guid: c6f7a37fbb903574eb200064d5a65340,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2682,45 +2667,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3527644150192820067, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3527644150192820067, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3527644150192820067, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 3527644150192820067, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3527644150192820067, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 4373077509933759324, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: isLeftLadder
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7885561848764964684, guid: c6f7a37fbb903574eb200064d5a65340,
         type: 3}
       propertyPath: m_Name
       value: Ladder_Left
-      objectReference: {fileID: 0}
-    - target: {fileID: 8226180750106850720, guid: c6f7a37fbb903574eb200064d5a65340,
-        type: 3}
-      propertyPath: isLeftLadder
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2877,6 +2827,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4989823276277799774, guid: 7ba90d0a1f645ba4b8fd0597dac26ca0,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5105600736844585329, guid: 7ba90d0a1f645ba4b8fd0597dac26ca0,
         type: 3}
       propertyPath: m_Name
