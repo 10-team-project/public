@@ -1,9 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using LTH;
 
 public class PlayerMovement : MonoBehaviour, IInputLockHandler
 {
-
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed;
     [SerializeField] float runSpeed;
@@ -28,6 +28,9 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
     private bool isInputTemporarilyBlocked = false;
 
     private float fixedZ; // Z축 고정(횡스크롤 장르 고려)
+    private bool isZFixed = true;
+
+    private Vector3 currentLadderDirection;
 
     private bool IsGrounded()
     {
@@ -64,11 +67,31 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         PlayerInput();
     }
 
-    private void LateUpdate()
+    public void SetZFixed(bool value)
     {
+        isZFixed = value;
+    }
+
+    public void UpdateFixedZ()
+    {
+        fixedZ = transform.position.z;
+    }
+
+    public void ForceZPosition(float z)
+    {
+        StartCoroutine(ForceZFix(z));
+    }
+
+    private IEnumerator ForceZFix(float z)
+    {
+        yield return new WaitForEndOfFrame();
+
         Vector3 pos = transform.position;
-        pos.z = fixedZ;
+        pos.z = z;
         transform.position = pos;
+
+        UpdateFixedZ();
+        SetZFixed(true);
     }
 
     private void FixedUpdate()
@@ -160,9 +183,13 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         _rigid.useGravity = false;
         _rigid.velocity = Vector3.zero;
 
-        Vector3 targetPos = new Vector3(pos.x + 0.2f, pos.y + 0.1f, pos.z);
-        transform.position = targetPos;
-        transform.rotation = Quaternion.LookRotation(Vector3.right);
+        currentLadderDirection = forward;
+
+        float directionSign = forward.x > 0.01f ? 1 : (forward.x < -0.01f ? -1 : 0);
+        Vector3 lookDir = directionSign < 0 ? Vector3.left : Vector3.right;
+
+        transform.position = pos + lookDir * 0.2f + Vector3.up * 0.1f;
+        transform.rotation = Quaternion.LookRotation(lookDir);
 
         // 잠깐 입력 막기 (자연스러운 애니메이션용)
         isInputTemporarilyBlocked = true;
@@ -233,22 +260,13 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         if (isOnLadder)
         {
             float vertical = moveInput.y;
-
-            if (vertical > 0.01f)
-            {
-                animator.SetBool("LadderUpPlay", true);
-                animator.SetBool("LadderDownPlay", false);
-            }
-            else if (vertical < -0.01f)
-            {
-                animator.SetBool("LadderUpPlay", false);
-                animator.SetBool("LadderDownPlay", true);
-            }
-            else
+            animator.SetBool("LadderUpPlay", vertical > 0.01f);
+            animator.SetBool("LadderDownPlay", vertical < -0.01f);
+            if (Mathf.Abs(vertical) < 0.01f)
             {
                 animator.SetBool("LadderUpPlay", false);
                 animator.SetBool("LadderDownPlay", false);
-            }
+            }   
             return;
         }
 
