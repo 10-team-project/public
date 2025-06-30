@@ -1,9 +1,10 @@
 using System;
 using UnityEngine;
 using EditorAttributes;
+using SHG;
 
 [Serializable]
-public abstract partial class ItemData : ScriptableObject
+public abstract partial class ItemData : IdentifiableScriptableObject
 {
   [HideInInspector]
   public string Name => this.itemName;

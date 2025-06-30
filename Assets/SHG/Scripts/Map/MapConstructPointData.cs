@@ -15,6 +15,9 @@ namespace SHG
         return (false);
       }
       foreach (var item in this.RequiredItems) {
+        if (item == null) {
+          return (false);
+        }
         if (item.Purpose == EquipmentItemPurpose.Destruct) {
           return (true);
         }     

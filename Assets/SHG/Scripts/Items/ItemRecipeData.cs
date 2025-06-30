@@ -7,7 +7,7 @@ namespace SHG
 {
   [Serializable]
   [CreateAssetMenu (menuName = "ScriptableObjects/Items/ItemRecipe")]
-  public class ItemRecipeData : ScriptableObject
+  public class ItemRecipeData : IdentifiableScriptableObject
   {
     public ItemData Product => this.product;
     public ItemData[] Materials => this.materials;

@@ -33,6 +33,7 @@ namespace SHG
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.ItemLocker, true);
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true);
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -48,6 +49,7 @@ namespace SHG
         if (Input.GetKeyDown(Settings.InputSettings.CloseWindowKey) &&
           !App.Instance.InputManager.IsBlocked(InputType.UI)) {
           this.MainUI.CloseAllWindows();
+          this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
           App.Instance.InputManager.EndInput(this);
         }
         else if (
@@ -63,10 +65,12 @@ namespace SHG
       if (this.MainUI.IsWindowOpened(MainUIPlaceHolder.WindowType.Inventory)) {
 
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
         App.Instance.InputManager.EndInput(this);
       }
       else {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
     }

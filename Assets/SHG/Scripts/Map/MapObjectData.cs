@@ -4,7 +4,7 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
-  public abstract class MapObjectData : ScriptableObject
+  public abstract class MapObjectData : IdentifiableScriptableObject
   {
     public EquipmentItemData[] RequiredItems => this.requiredItems;
 

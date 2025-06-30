@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cef0004ddb56e4239a42fc3f85b6c3af, type: 3}
-  m_Name: ObstacleTest
+  m_Script: {fileID: 11500000, guid: f0832b6f0ef4e3b99b6f05b6c1de9c2a, type: 3}
+  m_Name: ConstructPointTest
   m_EditorClassIdentifier: 
-  objectName: Test obstacle
+  objectName: TestConstruct
   description: 
   requiredItems:
-  - {fileID: 11400000, guid: a47a8a7cd8c39dfeeb44e3cd4475c0fb, type: 2}
-  prefab: {fileID: 5010328538516330576, guid: 8276646ab1ad70fbf9fcc106d5c74612, type: 3}
+  - {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
+  prefab: {fileID: 620901791343572557, guid: 0bd2d06a46581acaeb96a3126338d32f, type: 3}

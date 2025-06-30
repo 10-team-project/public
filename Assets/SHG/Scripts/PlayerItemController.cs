@@ -35,6 +35,9 @@ namespace SHG
         if (this.TryFindMapObject(itemData, out IMapObject mapObject)) {
           this.TryInteractWith(itemData, mapObject);
         }
+        else {
+          Debug.Log("map object not found");
+        }
       }
     }
 
@@ -45,6 +48,9 @@ namespace SHG
         //TODO: lock input
         this.itemAction = this.StartCoroutine(
           mapObject.Interact(item, this.OnItemActionFinished));
+      }
+      else {
+        Debug.Log($"not interactable with {itemData.Name} + {mapObject}");
       }
     }
 
