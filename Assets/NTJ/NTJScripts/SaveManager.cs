@@ -8,34 +8,18 @@ namespace NTJ
     {
         private static string SavePath => Application.persistentDataPath + "/save.json";
 
-        public static void SaveGame(int currentDay)
+        public static void SaveData(GameData data)
         {
-            GameData data = new GameData
-            {
-                savedDay = currentDay,
-                playerHP = GameStateManager.Instance.playerHP,
-                maxHP = GameStateManager.Instance.maxHP,  
-                playerPosX = GameStateManager.Instance.playerPosition.x,
-                playerPosY = GameStateManager.Instance.playerPosition.y,
-                inventoryItems = new List<string>(GameStateManager.Instance.inventoryItems)
-            };
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(SavePath, json);
         }
 
-        public static void LoadGame()
+        public static GameData LoadData()
         {
-            if (!File.Exists(SavePath)) return;
+            if (!File.Exists(SavePath)) return null;
 
             string json = File.ReadAllText(SavePath);
-            GameData data = JsonUtility.FromJson<GameData>(json);
-
-            GameStateManager.Instance.playerHP = data.playerHP;
-            GameStateManager.Instance.maxHP = data.maxHP;
-            GameStateManager.Instance.playerPosition = new Vector2(data.playerPosX, data.playerPosY);
-            GameStateManager.Instance.inventoryItems = new List<string>(data.inventoryItems);
-
-            GameTimeManager.InitialDay = data.savedDay;
+            return JsonUtility.FromJson<GameData>(json);
         }
 
         public static bool HasSavedData()
