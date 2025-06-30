@@ -145,8 +145,8 @@ namespace NTJ
 
             // 체력 회복
             var stat = PlayerStatManager.Instance;
-            var maxHP = stat.HP.resource.Max;
-            stat.HP.resource.Cur = isManual ? maxHP * 0.7f : maxHP * 0.3f;
+            var maxHP = stat.HP.MaxHP;
+            stat.HP.CurrentHP = isManual ? maxHP * 0.7f : maxHP * 0.3f;
 
             // 자동 저장
             var saveData = CreateSaveData(currentDay);
@@ -181,12 +181,12 @@ namespace NTJ
             data.day = currentDay;
 
             var stat = PlayerStatManager.Instance;
-            data.hp = stat.HP.resource.Cur;
+            data.hp = stat.HP.CurrentHP;
             data.hunger = stat.Hunger.HungerCur;
             data.thirst = stat.Thirsty.ThirstyCur;
             data.fatigue = stat.Fatigue.FatigueCur;
 
-            data.inventoryItemIDs = Inventory.Instance.GetItemIDs();
+            data.inventoryItems = Inventory.Instance.GetItemSaveDataList();
             data.quickSlotItemIDs = Inventory.Instance.GetQuickSlotItemIDs();
 
             return data;
@@ -200,7 +200,7 @@ namespace NTJ
             stat.Thirsty.SetThirst(data.thirst);
             stat.Fatigue.SetFatigue(data.fatigue);
 
-            Inventory.Instance.LoadFromItemIDs(data.inventoryItemIDs);
+            Inventory.Instance.LoadFromItemSaveDataList(data.inventoryItems);
             Inventory.Instance.LoadQuickSlotItems(data.quickSlotItemIDs);
         }
     }
