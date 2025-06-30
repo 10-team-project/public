@@ -15,6 +15,9 @@ public class DialogueController : BaseController
     public TMP_Text rightnameText;
     public TMP_Text dialogueText; // 대사 텍스트
     public string leftcharacter; //왼쪽에 배치될 캐릭터
+    public float delay;
+
+    private float timer = 0f;
 
     public override void NextNode(BaseNode b)
     {
@@ -67,11 +70,21 @@ public class DialogueController : BaseController
     private void Update()
     {
         if (!onNode) return;
+        
+        timer += Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
             onNode = false;
+            timer = 0f;
             ScriptManager.Instance.NextNode();
         }
+        else if (timer >= delay)
+        {
+            onNode = false;
+            timer = 0f;
+            ScriptManager.Instance.NextNode();       
+        }
     }
+    
 }

@@ -2099,6 +2099,7 @@ MonoBehaviour:
   rightnameText: {fileID: 1808410287}
   dialogueText: {fileID: 162176729}
   leftcharacter: "\uD53C\uCE74\uCE04"
+  delay: 5
 --- !u!1 &1089571239
 GameObject:
   m_ObjectHideFlags: 0
