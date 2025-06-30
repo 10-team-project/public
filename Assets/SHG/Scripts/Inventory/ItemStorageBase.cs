@@ -81,6 +81,7 @@ namespace SHG
 
     public void AddItem(Item item)
     {
+      Debug.Log($"item add {item.Data.Name}");
       this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {

@@ -7,7 +7,7 @@ namespace NTJ
 {
     public static class ItemDatabase
     {
-        private static Dictionary<string, ItemData> idToData;
+        public static Dictionary<string, ItemData> idToData;
 
         static ItemDatabase()
         {

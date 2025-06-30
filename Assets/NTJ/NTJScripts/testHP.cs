@@ -11,8 +11,8 @@ namespace NTJ
         // HP에 추가
         public float CurrentHP
         {
-            get => resource.Cur;
-            set => resource.Cur = value;
+            get => 1.0f;// resource.Cur;
+            set {} // =>  resource.Cur = value;
         }
 
 
@@ -20,19 +20,19 @@ namespace NTJ
 
         public void SetHunger(float value)
         {
-            resourceDegenerator.Resource.Cur = value;
+            //resourceDegenerator.Resource.Cur = value;
         }
 
         // Thirst에 추가
         public void SetThirst(float value)
         {
-            resourceDegenerator.Resource.Cur = value;
+            //resourceDegenerator.Resource.Cur = value;
         }
 
         // Fatigue에 추가
         public void SetFatigue(float value)
         {
-            resourceDegenerator.Resource.Cur = value;
+            //resourceDegenerator.Resource.Cur = value;
         }
     }
 }

@@ -24,6 +24,5 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
     OnPickedUp?.Invoke(item);
     Destroy(gameObject);
   }
-
 }
 
