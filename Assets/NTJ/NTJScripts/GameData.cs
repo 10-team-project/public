@@ -13,7 +13,7 @@ namespace NTJ
         public float fatigue;
         public int day;
 
-        public List<string> inventoryItemIDs = new(); // ScriptableObject 이름 또는 고유 ID
+        public List<ItemSaveData> inventoryItems = new(); // ScriptableObject 이름 또는 고유 ID
         public List<string> quickSlotItemIDs = new();
     }
 }
