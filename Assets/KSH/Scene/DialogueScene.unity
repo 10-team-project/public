@@ -3503,6 +3503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   talkButton: {fileID: 564835868}
   eventButton: {fileID: 1089571241}
+  mainDialogue: {fileID: 1783162354}
 --- !u!1 &1808410285
 GameObject:
   m_ObjectHideFlags: 0
