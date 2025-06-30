@@ -11,7 +11,8 @@ public enum LadderTriggerType
 public class LadderTrigger : MonoBehaviour, IInteractable
 {
     [HideInInspector] public LadderTriggerType triggerType;
-    [SerializeField] public float enterDistance = 1.1f;
+    [SerializeField] public float enterDistance = 1.2f;
+    [SerializeField] private bool isLeftLadder = false;
 
     private PlayerMovement player;
 
@@ -62,31 +63,21 @@ public class LadderTrigger : MonoBehaviour, IInteractable
 
     public void Interact()
     {
-        if (player == null)
-        {
-            return;
-        }
+        if (player == null) return;
 
-        float dist = Vector3.Distance(transform.position, player.transform.position);
-
-        if (dist > enterDistance)
-        {
-            return;
-        }
+        Vector3 climbDirection = isLeftLadder ? Vector3.left : Vector3.right;
 
         switch (triggerType)
         {
             case LadderTriggerType.EnterBottom:
             case LadderTriggerType.EnterTop:
-                player.StartClimbing(transform.position, transform.forward, triggerType);
+                player.StartClimbing(transform.position, climbDirection, triggerType);
                 break;
 
             case LadderTriggerType.ExitBottom:
             case LadderTriggerType.ExitTop:
                 if (player.IsOnLadder)
-                {
                     player.EndClimb();
-                }
                 break;
         }
     }
