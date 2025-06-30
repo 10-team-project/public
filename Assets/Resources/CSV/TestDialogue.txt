@@ -14,3 +14,6 @@ ID,NodeType,Character,Dialogue,Reference
 ,dialogue,꼬부기,이야아아압(물대포 발사),
 4,dialogue,피카츄,거짓말 치지마 넌 한 대 맞아야겠다.,
 ,dialogue,꼬부기,(도망간다),
+,,,,
+10,dialogue,피카츄,오늘 하루는 정말 힘든 것 같아,
+,dialogue,피카츄,오늘도 힘내자!!,

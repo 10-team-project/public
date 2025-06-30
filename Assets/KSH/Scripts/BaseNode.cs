@@ -31,7 +31,7 @@ public class DialogueNode : BaseNode
     {
         nodetype = NodeType.dialogue; //노드타입을 dialogue로 설정
         
-        name = datas["Name"].ToString(); //이름을 문자열로 저장
+        name = datas["Character"].ToString(); //이름을 문자열로 저장
         dialogue = datas["Dialogue"].ToString();
         string reference = datas["Reference"].ToString();
         
@@ -49,21 +49,21 @@ public class OptionNode : BaseNode
     {
         nodetype = NodeType.option; //노드타입을 option으로 저장
         
-        name = datas["Name"].ToString(); //이름을 문자열로 저장
+        name = datas["Character"].ToString(); //이름을 문자열로 저장
         
-        string[] optionTexts = datas["Dialogue"].ToString().Split('/');
+        string[] optionTexts = datas["Dialogue"].ToString().Split('/'); // /로 분리
         string[] optionNextIDs = datas["Reference"].ToString().Split('/');
 
-        if (optionTexts.Length != optionNextIDs.Length)
+        if (optionTexts.Length != optionNextIDs.Length) //선택지 갯수와 다음 노드 갯수가 다르면 
         {
             Debug.LogError("옵션 선택에 따른 다른 대화 설정 지정 오류");
             return;
         }
         
-        optionDatas = new OptionData[optionTexts.Length];
+        optionDatas = new OptionData[optionTexts.Length]; //옵션데이터 배열 생성
         for (int i = 0; i < optionTexts.Length; i++)
         {
-            optionDatas[i] = new OptionData(optionTexts[i], int.Parse(optionNextIDs[i]));
+            optionDatas[i] = new OptionData(optionTexts[i], int.Parse(optionNextIDs[i])); //정수인 다음 아이디로 옵션 데이터 객체 생성
         }
     }
 

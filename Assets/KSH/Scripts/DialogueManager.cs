@@ -17,25 +17,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        var datas = CSVParser.Parse("CSV/TestDialogue"); // CSV파일 파싱
-
-        int curId = 0; //현재ID
-        for (int i = 0; i < datas.Count; i++) //행을 하나씩 반복
-        {
-            if (!string.IsNullOrEmpty(datas[i]["ID"].ToString()) && (int.TryParse(datas[i]["ID"].ToString(),out int id))) // ID칸이 비어있지 않고 ID의 값을 정수로 변환가능하면 id에 저장
-            {
-                if (!scriptDic.ContainsKey(id)) // 만약 scriptDic에 id키가 없으면
-                {
-                    curId = id; //현재 키를 id로 저장
-                    scriptDic.Add(curId, new List<Dictionary<string, object>>()); //새로운 리스트로 추가
-                }
-            }
-            scriptDic[curId].Add(datas[i]); // 현재 줄을 현재 id에 해당하는 리스트에 추가
-        }
-        
-        characterSprite = FindObjectOfType<CharacterSprite>(); //CharacterSprite 타입의 컴포넌트 가져옴
-        nameText.text = "";
-        dialogueText.text = "";
+        ScriptManager.Instance.StartScript(0);
     }
     
     int curDialogueIndex = 0;
