@@ -5,16 +5,27 @@ using UnityEngine.UIElements;
 
 namespace SHG
 {
-  public class QuickSlotWindow : ItemConatinerWindow
+  public class QuickSlotWindow : ItemStorageWindow
   {
     ItemBox[] slots;
     Dictionary<VisualElement, ItemAndCount> itemBoxTable;
-    ItemConatinerWindow[] dropTargets; 
+    ItemStorageWindow[] dropTargets; 
 
-    public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox)
+    public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
       this.name = "quick-slot-window-container";
       this.Show();
+    }
+    
+    public bool TryGetQuickslotItem(int slotNumber, out ItemData item)
+    {
+      var itemInSlot = this.slots[slotNumber].ItemData;
+      if (itemInSlot != ItemAndCount.None) {
+        item = itemInSlot.Item;
+        return (true);
+      }  
+      item = null;
+      return (false);
     }
 
     protected override void CreateUI()
@@ -50,14 +61,22 @@ namespace SHG
       return ;
     }
 
-    protected override bool IsAbleToDropItem(ItemData item)
+    protected override bool IsAbleToDropItem(ItemData item, ItemStorageWindow targetContainer)
     {
-      return (item as EquipmentItemData);
+      if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
+        return (item as EquipmentItemData);
+      }
+      return (false);
     }
 
-    protected override void DropItem(ItemAndCount itemAndCount)
+    protected override void DropItem(ItemAndCount itemAndCount, ItemStorageWindow targetContainer)
     {
-      App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);
+      if (targetContainer is InventoryWindow InventoryItemContainerWindow) {
+        App.Instance.Inventory.MoveItemFromQuickSlot(itemAndCount.Item);
+      }
+      else {
+
+      }
     }
 
     protected override void DropItemOutSide(ItemAndCount itemAndCount)

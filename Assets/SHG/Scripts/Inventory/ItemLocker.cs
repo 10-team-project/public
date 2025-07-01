@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace SHG
 {
-  public class ItemStorage : ItemStorageBase
+  public class ItemLocker : ItemStorageBase
   {
-    public ItemStorage(): base()
+    public ItemLocker(): base()
     {
     }
   }

@@ -1,10 +1,9 @@
 #inventory-window-container 
 {
-  width: 40%;
+  width: 35%;
   height: 70%;
-  left: 5%;
+  left: 60%;
   top: 10%;
-  padding-top: 100px;
   position: absolute;
 }
 
@@ -19,16 +18,14 @@
 
 .inventory-window-tab-button
 {
-  border-color: green;
-  border-width: 1px;
   color: black;
   font-size: 20px;
   margin: 5px;
 }
 
-#item-storage-window-container
+#item-locker-window-container
 {
-  width: 70%;
+  width: 50%;
   height: 70%;
   left: 5%;
   top: 10%;
@@ -36,7 +33,7 @@
   position: absolute;
 }
 
-#item-storage-item-container
+#item-locker-item-container
 {
   width: 100%;
   height: 80%;

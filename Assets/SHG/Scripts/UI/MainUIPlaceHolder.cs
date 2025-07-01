@@ -1,20 +1,33 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 using EditorAttributes;
 using Patterns;
 using KSH;
-using System;
 
 namespace SHG
 {
+
   public class MainUIPlaceHolder : MonoBehaviour
   {
+    [Flags]
+    public enum WindowType
+    {
+      None = 0,
+      Inventory = 1,
+      ItemLocker = 2,
+      Craft = 4
+    }
+    public static readonly WindowType[] ALL_WINDOW_TYPES = (WindowType[])Enum.GetValues(typeof(WindowType));
+
+    int currentOpenedWindows = (int)WindowType.None;
     VisualElement root;
-    InventoryWindow inventoryWindow;
+    InventoryContainerWindow inventoryWindow;
     QuickSlotWindow quickSlotWindow;
     CraftWindow craftWindow;
     ItemBox floatingItemBox;
-    ItemStorageWindow itemStorageWindow;
+    ItemLockerContainerWindow itemLockerWindow;
 
     ItemSpawnTest itemSpawner;
 
@@ -33,6 +46,33 @@ namespace SHG
     Resource thirst;
     Resource hunger;
     Resource fatigue;
+
+    public WindowType[] GetCurrentOpenedWindowTypes()
+    {
+      var count = (Utils.CountBits(this.currentOpenedWindows));
+      int index = 0;
+      var windowTypes = new WindowType[count];
+      foreach (var windowType in ALL_WINDOW_TYPES) {
+        if (this.IsWindowOpened(windowType))  {
+          windowTypes[index++] = windowType;
+        }
+      }
+      return (windowTypes); 
+    }
+
+    public bool IsWindowOpened(WindowType windowType)
+    {
+      return ((this.currentOpenedWindows & ((int)windowType)) != 0);
+    }
+
+    public void CloseAllWindows()
+    {
+      foreach (var windowType in ALL_WINDOW_TYPES) {
+        if (this.IsWindowOpened(windowType)) {
+          this.SetWindowVisible(windowType, false);
+        }
+      }
+    }
 
     void Awake()
     {
@@ -94,37 +134,102 @@ namespace SHG
       this.CreateItemUI();
     }
 
+    void OnEnable()
+    {
+      App.Instance?.UIController.SetMainUI(this); 
+    }
+
+    void OnDisable()
+    {
+      App.Instance?.UIController.SetMainUI(null); 
+    }
+
+    public void SetWindowVisible(WindowType windowType, bool visible)
+    {
+      IHideableUI window = windowType switch {
+        WindowType.Inventory => this.inventoryWindow,
+        WindowType.ItemLocker => this.itemLockerWindow,
+        WindowType.Craft => this.craftWindow,
+        _ => throw (new ArgumentException())
+      };
+      this.SetWindowVisible(window, windowType, visible);
+    }
+
+    public void ToggleWindowVisible(WindowType windowType)
+    {
+      this.SetWindowVisible(
+        windowType, 
+        this.IsWindowOpened(windowType) ? false: true);
+    }
+
+    void SetWindowVisible(IHideableUI window, bool visible)
+    {
+      WindowType windowType = window switch {
+        InventoryContainerWindow inventory => WindowType.Inventory,
+        ItemLockerContainerWindow itemLocker => WindowType.ItemLocker,
+        CraftWindow craftWindow => WindowType.Craft,
+        _ => throw (new NotImplementedException($"unknown window type for {window}"))
+      };
+      this.SetWindowVisible(window, windowType, visible);
+    }
+
+    void SetWindowVisible(IHideableUI window, WindowType windowType, bool visible)
+    {
+      if (visible && !window.IsVisiable) {
+        window.Show();
+        this.currentOpenedWindows |= ((int)windowType);
+      }
+      else if (!visible && window.IsVisiable) {
+        window.Hide();
+        this.currentOpenedWindows &= (~((int)windowType));
+      }
+    }
+
+    void OnClickInventoryButton(ClickEvent click)
+    {
+      if (inventoryWindow.IsVisiable) {
+        this.SetWindowVisible(this.inventoryWindow, false);
+      }
+      else {
+        this.SetWindowVisible(this.inventoryWindow, true);
+      }
+    }
+
     void OnClickCraftButton(ClickEvent click)
     {
       if (craftWindow.IsVisiable) {
-        this.craftWindow.Hide();
+        this.SetWindowVisible(this.craftWindow, false); 
+        this.SetWindowVisible(this.inventoryWindow, false);
       }
       else {
-        this.craftWindow.Show(); 
+        this.SetWindowVisible(this.craftWindow, true); 
+        this.SetWindowVisible(this.inventoryWindow, true);
       }
     }
 
     void OnClickStorageButton(ClickEvent click)
     {
-      if (this.itemStorageWindow.IsVisiable) {
-        this.itemStorageWindow.Hide();
+      if (this.itemLockerWindow.IsVisiable) {
+        this.SetWindowVisible(this.itemLockerWindow, false);
+        this.SetWindowVisible(this.inventoryWindow, false);
       }
       else {
-        this.itemStorageWindow.Show();
+        this.SetWindowVisible(this.itemLockerWindow, true);
+        this.SetWindowVisible(this.inventoryWindow, true);
       }
     }
 
     void CreateItemUI()
     {
       this.floatingItemBox = this.CreateFloatingItemBox();
-      this.inventoryWindow = new InventoryWindow(this.floatingItemBox);
+      this.inventoryWindow = new InventoryContainerWindow(this.floatingItemBox);
       this.quickSlotWindow = new QuickSlotWindow(this.floatingItemBox);
       this.craftWindow = new CraftWindow(this.floatingItemBox);
-      this.itemStorageWindow = new ItemStorageWindow(this.floatingItemBox);
+      this.itemLockerWindow = new ItemLockerContainerWindow(this.floatingItemBox);
       this.inventoryWindow.Hide();
       this.craftWindow.Hide();
-      this.itemStorageWindow.Hide();
-      this.root.Add(this.itemStorageWindow);
+      this.itemLockerWindow.Hide();
+      this.root.Add(this.itemLockerWindow);
       this.root.Add(this.inventoryWindow);
       this.root.Add(this.quickSlotWindow);
       this.root.Add(this.floatingItemBox);
@@ -135,12 +240,20 @@ namespace SHG
     void WireInventoryStoarges()
     {
       this.inventoryWindow.AddDropTargets(
-         new ItemConatinerWindow[] { this.quickSlotWindow }
-        
+        new ItemStorageWindow[] { 
+        this.quickSlotWindow,
+        this.itemLockerWindow.ItemContainer
+        }
+        );
+      this.itemLockerWindow.ItemContainer.AddDropTargets(
+        new ItemStorageWindow[] {
+          this.inventoryWindow.NormalItemTab.Content as InventoryWindow,
+          this.inventoryWindow.StoryItemTab.Content as InventoryWindow
+        }
         );
       this.quickSlotWindow.AddDropTargets(
-        new ItemConatinerWindow[] { 
-        this.inventoryWindow.NormalItemTab.Content as ItemConatinerWindow
+        new ItemStorageWindow[] { 
+        this.inventoryWindow.NormalItemTab.Content as ItemLockerWindow
         }
         );
     }
@@ -179,16 +292,6 @@ namespace SHG
       this.hungerLabel.text = $"Hunger: {this.hunger.Cur}/{this.hunger.Max}";
       this.thirstLabel.text = $"Thirst : {this.thirst.Cur}/{this.thirst.Max}";
       this.fatigueLabel.text = $"Fatigue: {this.fatigue.Cur}/{this.fatigue.Max}";
-    }
-
-    void OnClickInventoryButton(ClickEvent click)
-    {
-      if (inventoryWindow.IsVisiable) {
-        inventoryWindow.Hide();
-      }
-      else {
-        inventoryWindow.Show();
-      }
     }
 
     [Button ("Show inventory")]
