@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -34,6 +33,7 @@ namespace SHG
     public ItemLocker ItemStorage { get; private set; }
     public UIController UIController { get; private set; }
     public PopupManager PopupManager { get; private set; }
+    public CameraController CameraController { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -80,6 +80,11 @@ namespace SHG
         this.ChangeMode(this.startMode);
       }
       #endif
+    }
+
+    public void SetCameraController(CameraController cameraController)
+    {
+      this.CameraController = cameraController;
     }
 
     public void ChangeMode(GameMode gameMode, string nextScene = null)
