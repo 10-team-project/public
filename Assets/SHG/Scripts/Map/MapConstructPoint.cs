@@ -44,6 +44,7 @@ namespace SHG
       this.Construction.transform.SetParent(this.transform);
       if (this.spawnPoint != null) {
         this.Construction.transform.position = this.spawnPoint.position;
+        this.Construction.transform.rotation = this.spawnPoint.rotation;
       }
       else {
         this.Construction.transform.position = this.transform.position;
