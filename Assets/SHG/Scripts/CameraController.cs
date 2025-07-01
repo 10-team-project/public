@@ -143,6 +143,7 @@ public class CameraController : MonoBehaviour
   IEnumerator MoveCameraRoutine(Transform lookTarget, FocusDirection focusDirection)
   {
     var followPosition = this.CalcFollowPosition(lookTarget, focusDirection);
+    var targetPosition = lookTarget.position;
     while (this.cameraMoveProgress < 1) {
       this.cameraFollow.position = Vector3.Lerp(
         this.cameraFollow.position,
@@ -151,7 +152,7 @@ public class CameraController : MonoBehaviour
         );
       this.cameraLook.position = Vector3.Lerp(
         this.cameraLook.position,
-        lookTarget.position,
+        lookTarget != null ? lookTarget.position : targetPosition,
         this.cameraMoveProgress
         );
       this.cameraMoveProgress += this.cameraMoveSpeed * Time.deltaTime;
