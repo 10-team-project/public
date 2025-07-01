@@ -9,6 +9,7 @@ namespace LTH
         Move,
         Interaction,
         UI,
+        ItemUse,
         All
     }
 

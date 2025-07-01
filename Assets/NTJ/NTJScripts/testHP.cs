@@ -1,7 +1,3 @@
-using KSH;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.iOS;
 using UnityEngine;
 
 namespace NTJ
@@ -34,5 +30,35 @@ namespace NTJ
         {
             //resourceDegenerator.Resource.Cur = value;
         }
+        //   // HP에 추가
+        //   public float CurrentHP
+        //   {
+        //       get => resource.Cur;
+        //       set => resource.Cur = value;
+        //   }
+        // public float MaxHP
+        // {
+        //     get => resource.Max;
+        // }
+        //
+        //
+        //   // Hunger에 추가
+        //
+        //   public void SetHunger(float value)
+        //   {
+        //       resourceDegenerator.Resource.Cur = value;
+        //   }
+        //
+        //   // Thirst에 추가
+        //   public void SetThirst(float value)
+        //   {
+        //       resourceDegenerator.Resource.Cur = value;
+        //   }
+        //
+        //   // Fatigue에 추가
+        //   public void SetFatigue(float value)
+        //   {
+        //       resourceDegenerator.Resource.Cur = value;
+        //   }
     }
 }
