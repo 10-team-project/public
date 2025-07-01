@@ -73515,11 +73515,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d7d635736aa3542961cd24f28d9cb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  go_dialogueBar: {fileID: 1527640738}
-  go_dialogueNameBar: {fileID: 294795748}
-  txt_dialogue: {fileID: 1489206310}
-  txt_Name: {fileID: 1520284484}
-  AutoTime: 5
 --- !u!114 &1479691514
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86807,8 +86802,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10e78d08dd1cd90429fbebc1d694e485, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csv_DFileName: TestDialogue
-  csv_SFileName: TestSelectDialogue
 --- !u!114 &1767731247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93698,7 +93691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraFollow: {fileID: 514967220}
-  followOffset: {x: 0, y: 1, z: -5}
+  followOffset: {x: 0, y: 1.5, z: -5}
 --- !u!4 &1937169098
 Transform:
   m_ObjectHideFlags: 0

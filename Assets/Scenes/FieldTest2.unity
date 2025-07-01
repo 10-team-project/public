@@ -31093,7 +31093,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraFollow: {fileID: 954554034}
-  followOffset: {x: 0, y: 1, z: -10}
+  followOffset: {x: 0, y: 3, z: -7}
 --- !u!1001 &722207703
 PrefabInstance:
   m_ObjectHideFlags: 0
