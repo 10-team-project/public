@@ -15,7 +15,10 @@ namespace SHG
     GameObject placeHolder;
     [SerializeField, ReadOnly]
     public GameObject Construction;
+    [SerializeField]
+    Transform spawnPoint;
     DissolveController dissolveController;
+    Collider blockingCollider;
 
     [Button ("Construct")]
     public void ConstructTest()
@@ -39,7 +42,12 @@ namespace SHG
       }
       this.Construction = Instantiate(this.PointData.Prefab);
       this.Construction.transform.SetParent(this.transform);
-      this.Construction.transform.localPosition = Vector3.zero;
+      if (this.spawnPoint != null) {
+        this.Construction.transform.position = this.spawnPoint.position;
+      }
+      else {
+        this.Construction.transform.position = this.transform.position;
+      }
       this.dissolveController = this.Construction.GetComponent<DissolveController>();
     }
 
@@ -52,6 +60,9 @@ namespace SHG
       if (this.dissolveController != null) {
         this.dissolveController.DisappearImmediately();
         yield return (this.dissolveController.StartAppear());
+      }
+      if (this.blockingCollider != null) {
+        this.blockingCollider.enabled = false;
       }
       yield return (null);
     }
@@ -67,6 +78,11 @@ namespace SHG
       return (
         item.Purpose == EquipmentItemPurpose.Construct &&
         Array.IndexOf(this.PointData.RequiredItems, item) != -1);
+    }
+
+    void Awake()
+    {
+      this.blockingCollider = this.GetComponent<Collider>();
     }
   }
 }

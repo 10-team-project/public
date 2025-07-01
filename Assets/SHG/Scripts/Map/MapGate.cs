@@ -5,6 +5,7 @@ using TMPro;
 using EditorAttributes;
 using UnityEngine.SceneManagement;
 using KSH;
+using LTH;
 
 namespace SHG
 {
@@ -54,9 +55,29 @@ namespace SHG
     public void Interact()
     {
       if (this.isPresentingUI && !this.isMoved) {
-        this.isMoved = true;
-        this.OnMove?.Invoke(this.sceneToMove); 
-      }
+          var popup = PopupManager.Instance.ShowPopup<ConfirmPopup>();
+          if (popup == null) {
+          #if UNITY_EDITOR
+            Debug.LogError("Popup ui is not available");
+          #endif
+            return;
+          }
+          popup.Show("이동하시겠습니까?","예", 
+            this.OnConfirm,
+            "아니요",
+            this.OnDismiss);
+        }
+    }
+
+    void OnConfirm()
+    {
+      this.isMoved = true;
+      this.OnMove?.Invoke(this.sceneToMove); 
+    }
+
+    void OnDismiss()
+    {
+
     }
 
     protected bool IsInvalidScene()
@@ -64,12 +85,12 @@ namespace SHG
       if (this.sceneToMove.Replace(" ", "").Length == 0) {
         return (true);
       }
-      #if UNITY_EDITOR
+#if UNITY_EDITOR
       var index = SceneUtility.GetBuildIndexByScenePath(this.sceneToMove);
       if (index == -1) {
         return (true);
       }
-      #endif
+#endif
       return (false);
     }
   }

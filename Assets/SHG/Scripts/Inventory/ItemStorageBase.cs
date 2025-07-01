@@ -13,11 +13,29 @@ namespace SHG
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
+    public const string ITEM_DIR = "Assets/SHG/Test/Items";
 
   #if UNITY_EDITOR
     [SerializeField]
     public List<string> ItemNamesForDebugging;
   #endif
+
+    public List<ItemSaveData> GetItemSaveDataList()
+    {
+      List<ItemSaveData> list = new (this.Items.Count);
+      
+      foreach (var itemAndCount in this.Items) {
+        if (itemAndCount.Value > 0) {
+          list.Add(new ItemSaveData {id = itemAndCount.Key.Id, count = itemAndCount.Value});
+        }
+      }
+      return (list);
+    }
+
+    public void LoadFromItemSaveDataList(List<ItemSaveData> data)
+    {
+       
+    }
 
     protected ItemStorageBase()
     {
@@ -63,6 +81,7 @@ namespace SHG
 
     public void AddItem(Item item)
     {
+      Debug.Log($"item add {item.Data.Name}");
       this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {

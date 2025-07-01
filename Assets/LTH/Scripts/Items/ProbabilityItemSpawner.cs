@@ -27,13 +27,14 @@ namespace LTH
 
                 var item = selectedGrade.items[UnityEngine.Random.Range(0, selectedGrade.items.Count)];
 
-                GameObject instance = Instantiate(item.Prefab);
+                //GameObject itemObject = Instantiate(item.Prefab);
+                ItemObject instance = Item.CreateItemObjectFrom(item);
                 instance.transform.position = rule.spawnPoint.position;
 
-                if (instance.TryGetComponent<ItemObject>(out var itemObject))
-                {
-                    itemObject.SetItem(Item.CreateItemFrom(item));
-                }
+//                if (instance.TryGetComponent<ItemObject>(out var itemObject))
+//                {
+//                    itemObject.SetItem(Item.CreateItemFrom(item));
+//                }
             }
         }
 

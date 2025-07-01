@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0620495320dc2fd2866611ad094cda8, type: 3}
   m_Name: TestAxeRecipe
   m_EditorClassIdentifier: 
+  uuid: 5570de96-144b-4a46-9aa5-2f7842022260
   product: {fileID: 11400000, guid: a47a8a7cd8c39dfeeb44e3cd4475c0fb, type: 2}
   materials:
   - {fileID: 11400000, guid: 4a16e2d7f3955160b8595e94b29b5afd, type: 2}

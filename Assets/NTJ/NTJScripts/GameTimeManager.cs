@@ -1,3 +1,4 @@
+using KSH;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -19,6 +20,8 @@ namespace NTJ
         public TextMeshProUGUI timeScaleText;
         public Animator playerAnimator;            // Project 창에서 우클릭 → Create → Animator Controller
                                                    // Player에 Animator 컴포넌트를 연결 없으면 Add Component → Animator
+        public Transform bedSpawnPoint; // 침대 스폰 위치 지정
+        public Transform player; // 플레이어 Transform 참조
 
         [Header("Time Settings")]
         public int timeScale = 30; // 현실 1초 = 게임 1분
@@ -27,7 +30,6 @@ namespace NTJ
         private float fadeDuration = 2f;
         private bool isSleeping = false;
         private bool sleepRequested = false;
-
 
 
         void Start()
@@ -40,9 +42,14 @@ namespace NTJ
                 GameData data = SaveManager.LoadData();
                 if (data != null)
                 {
-                    currentDay = data.savedDay;
-                    GameStateManager.Instance.LoadFromData(data);
+                    currentDay = data.day; 
+                    LoadFromData(data);
+                    player.position = bedSpawnPoint.position; // 침대 위치에서 시작
                 }
+            }
+            else
+            {
+                player.position = bedSpawnPoint.position;
             }
 
             gameTime = 9 * 3600f;
@@ -68,7 +75,7 @@ namespace NTJ
             timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
 
             if (hours >= 24 || hours < 9)
-            {                
+            {
                 if (!sleepRequested)
                     StartCoroutine(SleepWithAnimation(false)); // 강제 수면
             }
@@ -137,12 +144,12 @@ namespace NTJ
             gameTime = 9 * 3600f;
 
             // 체력 회복
-            float maxHP = GameStateManager.Instance.maxHP;
-            GameStateManager.Instance.playerHP = isManual ?
-                maxHP * 0.7f : maxHP * 0.3f;
+            var stat = PlayerStatManager.Instance;
+            //var maxHP = stat.HP.resource.Max;
+            //stat.HP.resource.Cur = isManual ? maxHP * 0.7f : maxHP * 0.3f;
 
             // 자동 저장
-            GameData saveData = GameStateManager.Instance.CreateSaveData(currentDay);
+            var saveData = CreateSaveData(currentDay);
             SaveManager.SaveData(saveData);
 
             // Fade Out
@@ -159,11 +166,43 @@ namespace NTJ
             fadePanel.gameObject.SetActive(false);
             dayTextPanel.SetActive(false);
             isSleeping = false;
+
+            player.transform.position = bedSpawnPoint.position; // 플레이어가 침대에서 리스폰
         }
         public void OnTimeScaleChanged(float value)
         {
             timeScale = Mathf.RoundToInt(value);
             timeScaleText.text = $"{timeScale}배속";
-        } 
+        }
+
+        private GameData CreateSaveData(int currentDay)
+        {
+            var data = new GameData();
+            data.day = currentDay;
+
+            var stat = PlayerStatManager.Instance;
+            //data.hp = stat.HP.resource.Cur;
+            data.hunger = stat.Hunger.HungerCur;
+            data.thirst = stat.Thirsty.ThirstyCur;
+            data.fatigue = stat.Fatigue.FatigueCur;
+
+            //data.inventoryItemIDs = Inventory.Instance.GetItemIDs();
+            //data.quickSlotItemIDs = Inventory.Instance.GetQuickSlotItemIDs();
+
+            return data;
+        }
+        private void LoadFromData(GameData data)
+        {
+            var stat = PlayerStatManager.Instance;
+
+            //stat.HP.CurrentHP = data.hp;
+            //stat.Hunger.SetHunger(data.hunger);
+            //stat.Thirsty.SetThirst(data.thirst);
+            //stat.Fatigue.SetFatigue(data.fatigue);
+
+            //Inventory.Instance.LoadFromItemIDs(data.inventoryItemIDs);
+            //Inventory.Instance.LoadQuickSlotItems(data.quickSlotItemIDs);
+        }
     }
+
 }

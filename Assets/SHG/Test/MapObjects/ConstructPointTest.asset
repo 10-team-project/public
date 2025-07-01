@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0832b6f0ef4e3b99b6f05b6c1de9c2a, type: 3}
   m_Name: ConstructPointTest
   m_EditorClassIdentifier: 
+  uuid: a67423fb-5f51-4a69-ac9a-236ac892561b
   objectName: TestConstruct
   description: 
   requiredItems:
   - {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
-  prefab: {fileID: 620901791343572557, guid: 0bd2d06a46581acaeb96a3126338d32f, type: 3}
+  prefab: {fileID: 7193341564152819984, guid: a8f5f40fa626074aabf039b9574a5fe4, type: 3}

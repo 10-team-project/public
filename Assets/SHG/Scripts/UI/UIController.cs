@@ -27,6 +27,21 @@ namespace SHG
       return (false);
     }
 
+    public void OnInteractCraft()
+    {
+      if (this.MainUI != null && App.Instance?.InputManager != null &&
+        !App.Instance.InputManager.IsBlocked(InputType.UI)) {
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, true); 
+        App.Instance.InputManager.StartInput(this);
+      }
+      #if UNITY_EDITOR
+      else {
+        Debug.LogError("OnInteractLocker: Main ui is not set");
+      }
+      #endif
+    }
+
     public void OnInteractLocker()
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
