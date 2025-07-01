@@ -27,7 +27,8 @@ public class OptionController : BaseController
         
         uiObj.SetActive(true);
         curOptionNode = b as OptionNode;
-        CharacterManager.Instance.GetCharacterData(curOptionNode.name);
+
+        string allId = curOptionNode.allId;
         for (int i = 0; i < optionPanels.Length; i++)
         {
             if (i < curOptionNode.optionDatas.Length) //현재 노드의 선택지 수보다 작으면

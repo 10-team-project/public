@@ -13,12 +13,12 @@ public class DialogueButton : MonoBehaviour
     {
         talkButton.onClick.AddListener(() =>
         {
-            ScriptManager.Instance.StartScript(10);
+            ScriptManager.Instance.StartScript(601);
             mainDialogue.SetActive(false);
         });
         eventButton.onClick.AddListener(() =>
         {
-            ScriptManager.Instance.StartScript(0);
+            ScriptManager.Instance.StartScript(101);
             mainDialogue.SetActive(false);
         });
     }
