@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel.Design.Serialization;
 using UnityEngine;
-using KSH;
 
 namespace KSH
 {
@@ -11,12 +7,16 @@ namespace KSH
         [SerializeField] private ResourceDegenerator resourceDegenerator;
 
         public float HungerCur => resourceDegenerator.Resource.Cur;
-        
+
         public void Eat(float amount)
         {
             resourceDegenerator.Resource.Increase(amount);
         }
 
-    }    
+        public void SetHunger(float value)
+        {
+            resourceDegenerator.Resource.Cur = value;
+        }
+    }
 }
 

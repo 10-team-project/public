@@ -28,6 +28,16 @@ public class Inventory : ItemStorageBase
     return (items);
   }
 
+  public List<string> GetQuickSlotItemIDs()
+  {
+    return (new ());
+  }
+
+  public void LoadQuickSlotItems(List<string> items)
+  {
+
+  }
+
   public void MoveItemToQuickSlot(ItemData itemData)
   {
     if (itemData is EquipmentItemData equipmentItemData) {
