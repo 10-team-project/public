@@ -811,8 +811,10 @@ MonoBehaviour:
   cameraFollow: {fileID: 0}
   cameraLook: {fileID: 0}
   followOffset: {x: 0, y: 1.5, z: -5}
-  focusTarget: {fileID: 954845174}
+  horizontalFocusDist: 4
+  forwardFocusDist: 2
   cameraMoveSpeed: 0.71
+  focusTarget: {fileID: 954845174}
 --- !u!4 &907975160
 Transform:
   m_ObjectHideFlags: 0

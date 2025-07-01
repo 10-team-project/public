@@ -128,7 +128,7 @@ Material:
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
-    - _Thickness: 0.0046
+    - _Thickness: 0.0028
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 1

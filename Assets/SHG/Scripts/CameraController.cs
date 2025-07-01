@@ -79,7 +79,7 @@ public class CameraController : MonoBehaviour
       return ;
     }
     this.AddFocus(this.focusTarget, direction, 
-      OnEnded: (camera) => {
+      onEnded: (camera) => {
       Debug.Log("Focus ended");
       camera.OnCommandEnd(camera);
       });
@@ -98,11 +98,11 @@ public class CameraController : MonoBehaviour
   public CameraController AddFocus(
     Transform target,
     FocusDirection focusDirection,
-    Action<CameraController> OnEnded = null,
+    Action<CameraController> onEnded = null,
     Nullable<float> focusDist = null)
   {
     this.cameraCommandQueue.Enqueue(
-      (this.MoveCameraRoutine(target, focusDirection), OnEnded ?? this.onCommandEnded));
+      (this.MoveCameraRoutine(target, focusDirection), onEnded ?? this.onCommandEnded));
     return (this);
   }
 
@@ -180,12 +180,13 @@ public class CameraController : MonoBehaviour
     this.onCommandEnded?.Invoke(this);
   }
 
-  public void OnCommandEnd(CameraController camera)
+  public void OnCommandEnd(CameraController camera = null)
   {
-    camera.onCommandEnded = null;
-    camera.cameraMoveProgress = 0f;
-    camera.cameraRoutine = null;
-    camera.cameraMoveProgress = 0f;
+    CameraController cam = camera ?? this;
+    cam.onCommandEnded = null;
+    cam.cameraMoveProgress = 0f;
+    cam.cameraRoutine = null;
+    cam.cameraMoveProgress = 0f;
   }
 
   void OnEnable()

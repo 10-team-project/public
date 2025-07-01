@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b3d386ba5cd94485973aee1479b272e, type: 3}
   m_Name: Block
   m_EditorClassIdentifier: 
-  m_Active: 1
+  m_Active: 0
   settings:
     passTag: Block
     Event: 250
@@ -118,7 +118,7 @@ MonoBehaviour:
       overrideStencilState: 1
       stencilReference: 1
       stencilCompareFunction: 8
-      passOperation: 2
+      passOperation: 1
       failOperation: 0
       zFailOperation: 0
     cameraSettings:
@@ -218,7 +218,7 @@ MonoBehaviour:
     m_Bits: 1155199
   m_TransparentLayerMask:
     serializedVersion: 2
-    m_Bits: 7463039
+    m_Bits: 4294967295
   m_DefaultStencilState:
     overrideStencilState: 1
     stencilReference: 0
