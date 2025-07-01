@@ -75,5 +75,16 @@ namespace KSH
         {
             resourceDegenerator.Resource.Increase(amount);
         }
+
+        public float CurrentHP
+        {
+            get => resource.Cur;
+            set => resource.Cur = value;
+        }
+
+        public float MaxHP
+        {
+            get => resource.Max;
+        }
     }
 }
