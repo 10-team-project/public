@@ -2,19 +2,151 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Patterns;
+using KSH;
 using SHG;
+using NTJ;
 
-public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Inventory>
+public class Inventory : ItemStorageBase
 {
+  public const int QUICKSLOT_COUNT = 4;
+  public List<ItemData> QuickSlotItems { get; private set;}
 
-  public Dictionary<ItemData, int> Items { get; private set; }
 #if UNITY_EDITOR
   [SerializeField]
-  public List<string> ItemNamesForDebugging;
+  public List<string> ItemNamesForDebuggingInQuickSlot;
 #endif
 
-  public Action<Inventory> WillChange { get; set; }
-  public Action<Inventory> OnChanged { get; set; }
+  public EquipmentItem GetItemFromQuickSlot(EquipmentItemData item)
+  {
+    int index = this.QuickSlotItems.IndexOf(item);
+    if (index == -1) {
+      throw (new ApplicationException($"no {item.Name} in quickslot"));
+    }
+    this.WillChange?.Invoke(this);
+    this.QuickSlotItems.RemoveAt(index);
+    this.OnChanged.Invoke(this);
+    return (Item.CreateItemFrom(item) as EquipmentItem);
+  }
+
+  public Inventory(): base()
+  {
+    this.QuickSlotItems = new ();
+    this.ItemNamesForDebuggingInQuickSlot = new();
+  }
+
+  public ItemData[] PeakItemsInQuickSlot()
+  {
+    var items = new ItemData[this.QuickSlotItems.Count];
+    this.QuickSlotItems.CopyTo(items);
+    return (items);
+  }
+
+  public List<string> GetQuickSlotItemIDs()
+  {
+    return (this.QuickSlotItems.ConvertAll(item => item.Id));
+  }
+
+  public void LoadQuickSlotItems(List<string> itemIds)
+  {
+    for (int i = 0; i < itemIds.Count; i++) {
+      var item = ItemDatabase.GetItemDataByID(itemIds[i]);
+      if (item != null) {
+        this.QuickSlotItems[i] = item;
+      }
+      #if UNITY_EDITOR
+      else {
+        Debug.LogError($"Fail to get item from {nameof(ItemDatabase)} by id: {itemIds[i]}");
+      }
+      #endif
+    }    
+  }
+
+  public void MoveItemToQuickSlot(ItemData itemData)
+  {
+    if (itemData is EquipmentItemData equipmentItemData) {
+      var currentCount = this.GetItemCount(itemData);
+      if (currentCount > 0) {
+        this.WillChange?.Invoke(this);
+        this.QuickSlotItems.Add(equipmentItemData);
+        if (currentCount > 1) {
+          this.Items[itemData] = currentCount - 1;
+        }
+        else {
+          this.Items.Remove(itemData);
+        }
+        #if UNITY_EDITOR
+        this.RemoveItemName(itemData);
+        this.AddQuickSlotItemName(itemData);
+        #endif
+        this.OnChanged?.Invoke(this);
+      }
+      else {
+        throw (new ApplicationException($"{itemData.Name} is not found in Inventory"));
+      }
+    }
+    else {
+      throw (new ArgumentException($"{itemData.Name} is not equipment item, invalid move to quickslot"));
+    }
+  }
+
+  public void UseItem(IUsable item)
+  {
+    if (item is RecoveryItem recoveryItem)
+    {
+      var recoveryItemData = recoveryItem.Recovery();
+
+      foreach (var data in recoveryItemData)
+      {
+        switch (data.Stat)
+        {
+          case TempCharacter.Stat.Hp:
+            PlayerStatManager.Instance.HP.Heal(data.Amount);
+            break;
+          case TempCharacter.Stat.Hydration:
+            PlayerStatManager.Instance.Thirsty.Drink(data.Amount);
+            break;
+          case TempCharacter.Stat.Hunger:
+            PlayerStatManager.Instance.Hunger.Eat(data.Amount);
+            break;
+          case TempCharacter.Stat.Fatigue:
+            PlayerStatManager.Instance.Fatigue.Sleep(data.Amount);
+            break;
+        }
+      }
+    }
+    else {
+      throw (new NotImplementedException());
+    }
+  }
+
+  public void MoveItemFromQuickSlot(ItemData itemData)
+  {
+    if (itemData is EquipmentItemData equipmentItemData) {
+      var index = this.QuickSlotItems.IndexOf(equipmentItemData);
+      if (index != -1) {
+        this.WillChange?.Invoke(this);
+        this.QuickSlotItems.RemoveAt(index);
+        if (this.Items.TryGetValue(itemData, out int currentCount)) {
+          this.Items[itemData] = currentCount + 1;
+        }
+        else {
+          this.Items.Add(itemData, 1);
+        }
+        #if UNITY_EDITOR
+        this.AddItemName(itemData);
+        this.RemoveQuickSlotItemName(itemData);
+        #endif
+        this.OnChanged?.Invoke(this);
+      }
+      else {
+        throw (new ApplicationException($"{itemData.Name} is not found in Inventory"));
+      }
+    }
+    else {
+      throw (new ArgumentException($"{itemData.Name} is not equipment item, invalid move to quickslot"));
+    }
+
+  }
 
   public List<ItemRecipe> GetCraftableRecipes(ItemData product)
   {
@@ -54,31 +186,46 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       }  
       else {
         this.Items[required.Item] = count - required.Count;
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         for (int i = 0; i < required.Count; i++) {
           this.RemoveItemName(required.Item);    
         }
-        #endif
+#endif
       }
     } 
     this.OnChanged?.Invoke(this);
     return (Item.CreateItemFrom(recipe.RecipeData.Product));
   }
 
-  public void AddItem(Item item)
+  public int GetItemCouontInQuickSlot(ItemData itemData)
   {
-    this.WillChange?.Invoke(this);
-#if UNITY_EDITOR
-    this.AddItemName(item.Data);
-#endif
-    if (this.Items.TryGetValue(item.Data, out int itemCount)) {
-      this.Items[item.Data] = itemCount + 1;
+    int count = 0;
+    for (int i = 0; i < this.QuickSlotItems.Count; i++) {
+      if (this.QuickSlotItems[i] == itemData) {
+        count += 1;
+      } 
     }
-    else {
-      this.Items.Add(item.Data, 1);
-    }
-    this.OnChanged?.Invoke(this);
+    return (count);
   }
+#if UNITY_EDITOR
+    void AddQuickSlotItemName(ItemData data) 
+    {
+      this.ItemNamesForDebuggingInQuickSlot.Add(data.Name);
+      this.ItemNamesForDebuggingInQuickSlot.Sort();
+    }
+#endif
+
+#if UNITY_EDITOR
+    void RemoveQuickSlotItemName(ItemData itemData)
+    {
+      var index = this.ItemNamesForDebuggingInQuickSlot.FindIndex(
+        name => name == itemData.Name);
+      if (index != -1) {
+        this.ItemNamesForDebuggingInQuickSlot.RemoveAt(index);
+      }
+    }
+#endif
+
 
 #if UNITY_EDITOR
   void AddItemName(ItemData data) 
@@ -88,17 +235,7 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
   }
 #endif
 
-  public int GetItemCount(ItemData itemData)
-  {
-    if (this.Items.TryGetValue(itemData, out int itemCount)) {
-      return (itemCount);
-    }
-    else {
-      return (0);
-    }
-  }
-
-  #if UNITY_EDITOR
+#if UNITY_EDITOR
   void RemoveItemName(ItemData itemData)
   {
     var index = this.ItemNamesForDebugging.FindIndex(
@@ -107,35 +244,5 @@ public class Inventory : SingletonBehaviour<Inventory>, IObservableObject<Invent
       this.ItemNamesForDebugging.RemoveAt(index);
     }
   }
-  #endif
-
-  public Item GetItem(ItemData itemData)
-  {
-    int itemCount = this.GetItemCount(itemData);
-    if (itemCount < 1) {
-      throw (new ApplicationException($"GetItem: No {itemData.Name} in Inventory")); 
-    }
-    this.WillChange?.Invoke(this);
-    Item item = Item.CreateItemFrom(itemData);
-#if UNITY_EDITOR
-    this.RemoveItemName(itemData);
 #endif
-    if (itemCount > 0) {
-      this.Items.Remove(itemData);
-    }
-    else {
-      this.Items[itemData] = itemCount - 1;
-    }
-    this.OnChanged?.Invoke(this);
-    return (item);
-  }
-
-  protected override void Awake()
-  {
-    base.Awake();
-    this.Items = new ();
-#if UNITY_EDITOR
-    this.ItemNamesForDebugging = new();
-#endif
-  }
 }

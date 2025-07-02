@@ -1,0 +1,40 @@
+#inventory-window-container 
+{
+  width: 35%;
+  height: 70%;
+  left: 60%;
+  top: 10%;
+  position: absolute;
+}
+
+#inventory-window-tab-button-container
+{
+  flex-direction: row;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+.inventory-window-tab-button
+{
+  color: black;
+  font-size: 20px;
+  margin: 5px;
+}
+
+#item-locker-window-container
+{
+  width: 50%;
+  height: 70%;
+  left: 5%;
+  top: 10%;
+  padding-top: 100px;
+  position: absolute;
+}
+
+#item-locker-item-container
+{
+  width: 100%;
+  height: 80%;
+}

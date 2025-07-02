@@ -6,12 +6,22 @@ namespace SHG
 {
   public class CharacterSelectMode : Singleton<CharacterSelectMode>, IGameMode
   {
+
+    public string SceneName => "CharacterChoiceScene";
+
     public bool Equals(IGameMode other)
     {
       if (other is CharacterSelectMode) {
         return (true);
       }
       return (false);
+    }
+
+    public void OnSelectCharacter(Character newCharacter)
+    {
+      //TODO: 캐릭터 데이터 저장, 다음 scene 로드      
+      App.Instance.ChangeMode(GameMode.Shelter,
+        ShelterMode.Instance.SceneName);
     }
 
     public IEnumerator OnEnd()
