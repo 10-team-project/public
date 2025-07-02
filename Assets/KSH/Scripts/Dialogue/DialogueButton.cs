@@ -37,6 +37,12 @@ namespace KSH
             });
             
             OnInteract += Interact; // 이벤트에 연결
+            
+            ScriptManager.Instance.OnEnd += () =>
+            {
+                if(isreach)
+                    Interact(true);
+            };
         }
 
         private void Update()
@@ -69,7 +75,10 @@ namespace KSH
         
         public void Interact(bool state) //bool값에 따른 상호작용
         {
-            mainDialogue.SetActive(state);
+            if (!ScriptManager.Instance.IsTalk)
+            {
+                mainDialogue.SetActive(state);
+            }
         }
     
         private void OnDrawGizmosSelected() //기즈모

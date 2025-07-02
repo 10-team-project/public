@@ -44,15 +44,27 @@ namespace KSH
         DialogueNode dNode = b as DialogueNode;
         if(dNode == null) return;
 
+        int nodeforce = dNode.nodeForce; //nodeforce 불러옴
+        
+        SetDialogue(dNode);
+
+        if (nodeforce == 2)
+        {
+            //강제대사 효과 있으면 쓰기
+        }
+    }
+
+    private void SetDialogue(DialogueNode dNode)
+    {
         string charname = CharacterManager.Instance.GetCharacterData(dNode.allId);
         
         leftnameText.text = charname;
         rightnameText.text = charname;
        
         fulltext = dNode.dialogue; // 대사 저장
-       StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue)); //타이핑 효과
+        StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue)); //타이핑 효과
 
-       Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
+        Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
         if (portrait != null)
         {
             leftportrait.sprite = portrait;
