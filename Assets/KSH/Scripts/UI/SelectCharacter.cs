@@ -70,7 +70,7 @@ namespace KSH
 
         IEnumerator LoadScene()
         {
-            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Test");
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("KSHScene");
 
             while (!asyncLoad.isDone)
             {
