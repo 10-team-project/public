@@ -1,9 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using LTH;
 
 public class PlayerMovement : MonoBehaviour, IInputLockHandler
 {
-
     [Header("Movement Settings")]
     [SerializeField] float moveSpeed;
     [SerializeField] float runSpeed;
@@ -23,6 +23,15 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
 
     [HideInInspector] public bool IsOnLadder => isOnLadder;
 
+    // 사다리 입력 잠금 관련 변수
+    private float inputLockTimer = 0f;
+    private bool isInputTemporarilyBlocked = false;
+
+    private float fixedZ; // Z축 고정(횡스크롤 장르 고려)
+    private bool isZFixed = true;
+
+    private Vector3 currentLadderDirection;
+
     private bool IsGrounded()
     {
         Ray ray = new Ray(transform.position, Vector3.down);
@@ -34,15 +43,55 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         _rigid = GetComponent<Rigidbody>();
         _rigid.freezeRotation = true;
 
+        _rigid.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
+        fixedZ = transform.position.z;
+
         animator = GetComponent<Animator>(); // 애니메이션(테스트용 삭제 예정)
         ladderClimber = new LadderClimber(_rigid, climbSpeed, EndClimb, EndClimbFromTop);
     }
 
     private void Update()
     {
+        if (isInputTemporarilyBlocked)
+        {
+            inputLockTimer -= Time.deltaTime;
+            if (inputLockTimer <= 0f)
+            {
+                isInputTemporarilyBlocked = false;
+            }
+            return;
+        }
+
         if (!isOnLadder && InputManager.Instance.IsBlocked(InputType.Move)) return;
 
         PlayerInput();
+    }
+
+    public void SetZFixed(bool value)
+    {
+        isZFixed = value;
+    }
+
+    public void UpdateFixedZ()
+    {
+        fixedZ = transform.position.z;
+    }
+
+    public void ForceZPosition(float z)
+    {
+        StartCoroutine(ForceZFix(z));
+    }
+
+    private IEnumerator ForceZFix(float z)
+    {
+        yield return new WaitForEndOfFrame();
+
+        Vector3 pos = transform.position;
+        pos.z = z;
+        transform.position = pos;
+
+        UpdateFixedZ();
+        SetZFixed(true);
     }
 
     private void FixedUpdate()
@@ -134,11 +183,17 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         _rigid.useGravity = false;
         _rigid.velocity = Vector3.zero;
 
-        Vector3 targetPos = new Vector3(pos.x, transform.position.y, pos.z);
-        targetPos.y += 0.1f;
-        transform.position = targetPos;
+        currentLadderDirection = forward;
 
-        transform.rotation = Quaternion.LookRotation(Vector3.right);
+        float directionSign = forward.x > 0.01f ? 1 : (forward.x < -0.01f ? -1 : 0);
+        Vector3 lookDir = directionSign < 0 ? Vector3.left : Vector3.right;
+
+        transform.position = pos + lookDir * 0.2f + Vector3.up * 0.1f;
+        transform.rotation = Quaternion.LookRotation(lookDir);
+
+        // 잠깐 입력 막기 (자연스러운 애니메이션용)
+        isInputTemporarilyBlocked = true;
+        inputLockTimer = 1.75f;
 
         // 애니메이션(테스트용 삭제 예정)
         animator.SetBool("Ladder", true);
@@ -154,7 +209,11 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         // 애니메이션(테스트용 삭제 예정)
         animator.SetTrigger("LadderUpEnd");
         animator.SetBool("Ladder", false);
-        ExitLadder(transform.forward * 0.7f + Vector3.up * 0.7f);
+
+        isInputTemporarilyBlocked = true;
+        inputLockTimer = 1.72f;
+
+        ExitLadder(transform.forward * 0);
     }
 
     public void EndClimb()
@@ -163,7 +222,10 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         animator.SetTrigger("LadderDownEnd");
         animator.SetBool("Ladder", false);
 
-        ExitLadder(transform.forward * 0.5f);
+        isInputTemporarilyBlocked = true;
+        inputLockTimer = 1.4f;
+
+        ExitLadder(transform.forward * -0.1f);
     }
 
     private void ExitLadder(Vector3 offset)
@@ -198,22 +260,13 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         if (isOnLadder)
         {
             float vertical = moveInput.y;
-
-            if (vertical > 0.01f)
-            {
-                animator.SetBool("LadderUpPlay", true);
-                animator.SetBool("LadderDownPlay", false);
-            }
-            else if (vertical < -0.01f)
-            {
-                animator.SetBool("LadderUpPlay", false);
-                animator.SetBool("LadderDownPlay", true);
-            }
-            else
+            animator.SetBool("LadderUpPlay", vertical > 0.01f);
+            animator.SetBool("LadderDownPlay", vertical < -0.01f);
+            if (Mathf.Abs(vertical) < 0.01f)
             {
                 animator.SetBool("LadderUpPlay", false);
                 animator.SetBool("LadderDownPlay", false);
-            }
+            }   
             return;
         }
 

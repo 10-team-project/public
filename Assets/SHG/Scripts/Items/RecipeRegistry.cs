@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Patterns;
+using NTJ;
 
 namespace SHG
 {
   public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>
   {
-    const string ITEM_DIR = "Assets/SHG/Test/Items";
+    public const int NUMBER_OF_PRODUCTS = 20;
     const string RECIPE_DIR = "Assets/SHG/Test/Recipes";
     public static readonly List<ItemRecipe> EMPTY_RECIPES = new (0);
     //TODO: 아이템 레시피 최적화 자료구조
@@ -59,13 +60,13 @@ namespace SHG
         this.recipes.Add(recipe);
         #endif
       }
-
     }
 
     void LoadAllItems()
     {
-      ItemData[] items = Utils.LoadAllFrom<ItemData>(ITEM_DIR);
-      foreach (var item in items) {
+      var enumerator = ItemDatabase.GetEnumerator();
+      while (enumerator.MoveNext()) {
+        var item = enumerator.Current.Value;
         if (item.IsCraftable) {
           this.recipeTable.Add(item, new ());
         } 

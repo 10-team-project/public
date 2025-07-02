@@ -7,7 +7,7 @@ namespace SHG
 {
   public static partial class Utils 
   {
-    public static void ShowVisualElement<T>(T element) where T: VisualElement, IHideableUI
+    public static void ShowVisualElement(VisualElement element) 
     {
       element.style.display = DisplayStyle.Flex;
       element.BringToFront();
@@ -28,6 +28,15 @@ namespace SHG
       }
       return (target.GetFirstAncestorOfType<T>());
     }
-  }
 
+    public static int CountBits(int n)
+    {
+      int count = 0;
+      while (n > 0) {
+        count += n & 1;
+        n >>= 1;
+      }
+      return count;
+    }
+  }
 }

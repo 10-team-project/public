@@ -1,17 +1,47 @@
+.item-container-scroll-view
+{
+  flex-shrink: 0;
+  flex: 1;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.item-container-scroll-view>.item-storage-container
+{
+  min-height: 500px;
+}
+
 .item-storage-container {
-  border-radius: 20px;
+  width: 100%;
 }
 
 .item-storage-items-container
 {
   flex-direction: row;
   flex-wrap: wrap;
-  flex-direction: row;
   align-items: flex-start;
+  border-color: yellow;
+  border-width: 2px;
+}
+
+.item-storage-item-description-container
+{
+  background-color: white;
+  align-items: center;
+  position: absolute;
+  min-width: 200px;
+  min-height: 50px;
+  border-color: red;
+  border-width: 2px;
+}
+
+.item-storage-item-description
+{
+  font-size: 20px;
+  color: black;
 }
 
 .item-storage-item-box {
-  border-width: 2px;
   align-self: center;
   align-items: center;
   padding: 10px;

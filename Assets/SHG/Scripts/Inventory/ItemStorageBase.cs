@@ -13,11 +13,29 @@ namespace SHG
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
+    public const string ITEM_DIR = "Assets/SHG/Test/Items";
 
   #if UNITY_EDITOR
     [SerializeField]
     public List<string> ItemNamesForDebugging;
   #endif
+
+    public List<ItemSaveData> GetItemSaveDataList()
+    {
+      List<ItemSaveData> list = new (this.Items.Count);
+      
+      foreach (var itemAndCount in this.Items) {
+        if (itemAndCount.Value > 0) {
+          list.Add(new ItemSaveData {id = itemAndCount.Key.Id, count = itemAndCount.Value});
+        }
+      }
+      return (list);
+    }
+
+    public void LoadFromItemSaveDataList(List<ItemSaveData> data)
+    {
+       
+    }
 
     protected ItemStorageBase()
     {
@@ -33,10 +51,10 @@ namespace SHG
       if (currentSlotCount < MAX_SLOT_COUNT) {
         return (true);
       }
-      if (currentSlotCount == MAX_SLOT_COUNT) {
+      if ( currentSlotCount == MAX_SLOT_COUNT) {
         var currentItemCount = this.GetItemCount(itemAndCount.Item);
-        if ((currentItemCount % MAX_STACK_COUNT) + itemAndCount.Count <
-          MAX_STACK_COUNT) {
+        if (currentSlotCount != 0 &&
+          currentSlotCount % this.MAX_STACK_COUNT != 0) {
           return (true);
         }
       }
@@ -48,7 +66,10 @@ namespace SHG
       int count = 0;   
       foreach (var itemAndCount in this.Items) {
         var itemCount = itemAndCount.Value;
-        if (itemCount % MAX_STACK_COUNT == 0) {
+        if (itemAndCount.Key.IsStoryItem) {
+          count += itemAndCount.Value;
+        }
+        else if (itemCount % MAX_STACK_COUNT == 0) {
           count += (itemCount / MAX_STACK_COUNT);
         }
         else {
@@ -62,16 +83,42 @@ namespace SHG
     {
       this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
-      this.AddItemName(item.Data);
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {
         throw (new ApplicationException($"Unable to add more {item.Data.Name}"));
       }
+      this.AddItemName(item.Data);
 #endif
       if (this.Items.TryGetValue(item.Data, out int itemCount)) {
         this.Items[item.Data] = itemCount + 1;
       }
       else {
         this.Items.Add(item.Data, 1);
+      }
+      this.OnChanged?.Invoke(this);
+    }
+
+    public void AddItems(Item item, int count)
+    {
+      if (count < 1) {
+        throw (new ArgumentException($"Add {item.Data.Name} {count}"));
+      }
+      if (item.Data.IsStoryItem) {
+        throw (new ApplicationException($"Stroy items are not able to added at once"));
+      }
+      this.WillChange?.Invoke(this);
+      #if UNITY_EDITOR
+      for (int i = 0; i < count; i++) {
+        this.AddItemName(item.Data);
+      }
+      if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = count})) {
+        throw (new ApplicationException($"Unable to add {count} more {item.Data.Name}"));
+      }
+      #endif
+      if (this.Items.TryGetValue(item.Data, out int itemCount)) {
+        this.Items[item.Data] = itemCount + count;
+      }
+      else {
+        this.Items.Add(item.Data, count);
       }
       this.OnChanged?.Invoke(this);
     }
@@ -105,6 +152,29 @@ namespace SHG
       }
     }
 #endif
+
+    public (Item item, int count) GetItems(ItemData itemData, int count)
+    {
+      int itemCount = this.GetItemCount(itemData);
+      if (itemCount < count) {
+        throw (new ApplicationException($"GetItem: Not enough {itemData.Name} required: {count} ")); 
+      }
+      this.WillChange?.Invoke(this);
+      Item item = Item.CreateItemFrom(itemData);
+      #if UNITY_EDITOR
+      for (int i = 0; i < count; i++) {
+        this.RemoveItemName(itemData);
+      }
+      #endif
+      if (itemCount < count + 1) {
+        this.Items.Remove(itemData);
+      }
+      else {
+        this.Items[itemData] = itemCount - count;
+      }
+      this.OnChanged?.Invoke(this);
+      return (item, count);
+    }
 
     public Item GetItem(ItemData itemData)
     {
