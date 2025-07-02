@@ -18,6 +18,7 @@ public abstract class BaseNode
 
     protected int nextID = -1;
     protected int saveAllID;
+   // public int nodeForce = 1; //기본값
 
     public virtual int GetNextID()
     {
@@ -44,6 +45,9 @@ public class DialogueNode : BaseNode
         
         if(!string.IsNullOrEmpty(reference)) //만약 reference 값이 비어있지않다면
             nextID = int.Parse(reference); //정수로 변환해서 nextID에 저장
+
+      // string Force = datas.ContainsKey("NodeForce") ? datas["NodeForce"]?.ToString() : null;
+      // nodeForce = string.IsNullOrEmpty(Force) ? 1 : int.Parse(Force);
     }
 }
 

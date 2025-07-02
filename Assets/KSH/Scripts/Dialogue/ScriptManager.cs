@@ -21,6 +21,7 @@ namespace KSH
     }
 
     Dictionary<int, List<BaseNode>> scriptDataDic = new Dictionary<int, List<BaseNode>>();
+    
 
     public ScriptManager()
     {
