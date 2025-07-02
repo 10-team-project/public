@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,19 +37,22 @@ public class DialogueController : BaseController
         
         DialogueNode dNode = b as DialogueNode;
         if(dNode == null) return;
+
+        string charname = CharacterManager.Instance.GetCharacterData(dNode.allId);
         
-        leftnameText.text = dNode.name;
-        rightnameText.text = dNode.name;
-        dialogueText.text = dNode.dialogue;
-        
-        var data = CharacterManager.Instance.GetCharacterData(dNode.name);
-        if (data != null)
+        leftnameText.text = charname;
+        rightnameText.text = charname;
+       
+       StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue));
+
+       Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
+        if (portrait != null)
         {
-            leftportrait.sprite = data.sprite;
-            rightportrait.sprite = data.sprite;
+            leftportrait.sprite = portrait;
+            rightportrait.sprite = portrait;
         }
 
-        bool isLeft = (dNode.name == leftcharacter);
+        bool isLeft = (charname == leftcharacter);
         
         leftportrait.gameObject.SetActive(isLeft);
         leftnamePanel.SetActive(isLeft);
@@ -57,13 +61,27 @@ public class DialogueController : BaseController
 
         if (isLeft)
         {
-            leftnameText.text = dNode.name;
-            leftportrait.sprite = data.sprite;
+            leftnameText.text = charname;
+            leftportrait.sprite = portrait;
         }
         else
         {
-            rightnameText.text = dNode.name;
-            rightportrait.sprite = data.sprite;
+            rightnameText.text = charname;
+            rightportrait.sprite = portrait;
+        }
+    }
+
+    IEnumerator TypeTextEffect(TMP_Text text, string fulltext) //텍스트 타이핑 효과
+    {
+        text.text = string.Empty;
+        
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < fulltext.Length; i++)
+        {
+            stringBuilder.Append(fulltext[i]);
+            text.text = stringBuilder.ToString();
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
@@ -86,5 +104,4 @@ public class DialogueController : BaseController
             ScriptManager.Instance.NextNode();       
         }
     }
-    
 }
