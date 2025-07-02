@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace SHG
 {
+  [RequireComponent(typeof(Animator))]
   public class PlayerItemController : MonoBehaviour
   {
     [SerializeField] [Range(0.5f, 5f)]
@@ -14,10 +15,17 @@ namespace SHG
     [SerializeField] 
     Vector3 footOffset;
     Coroutine itemAction;
+    Animator animator;
+
+    public void TriggerAnimation(string name)
+    {
+      this.animator.SetTrigger(name);
+    }
 
     void Awake()
     {
-      this.mapObjectLayer = (1 << LayerMask.NameToLayer("Blocker"));
+      this.animator = this.GetComponent<Animator>();
+      this.mapObjectLayer = (1 << LayerMask.NameToLayer("ItemInteractObject"));
     }
 
     // Start is called before the first frame update
