@@ -39,10 +39,23 @@ namespace SHG
 
     public IEnumerator Interact(EquipmentItem item, Action OnEnded = null)
     {
-      Debug.Log($"interact to {this.ObstacleData.Name} with {item.Data.Name}");
-
+      var player = GameObject.FindWithTag("Player");
       if (this.dissolveController != null) {
+        if (player != null) {
+          CameraController.FocusDirection focusDirection =
+            player.transform.position.x < this.transform.position.x ? 
+            CameraController.FocusDirection.Left:
+            CameraController.FocusDirection.Right;
+          App.Instance.CameraController.AddFocus(
+            this.transform,
+            focusDirection,
+            onEnded: (cam) => {});
+        }
         yield return (this.dissolveController.StartDisappear());
+      }
+      if (player != null) {
+        App.Instance.CameraController.OnCommandEnd();
+        App.Instance.CameraController.AddReset();
       }
       Destroy(this.gameObject);
       yield return (null);

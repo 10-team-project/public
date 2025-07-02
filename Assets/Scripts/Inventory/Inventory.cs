@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
-using KSH;
 using UnityEngine;
 using Patterns;
+using KSH;
 using SHG;
+using NTJ;
 
 public class Inventory : ItemStorageBase
 {
@@ -42,12 +43,22 @@ public class Inventory : ItemStorageBase
 
   public List<string> GetQuickSlotItemIDs()
   {
-    return (new ());
+    return (this.QuickSlotItems.ConvertAll(item => item.Id));
   }
 
-  public void LoadQuickSlotItems(List<string> items)
+  public void LoadQuickSlotItems(List<string> itemIds)
   {
-
+    for (int i = 0; i < itemIds.Count; i++) {
+      var item = ItemDatabase.GetItemDataByID(itemIds[i]);
+      if (item != null) {
+        this.QuickSlotItems[i] = item;
+      }
+      #if UNITY_EDITOR
+      else {
+        Debug.LogError($"Fail to get item from {nameof(ItemDatabase)} by id: {itemIds[i]}");
+      }
+      #endif
+    }    
   }
 
   public void MoveItemToQuickSlot(ItemData itemData)

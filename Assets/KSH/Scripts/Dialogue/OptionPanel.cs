@@ -4,29 +4,33 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using KSH;
 
-public class OptionPanel : MonoBehaviour
+namespace KSH
 {
-    [SerializeField] TMP_Text optionText; //버튼 안 선택지 대사
-
-    private OptionNode.OptionData curOptionData; //현재 선택지의 데이터
-    private Action<OptionNode.OptionData> endCallback; //콜백 이벤트
-
-    private void Start()
+    public class OptionPanel : MonoBehaviour
     {
-        GetComponent<Button>().onClick.AddListener(OnClickOption);
-    }
+        [SerializeField] TMP_Text optionText; //버튼 안 선택지 대사
 
-    public void SetOptionData(OptionNode.OptionData oData, Action<OptionNode.OptionData> endCb)
-    {
-        curOptionData = oData;
+        private OptionNode.OptionData curOptionData; //현재 선택지의 데이터
+        private Action<OptionNode.OptionData> endCallback; //콜백 이벤트
 
-        optionText.text = curOptionData.text;
-        endCallback = endCb;
-    }
+        private void Start()
+        {
+            GetComponent<Button>().onClick.AddListener(OnClickOption);
+        }
 
-    public void OnClickOption()
-    {
-        endCallback?.Invoke(curOptionData);
+        public void SetOptionData(OptionNode.OptionData oData, Action<OptionNode.OptionData> endCb)
+        {
+            curOptionData = oData;
+
+            optionText.text = curOptionData.text;
+            endCallback = endCb;
+        }
+
+        public void OnClickOption()
+        {
+            endCallback?.Invoke(curOptionData);
+        }
     }
 }

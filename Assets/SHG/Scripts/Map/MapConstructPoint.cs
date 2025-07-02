@@ -60,8 +60,15 @@ namespace SHG
       this.Construct();
       if (this.dissolveController != null) {
         this.dissolveController.DisappearImmediately();
+        App.Instance.CameraController.AddFocus(
+          this.transform,
+          CameraController.FocusDirection.Foward,
+          onEnded: (camera) => {}
+          );
         yield return (this.dissolveController.StartAppear());
       }
+      App.Instance.CameraController.OnCommandEnd();
+      App.Instance.CameraController.AddReset();
       if (this.blockingCollider != null) {
         this.blockingCollider.enabled = false;
       }
