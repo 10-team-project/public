@@ -1,4 +1,4 @@
-ID,AllID,NodeType,Dialogue,Reference
+ID,CharacterEmotion,NodeType,Dialogue,Reference
 101,100101,dialogue,안녕 꼬북이야?,
 ,200104,dialogue,반가워 피카츄야,
 ,100102,dialogue,잘지냈어?,

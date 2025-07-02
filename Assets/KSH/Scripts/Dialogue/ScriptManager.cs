@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using KSH;
 
-public class ScriptManager
+namespace KSH
+{
+    public class ScriptManager
 {
     private static ScriptManager instance;
     public static ScriptManager Instance
@@ -95,4 +98,5 @@ public class ScriptManager
         }
         NotifyNextNode(scriptDataDic[curId][curOrder]);
     }
+}
 }

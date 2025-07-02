@@ -1,21 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using KSH;
 
-public class TestGameManager : MonoBehaviour
+namespace KSH
 {
-    public GameObject mainDialogue;
-    void Start()
+    public class TestGameManager : MonoBehaviour
     {
-        mainDialogue.SetActive(false);
-        //ScriptManager.Instance.StartScript(0);
-    }
-
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
+        public GameObject mainDialogue;
+        void Start()
         {
-            mainDialogue.SetActive(true);
+            mainDialogue.SetActive(false);
+            //ScriptManager.Instance.StartScript(0);
+        }
+
+        void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                mainDialogue.SetActive(true);
+            }
         }
     }
 }

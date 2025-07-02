@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
+using KSH;
 
-public enum NodeType
+namespace KSH
+{
+    public enum NodeType
 {
     dialogue, //대사
     option //선택지
@@ -32,7 +35,7 @@ public class DialogueNode : BaseNode
     {
         nodetype = NodeType.dialogue; //노드타입을 dialogue로 설정
         
-        allId = datas["AllID"].ToString();
+        allId = datas["CharacterEmotion"].ToString();
         if (!string.IsNullOrEmpty(allId))
             saveAllID = int.Parse(allId);
         
@@ -53,7 +56,7 @@ public class OptionNode : BaseNode
     {
         nodetype = NodeType.option; //노드타입을 option으로 저장
 
-        allId = datas["AllID"].ToString();
+        allId = datas["CharacterEmotion"].ToString();
         if (!string.IsNullOrEmpty(allId))
             saveAllID = int.Parse(allId);
         
@@ -84,4 +87,5 @@ public class OptionNode : BaseNode
             nextID = n;
         }
     }
+}
 }
