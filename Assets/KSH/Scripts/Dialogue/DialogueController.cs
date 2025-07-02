@@ -4,8 +4,11 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using KSH;
 
-public class DialogueController : BaseController
+namespace KSH
+{
+    public class DialogueController : BaseController
 {
     public Image leftportrait;
     public Image rightportrait;
@@ -19,6 +22,9 @@ public class DialogueController : BaseController
     public float delay;
 
     private float timer = 0f;
+    private bool isTyping = false;
+    private string fulltext;
+    private Coroutine typingCoroutine;
 
     public override void NextNode(BaseNode b)
     {
@@ -43,7 +49,8 @@ public class DialogueController : BaseController
         leftnameText.text = charname;
         rightnameText.text = charname;
        
-       StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue));
+        fulltext = dNode.dialogue; // 대사 저장
+       StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue)); //타이핑 효과
 
        Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
         if (portrait != null)
@@ -73,16 +80,23 @@ public class DialogueController : BaseController
 
     IEnumerator TypeTextEffect(TMP_Text text, string fulltext) //텍스트 타이핑 효과
     {
+        isTyping = true;
         text.text = string.Empty;
         
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < fulltext.Length; i++)
         {
+            if(!isTyping)
+                yield break;
+            
             stringBuilder.Append(fulltext[i]);
             text.text = stringBuilder.ToString();
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.1f);
         }
+        
+        isTyping = false;
+        typingCoroutine = null;
     }
 
     private void Update()
@@ -93,9 +107,24 @@ public class DialogueController : BaseController
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            onNode = false;
-            timer = 0f;
-            ScriptManager.Instance.NextNode();
+            if (isTyping) //타이핑 중이라면
+            {
+                if (typingCoroutine != null)
+                {
+                    StopCoroutine(typingCoroutine);
+                    typingCoroutine = null;
+                }
+                
+                dialogueText.text = fulltext;
+                isTyping = false;
+                timer = 0f;
+            }
+            else
+            {
+                onNode = false;
+                timer = 0f;
+                ScriptManager.Instance.NextNode();  
+            }
         }
         else if (timer >= delay)
         {
@@ -104,4 +133,5 @@ public class DialogueController : BaseController
             ScriptManager.Instance.NextNode();       
         }
     }
+}
 }

@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using KSH;
 
-public class ScriptManager
+namespace KSH
+{
+    public class ScriptManager
 {
     private static ScriptManager instance;
-    public static ScriptManager Instance
+    public static ScriptManager Instance //싱글톤
     {
         get
         {
@@ -18,13 +21,14 @@ public class ScriptManager
     }
 
     Dictionary<int, List<BaseNode>> scriptDataDic = new Dictionary<int, List<BaseNode>>();
+    
 
     public ScriptManager()
     {
         var datas = CSVParser.Parse("CSV/TestDialogue"); //CSV 파싱
 
         int curId = 0;
-        string lastNodeType = "dialogue";
+        NodeType lastNodeType = NodeType.dialogue; //이전 값
         for (int i = 0; i < datas.Count; i++) //행을 하나씩 반복
         {
             if (int.TryParse(datas[i]["ID"].ToString(), out int id)) //만약 ID의 값을 정수로 변환 가능하면 id에 저장
@@ -35,17 +39,22 @@ public class ScriptManager
                     scriptDataDic.Add(curId, new List<BaseNode>()); //새로운 리스트 추가
                 }
             }
-            
-            string nodeTypestr = datas[i]["NodeType"]?.ToString();
-            if(string.IsNullOrWhiteSpace(nodeTypestr))
-                nodeTypestr = lastNodeType;
+
+            int nodeTypeInt;
+            string nodeTypestr = datas[i]["NodeType"]?.ToString(); //NodeType값을 문자열로 저장
+
+            if (string.IsNullOrWhiteSpace(nodeTypestr)) //만약 비어있거나 공백이라면
+            {
+                nodeTypeInt = (int)lastNodeType; //lastNodeType 값으로 사용
+            }
             else
             {
-                lastNodeType = nodeTypestr;
+                nodeTypeInt = int.TryParse(nodeTypestr, out var temp) ? temp : (int)lastNodeType;//nodeTypestr을 정수로 변환 시도    
             }
             
-            NodeType nodeType = (NodeType)Enum.Parse(typeof(NodeType), nodeTypestr, true); //nodetype의 값을 열거형으로 반환
-
+            NodeType nodeType = (NodeType)nodeTypeInt; //enum으로 변환
+            lastNodeType = nodeType; //lastNodeType에 저장
+            
             switch (nodeType)
             {
                 case NodeType.dialogue:
@@ -75,24 +84,24 @@ public class ScriptManager
 
     public void NextNode()
     {
-        curOrder++;
+        curOrder++; //순서 이동
 
         if (curOrder >= scriptDataDic[curId].Count) //현재 순서가 현재 아이디의 수보다 크거나 같으면
         {
             int nextIdx = scriptDataDic[curId][curOrder - 1].GetNextID(); //마지막에 실행한 노드의 다음 아이디를 가져옴
 
-            if (nextIdx == 0 || !scriptDataDic.ContainsKey(nextIdx))
+            if (nextIdx == 0 || !scriptDataDic.ContainsKey(nextIdx)) //nextIdx가 0이거나 유효하지 않으면
             {
-                NotifyNextNode(null);
+                NotifyNextNode(null); // Null 처리
                 return;
             }
             else
             {
-                StartScript(nextIdx);
+                StartScript(nextIdx); //다음 ID로 시작
             }
-
             return;
         }
-        NotifyNextNode(scriptDataDic[curId][curOrder]);
+        NotifyNextNode(scriptDataDic[curId][curOrder]); //현재ID와 현재 순서 전달
     }
+}
 }
