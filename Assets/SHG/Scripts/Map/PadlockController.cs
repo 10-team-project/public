@@ -25,10 +25,6 @@ namespace SHG
     float impactPower;
     [SerializeField] [Range (0.1f, 2f)]
     float lockSpeed;
-    [SerializeField] [Range (0f, 5f)]
-    float hitDelay;
-    [SerializeField] [Range (0f, 5f)]
-    float hitDuration;
     [SerializeField] [Range(1f, 5f)]
     int numberOfHitsForUnlock;
     [SerializeField]
@@ -38,15 +34,11 @@ namespace SHG
     Rigidbody rb;
     Coroutine lockRoutine;
     PlayerItemController player;
-    WaitForSeconds waitForHitDelay;
-    WaitForSeconds waitForHitDuration;
 
     void Awake()
     {
       this.rb = this.GetComponent<Rigidbody>();
       this.IsLocked = true;
-      this.waitForHitDelay = new WaitForSeconds(this.hitDelay);
-      this.waitForHitDuration = new WaitForSeconds(this.hitDuration);
     }
 
     [Button ("Hit")]
@@ -157,21 +149,27 @@ namespace SHG
         (camera) => {},
         this.focusDistance
         );
+      int count = 1;
+      player.OnHit = (player) => {
+        this.OnHit(player, count);
+        count += 1;
+      };
       for (int i = 0; i < this.numberOfHitsForUnlock; i++) {
         this.player.TriggerAnimation("Hit");
-        yield return (this.waitForHitDuration);
-        this.Hit(this.forceDirection, this.impactPower);
-        if (i < this.numberOfHitsForUnlock - 1) {
-          yield return (this.waitForHitDelay);
-        }
+        yield return (this.player.WaitForHitDelay);
       }
-      if (this.IsLocked) {
-        this.ToggleLock();
-        yield return (this.waitForHitDelay);
-      }
-      App.Instance.CameraController.OnCommandEnd();
-      App.Instance.CameraController.AddReset();
       yield return null;
+    }
+
+    void OnHit(PlayerItemController player, int count)
+    { 
+      this.Hit(this.forceDirection, this.impactPower);
+      if (count >= this.numberOfHitsForUnlock && this.IsLocked) {
+        this.ToggleLock();
+        player.OnHit = null;
+        App.Instance.CameraController.OnCommandEnd();
+        App.Instance.CameraController.AddReset();
+      }
     }
   }
 }
