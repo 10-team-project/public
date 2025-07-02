@@ -82,20 +82,20 @@ namespace KSH
         IsTalk = true;
         NextNode();
     }
-    public event Action OnEnd;
+    public event Action OnEnd; //
+    
     public void NextNode()
     {
         curOrder++; //순서 이동
 
         if (curOrder >= scriptDataDic[curId].Count) //현재 순서가 현재 아이디의 수보다 크거나 같으면
         {
-            IsTalk = false;
             int nextIdx = scriptDataDic[curId][curOrder - 1].GetNextID(); //마지막에 실행한 노드의 다음 아이디를 가져옴
-            OnEnd?.Invoke();
             
             if (nextIdx == 0 || !scriptDataDic.ContainsKey(nextIdx)) //nextIdx가 0이거나 유효하지 않으면
             {
                 IsTalk = false;
+                OnEnd?.Invoke(); //끝난다는 이벤트 호출
                 NotifyNextNode(null); // Null 처리
                 return;
             }

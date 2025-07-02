@@ -38,9 +38,9 @@ namespace KSH
             
             OnInteract += Interact; // 이벤트에 연결
             
-            ScriptManager.Instance.OnEnd += () =>
+            ScriptManager.Instance.OnEnd += () => //대화가 끝나면
             {
-                if(isreach)
+                if(isreach) //만약 범위 안에 있으면
                     Interact(true);
             };
         }

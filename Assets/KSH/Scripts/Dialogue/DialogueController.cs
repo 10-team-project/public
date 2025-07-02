@@ -145,5 +145,29 @@ namespace KSH
             ScriptManager.Instance.NextNode();       
         }
     }
+
+    public void OnDialogueClick() //대화창 클릭용
+    {
+        if (!onNode) return;
+        
+        if (isTyping) //타이핑 중이라면
+        {
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+                
+            dialogueText.text = fulltext;
+            isTyping = false;
+            timer = 0f;
+        }
+        else
+        {
+            onNode = false;
+            timer = 0f;
+            ScriptManager.Instance.NextNode();  
+        }
+    }
 }
 }
