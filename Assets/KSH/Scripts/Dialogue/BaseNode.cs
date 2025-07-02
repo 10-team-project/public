@@ -8,8 +8,8 @@ namespace KSH
 {
     public enum NodeType
 {
-    dialogue, //대사
-    option //선택지
+    dialogue = 1, //대사
+    option = 2 //선택지
 }
 [System.Serializable]
 public abstract class BaseNode
