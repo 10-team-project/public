@@ -14,6 +14,7 @@ public abstract class BaseNode
     public NodeType nodetype;
 
     protected int nextID = -1;
+    protected int saveAllID;
 
     public virtual int GetNextID()
     {
@@ -24,16 +25,19 @@ public abstract class BaseNode
 [System.Serializable]
 public class DialogueNode : BaseNode
 {
-    public string name;
-    public string dialogue;
+    public string dialogue; //대사
+    public string allId;
     
     public DialogueNode(Dictionary<string, object> datas)
     {
         nodetype = NodeType.dialogue; //노드타입을 dialogue로 설정
         
-        name = datas["Character"].ToString(); //이름을 문자열로 저장
-        dialogue = datas["Dialogue"].ToString();
-        string reference = datas["Reference"].ToString();
+        allId = datas["AllID"].ToString();
+        if (!string.IsNullOrEmpty(allId))
+            saveAllID = int.Parse(allId);
+        
+        dialogue = datas["Dialogue"].ToString(); //대사를 문자열로 저장
+        string reference = datas["Reference"].ToString(); // 선택지 번호를 문자열로 저장
         
         if(!string.IsNullOrEmpty(reference)) //만약 reference 값이 비어있지않다면
             nextID = int.Parse(reference); //정수로 변환해서 nextID에 저장
@@ -42,14 +46,16 @@ public class DialogueNode : BaseNode
 
 public class OptionNode : BaseNode
 {
-    public string name;
+    public string allId;
     public OptionData[] optionDatas;
 
     public OptionNode(Dictionary<string, object> datas)
     {
         nodetype = NodeType.option; //노드타입을 option으로 저장
-        
-        name = datas["Character"].ToString(); //이름을 문자열로 저장
+
+        allId = datas["AllID"].ToString();
+        if (!string.IsNullOrEmpty(allId))
+            saveAllID = int.Parse(allId);
         
         string[] optionTexts = datas["Dialogue"].ToString().Split('/'); // /로 분리
         string[] optionNextIDs = datas["Reference"].ToString().Split('/');
