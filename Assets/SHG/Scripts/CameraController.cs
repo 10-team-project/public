@@ -122,7 +122,8 @@ public class CameraController : MonoBehaviour
     switch (focusDirection) {
       case FocusDirection.Foward:
         return (target.position + 
-          new Vector3(0, 
+          new Vector3(
+            0, 
             Math.Abs(depth * this.depthHeightRatio),
             -(depth)));
       case FocusDirection.Left:

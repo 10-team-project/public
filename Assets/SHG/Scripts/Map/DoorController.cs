@@ -5,7 +5,7 @@ using EditorAttributes;
 
 namespace SHG
 {
-  public class DoorController : MonoBehaviour
+  public class DoorController : MonoBehaviour, IInteractable
   {
     public bool IsClosed { get; private set; }
     [SerializeField] [Required]
@@ -16,6 +16,8 @@ namespace SHG
     float closedAngle;
     [SerializeField] [Range (1f, 30f)]
     float rotateSpeed;
+    [SerializeField]
+    bool isClosed;
     Coroutine rotateRoutine;
     Quaternion opendedRotation;
     Quaternion closedRotation;
@@ -25,6 +27,7 @@ namespace SHG
     {
       this.opendedRotation = Quaternion.Euler(0, this.openedAngle, 0);
       this.closedRotation = Quaternion.Euler(0, this.closedAngle, 0);
+      this.IsClosed = this.isClosed;
     }
 
     [Button ("Open")]
@@ -37,6 +40,7 @@ namespace SHG
       }
       this.destRotation = this.opendedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
+      this.IsClosed = false;
     }
 
     [Button ("Close")]
@@ -49,6 +53,7 @@ namespace SHG
       }
       this.destRotation = this.closedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
+      this.IsClosed = true; 
     }
 
     IEnumerator CreateRotateRoutine()
@@ -67,17 +72,14 @@ namespace SHG
       this.doorHinge.rotation = this.destRotation;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public void Interact()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+      if (this.IsClosed) {
+        this.Open();
+      }
+      else {
+        this.Close();
+      }
     }
   }
-
 }
