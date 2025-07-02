@@ -64,9 +64,17 @@ namespace SHG
 
     void LoadAllItems()
     {
-      var enumerator = ItemDatabase.GetEnumerator();
-      while (enumerator.MoveNext()) {
-        var item = enumerator.Current.Value;
+
+      Debug.Log($"item database: {ItemDatabase.idToData.Count}");
+      //var enumerator = ItemDatabase.GetEnumerator();
+      //while (enumerator.MoveNext()) {
+      //  var item = enumerator.Current.Value;
+      //  if (item.IsCraftable) {
+      //    this.recipeTable.Add(item, new ());
+      //  } 
+      //}
+      ItemData[] items = Utils.LoadAllFrom<ItemData>(ItemStorageBase.ITEM_DIR);
+      foreach (var item in items) {
         if (item.IsCraftable) {
           this.recipeTable.Add(item, new ());
         } 

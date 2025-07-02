@@ -4,29 +4,29 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using SHG;
 
 namespace NTJ
 {
     public class GameTimeManager : MonoBehaviour
     {
         [Header("UI")]
-        public TextMeshProUGUI timeText;           // »ó´Ü ÇöÀç ½Ã°£
-        public TextMeshProUGUI dayText;            // »ó´Ü ÇöÀç Day-X
-        public Image fadePanel;                    // È­¸é ¾ÏÀü¿ë Panel
-        public GameObject dayTextPanel;            // Áß¾Ó¿¡ ¶ç¿ï "Day - X" ÆĞ³Î
-        public TextMeshProUGUI dayTextDisplay;     // Áß¾Ó ÅØ½ºÆ® ("Day - X")
+        public TextMeshProUGUI timeText;           // ìƒë‹¨ í˜„ì¬ ì‹œê°„
+        public TextMeshProUGUI dayText;            // ìƒë‹¨ í˜„ì¬ Day-X
+        public Image fadePanel;                    // í™”ë©´ ì•”ì „ìš© Panel
+        public GameObject dayTextPanel;            // ì¤‘ì•™ì— ë„ìš¸ "Day - X" íŒ¨ë„
+        public TextMeshProUGUI dayTextDisplay;     // ì¤‘ì•™ í…ìŠ¤íŠ¸ ("Day - X")
         public CanvasGroup topUITextGroup;
         public Slider timeScaleSlider;
         public TextMeshProUGUI timeScaleText;
-        public Animator playerAnimator;            // Project Ã¢¿¡¼­ ¿ìÅ¬¸¯ ¡æ Create ¡æ Animator Controller
-                                                   // Player¿¡ Animator ÄÄÆ÷³ÍÆ®¸¦ ¿¬°á ¾øÀ¸¸é Add Component ¡æ Animator
-        public Transform bedSpawnPoint; // Ä§´ë ½ºÆù À§Ä¡ ÁöÁ¤
-        public Transform player; // ÇÃ·¹ÀÌ¾î Transform ÂüÁ¶
+        public Animator playerAnimator;            // Project ì°½ì—ì„œ ìš°í´ë¦­ â†’ Create â†’ Animator Controller
+                                                   // Playerì— Animator ì»´í¬ë„ŒíŠ¸ë¥¼ ì—°ê²° ì—†ìœ¼ë©´ Add Component â†’ Animator
+        public Transform bedSpawnPoint; // ì¹¨ëŒ€ ìŠ¤í° ìœ„ì¹˜ ì§€ì •
+        public Transform player; // í”Œë ˆì´ì–´ Transform ì°¸ì¡°
 
         [Header("Time Settings")]
-        public int timeScale = 30; // Çö½Ç 1ÃÊ = °ÔÀÓ 1ºĞ
-        private float gameTime;    // ´©ÀûµÈ °ÔÀÓ ½Ã°£
+        public int timeScale = 30; // í˜„ì‹¤ 1ì´ˆ = ê²Œì„ 1ë¶„
+        private float gameTime;    // ëˆ„ì ëœ ê²Œì„ ì‹œê°„
         private int currentDay = 1;
         private float fadeDuration = 2f;
         private bool isSleeping = false;
@@ -36,7 +36,7 @@ namespace NTJ
         void Start()
         {
 #if UNITY_EDITOR
-            SaveManager.ClearSave(); // ¿¡µğÅÍ¿¡¼­ ½ÇÇàÇÒ ¶§ ÀúÀå »èÁ¦
+            SaveManager.ClearSave(); // ì—ë””í„°ì—ì„œ ì‹¤í–‰í•  ë•Œ ì €ì¥ ì‚­ì œ
 #endif
             if (SaveManager.HasSavedData())
             {
@@ -45,7 +45,7 @@ namespace NTJ
                 {
                     currentDay = data.day;
                     LoadFromData(data);
-                    player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // Ä§´ë À§Ä¡¿¡¼­ ½ÃÀÛ
+                    player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // ì¹¨ëŒ€ ìœ„ì¹˜ì—ì„œ ì‹œì‘
                 }
             }
             else
@@ -61,7 +61,7 @@ namespace NTJ
             dayTextPanel.SetActive(false);
             timeScaleSlider.onValueChanged.AddListener(OnTimeScaleChanged);
             timeScaleSlider.value = timeScale;
-            timeScaleText.text = $"{timeScaleSlider.value}¹è¼Ó";
+            timeScaleText.text = $"{timeScaleSlider.value}ë°°ì†";
         }
 
         void Update()
@@ -78,7 +78,7 @@ namespace NTJ
             if (hours >= 24 || hours < 9)
             {
                 if (!sleepRequested)
-                    StartCoroutine(SleepWithAnimation(false)); // °­Á¦ ¼ö¸é
+                    StartCoroutine(SleepWithAnimation(false)); // ê°•ì œ ìˆ˜ë©´
             }
         }
 
@@ -95,15 +95,15 @@ namespace NTJ
             if (playerAnimator != null)
             {
                 if (isManual)
-                    playerAnimator.SetTrigger("SleepStart");  // ¼öµ¿ ¼ö¸é ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å
+                    playerAnimator.SetTrigger("SleepStart");  // ìˆ˜ë™ ìˆ˜ë©´ ì• ë‹ˆë©”ì´ì…˜ íŠ¸ë¦¬ê±°
                 else
-                    playerAnimator.SetTrigger("FallAsleep");  // °­Á¦ ¼ö¸é(¾²·¯Áü) ¾Ö´Ï¸ŞÀÌ¼Ç Æ®¸®°Å
+                    playerAnimator.SetTrigger("FallAsleep");  // ê°•ì œ ìˆ˜ë©´(ì“°ëŸ¬ì§) ì• ë‹ˆë©”ì´ì…˜ íŠ¸ë¦¬ê±°
 
-                // ¾Ö´Ï¸ŞÀÌ¼Ç ±æÀÌ¿¡ ¸Â°Ô ´ë±â 
+                // ì• ë‹ˆë©”ì´ì…˜ ê¸¸ì´ì— ë§ê²Œ ëŒ€ê¸° 
                 yield return new WaitForSeconds(3f);
             }
 
-            // ½ÇÁ¦ ¼ö¸é Ã³¸® (Day Áõ°¡, Ã¼·Â È¸º¹, ÀúÀå µî)
+            // ì‹¤ì œ ìˆ˜ë©´ ì²˜ë¦¬ (Day ì¦ê°€, ì²´ë ¥ íšŒë³µ, ì €ì¥ ë“±)
             yield return StartCoroutine(SleepAndStartNextDay(isManual));
 
             sleepRequested = false;
@@ -136,22 +136,22 @@ namespace NTJ
             currentDay++;
             UpdateDayText();
 
-            // Áß¾Ó Day-X ÅØ½ºÆ® Ç¥½Ã
+            // ì¤‘ì•™ Day-X í…ìŠ¤íŠ¸ í‘œì‹œ
             dayTextPanel.SetActive(true);
             dayTextDisplay.text = $"Day - {currentDay}";
-            yield return new WaitForSeconds(1.5f); // ÅØ½ºÆ® À¯Áö ½Ã°£
+            yield return new WaitForSeconds(1.5f); // í…ìŠ¤íŠ¸ ìœ ì§€ ì‹œê°„
 
-            // ´ÙÀ½ ³¯ ½Ã°£ ¸®¼Â
+            // ë‹¤ìŒ ë‚  ì‹œê°„ ë¦¬ì…‹
             gameTime = 9 * 3600f;
 
-            // Ã¼·Â È¸º¹
+            // ì²´ë ¥ íšŒë³µ
             var stat = PlayerStatManager.Instance;
             var maxHP = stat.HP.MaxHP;
             float healAmount = isManual ? maxHP * 0.7f : maxHP * 0.3f;
             stat.HP.CurrentHP = Mathf.Min(stat.HP.CurrentHP + healAmount, maxHP);
 
 
-            // ÀÚµ¿ ÀúÀå
+            // ìë™ ì €ì¥
             var saveData = CreateSaveData(currentDay);
             SaveManager.SaveData(saveData);
 
@@ -170,12 +170,12 @@ namespace NTJ
             dayTextPanel.SetActive(false);
             isSleeping = false;
 
-            player.transform.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // ÇÃ·¹ÀÌ¾î°¡ Ä§´ë¿¡¼­ ¸®½ºÆù
+            player.transform.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // í”Œë ˆì´ì–´ê°€ ì¹¨ëŒ€ì—ì„œ ë¦¬ìŠ¤í°
         }
         public void OnTimeScaleChanged(float value)
         {
             timeScale = Mathf.RoundToInt(value);
-            timeScaleText.text = $"{timeScale}¹è¼Ó";
+            timeScaleText.text = $"{timeScale}ë°°ì†";
         }
 
         private GameData CreateSaveData(int currentDay)
@@ -188,23 +188,21 @@ namespace NTJ
             data.hunger = stat.Hunger.HungerCur;
             data.thirst = stat.Thirsty.ThirstyCur;
             data.fatigue = stat.Fatigue.FatigueCur;
-
             data.inventoryItems = App.Instance.Inventory.GetItemSaveDataList();
-            //data.quickSlotItemIDs = App.Instance.Inventory.GetQuickSlotItemIDs();
-
+            data.quickSlotItemIDs = App.Instance.Inventory.GetQuickSlotItemIDs();
             return data;
         }
         private void LoadFromData(GameData data)
         {
             var stat = PlayerStatManager.Instance;
 
+            App.Instance.Inventory.LoadFromItemSaveDataList(data.inventoryItems);
+            App.Instance.Inventory.LoadQuickSlotItems(data.quickSlotItemIDs);
+
             stat.HP.CurrentHP = data.hp;
             stat.Hunger.SetHunger(data.hunger);
             stat.Thirsty.SetThirst(data.thirst);
             stat.Fatigue.SetFatigue(data.fatigue);
-
-            App.Instance.Inventory.LoadFromItemSaveDataList(data.inventoryItems);
-            // App.Instance.Inventory.LoadQuickSlotItems(data.quickSlotItemIDs);
         }
     }
 }

@@ -15,6 +15,18 @@ public class Inventory : ItemStorageBase
   public List<string> ItemNamesForDebuggingInQuickSlot;
 #endif
 
+  public EquipmentItem GetItemFromQuickSlot(EquipmentItemData item)
+  {
+    int index = this.QuickSlotItems.IndexOf(item);
+    if (index == -1) {
+      throw (new ApplicationException($"no {item.Name} in quickslot"));
+    }
+    this.WillChange?.Invoke(this);
+    this.QuickSlotItems.RemoveAt(index);
+    this.OnChanged.Invoke(this);
+    return (Item.CreateItemFrom(item) as EquipmentItem);
+  }
+
   public Inventory(): base()
   {
     this.QuickSlotItems = new ();
@@ -26,6 +38,16 @@ public class Inventory : ItemStorageBase
     var items = new ItemData[this.QuickSlotItems.Count];
     this.QuickSlotItems.CopyTo(items);
     return (items);
+  }
+
+  public List<string> GetQuickSlotItemIDs()
+  {
+    return (new ());
+  }
+
+  public void LoadQuickSlotItems(List<string> items)
+  {
+
   }
 
   public void MoveItemToQuickSlot(ItemData itemData)

@@ -8,7 +8,7 @@ namespace SHG
   {
     public KeyCode OpenInventoryKey;
     public KeyCode CloseWindowKey;
-    KeyCode[] QuickSlotKeys;
+    public KeyCode[] QuickSlotKeys;
 
     public InputSettings()
     {

@@ -17,11 +17,11 @@ namespace SHG
       this.Show();
     }
     
-    public bool TryGetQuickslotItem(int slotNumber, out ItemData item)
+    public bool TryGetQuickslotItem(int slotNumber, out EquipmentItemData item)
     {
       var itemInSlot = this.slots[slotNumber].ItemData;
       if (itemInSlot != ItemAndCount.None) {
-        item = itemInSlot.Item;
+        item = itemInSlot.Item as EquipmentItemData;
         return (true);
       }  
       item = null;

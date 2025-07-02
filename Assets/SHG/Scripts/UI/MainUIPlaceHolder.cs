@@ -17,7 +17,8 @@ namespace SHG
       None = 0,
       Inventory = 1,
       ItemLocker = 2,
-      Craft = 4
+      Craft = 4,
+      QuickSlot = 8
     }
     public static readonly WindowType[] ALL_WINDOW_TYPES = (WindowType[])Enum.GetValues(typeof(WindowType));
 
@@ -68,9 +69,24 @@ namespace SHG
     public void CloseAllWindows()
     {
       foreach (var windowType in ALL_WINDOW_TYPES) {
-        if (this.IsWindowOpened(windowType)) {
+        if (windowType != WindowType.QuickSlot && this.IsWindowOpened(windowType)) {
           this.SetWindowVisible(windowType, false);
         }
+      }
+    }
+
+    public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
+    {
+      if (this.quickSlotWindow.IsVisiable) {
+
+        return (this.quickSlotWindow.TryGetQuickslotItem(slotNumber, out item));
+      }
+      else {
+        #if UNITY_EDITOR
+        Debug.LogError("TryGetQuickslotItem: quick slot is not visible");
+        #endif
+        item = null;
+        return (false);
       }
     }
 
@@ -150,6 +166,7 @@ namespace SHG
         WindowType.Inventory => this.inventoryWindow,
         WindowType.ItemLocker => this.itemLockerWindow,
         WindowType.Craft => this.craftWindow,
+        WindowType.QuickSlot => this.quickSlotWindow,
         _ => throw (new ArgumentException())
       };
       this.SetWindowVisible(window, windowType, visible);
@@ -168,6 +185,7 @@ namespace SHG
         InventoryContainerWindow inventory => WindowType.Inventory,
         ItemLockerContainerWindow itemLocker => WindowType.ItemLocker,
         CraftWindow craftWindow => WindowType.Craft,
+        QuickSlotWindow quickSlotWindow => WindowType.QuickSlot,
         _ => throw (new NotImplementedException($"unknown window type for {window}"))
       };
       this.SetWindowVisible(window, windowType, visible);
@@ -253,7 +271,8 @@ namespace SHG
         );
       this.quickSlotWindow.AddDropTargets(
         new ItemStorageWindow[] { 
-        this.inventoryWindow.NormalItemTab.Content as ItemLockerWindow
+        this.inventoryWindow.NormalItemTab.Content as InventoryWindow,
+        this.inventoryWindow.StoryItemTab.Content as InventoryWindow
         }
         );
     }

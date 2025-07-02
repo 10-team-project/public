@@ -15,12 +15,40 @@ namespace SHG
       this.MainUI = ui;
     }
 
+    public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
+    {
+      if (this.MainUI != null) {
+        return (this.MainUI.TryGetQuickSlotItem(slotNumber, out item));
+      }
+      #if UNITY_EDITOR
+      Debug.LogError("TryGetQuickSlotItem: Main UI is not set");
+      #endif
+      item = null;
+      return (false);
+    }
+
+    public void OnInteractCraft()
+    {
+      if (this.MainUI != null && App.Instance?.InputManager != null &&
+        !App.Instance.InputManager.IsBlocked(InputType.UI)) {
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, true); 
+        App.Instance.InputManager.StartInput(this);
+      }
+      #if UNITY_EDITOR
+      else {
+        Debug.LogError("OnInteractLocker: Main ui is not set");
+      }
+      #endif
+    }
+
     public void OnInteractLocker()
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.ItemLocker, true);
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true);
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -36,6 +64,7 @@ namespace SHG
         if (Input.GetKeyDown(Settings.InputSettings.CloseWindowKey) &&
           !App.Instance.InputManager.IsBlocked(InputType.UI)) {
           this.MainUI.CloseAllWindows();
+          this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
           App.Instance.InputManager.EndInput(this);
         }
         else if (
@@ -51,10 +80,12 @@ namespace SHG
       if (this.MainUI.IsWindowOpened(MainUIPlaceHolder.WindowType.Inventory)) {
 
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
         App.Instance.InputManager.EndInput(this);
       }
       else {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
     }

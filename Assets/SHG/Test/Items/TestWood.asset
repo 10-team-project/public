@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e422aa3a2512acdc8f32b90023007a0, type: 3}
   m_Name: TestWood
   m_EditorClassIdentifier: 
+  uuid: 8774b956-59c0-422d-bfb2-e2f2b31af029
+  recipes: []
   itemName: wood
   image: {fileID: 21300000, guid: 4ad0379d35e6ba064835ac59c78fc399, type: 3}
   prefab: {fileID: 8685585624405281176, guid: 181baad4e7c50499c8a888159567e5c1, type: 3}
