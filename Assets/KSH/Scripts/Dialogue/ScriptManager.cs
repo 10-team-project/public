@@ -101,7 +101,19 @@ namespace KSH
             }
             return;
         }
-        NotifyNextNode(scriptDataDic[curId][curOrder]); //현재ID와 현재 순서 전달
+        BaseNode bnode = scriptDataDic[curId][curOrder];
+        NotifyNextNode(bnode); //현재ID와 현재 순서 전달
+
+        int nodeForce = 1;
+        if (bnode is DialogueNode dNode)
+        {
+            nodeForce = dNode.nodeForce;
+        }
+
+        if (nodeForce == 2)
+        {
+            //강제진행코드
+        }
     }
 }
 }
