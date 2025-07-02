@@ -9,52 +9,51 @@ namespace SHG
 {
   public interface IGameMode: IEquatable<IGameMode>
   {
+    public string SceneName { get; }
     public IEnumerator OnStart();
     public IEnumerator OnEnd();
     public void OnStartFromEditor();
   }
 
-  public class GameModeManager : MonoBehaviour
+  public class GameModeManager: SingletonBehaviour<GameModeManager>
   {
     public bool IsSwitching { get; set; }
-    public IGameMode CurrentMode { get; set; }
+    public IGameMode CurrentMode 
+    { 
+      get => this.currentMode;
+      set {
+        if (value != this.currentMode) {
+          this.StartCoroutine(this.SwitchMode(value));
+        }
+      } 
+    }
     WaitUntil WaitForSwitchable;
+    IGameMode currentMode;
 
-    void Awake()
+    protected override void Awake()
     {
+      base.Awake();
       this.IsSwitching = false;
-      this.WaitForSwitchable = new WaitUntil(() => this.IsSwitching);
-      #if UNITY_EDITOR
-      var currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-      switch (currentSceneIndex) {
-        case 0:
-          this.CurrentMode = MainMenuMode.Instance;
-          this.CurrentMode.OnStartFromEditor();
-          App.Instance.IsEditor = true;
-            break;
-        default:
-          App.Instance.IsEditor = true;
-          break;
-      }
+      this.WaitForSwitchable = new WaitUntil(() => !this.IsSwitching);
+      this.IsSwitching = false;
+      #if !UNITY_EDITOR
+      this.CurrentMode = new MainMenuMode();
       #endif
     }
 
     IEnumerator SwitchMode(IGameMode gameMode)
     {
       yield return (this.WaitForSwitchable);
-      if (gameMode == this.CurrentMode) {
-        yield break;
-      }
       this.IsSwitching = true;
-
-      //yield return (App.Backdrop.Required(true));
-      
       if (this.CurrentMode != null) {
         yield return (this.CurrentMode.OnEnd());
       }
-      this.CurrentMode = gameMode; 
-      //yield return (App.Backdrop.Release(true));
+      this.currentMode = gameMode; 
+      yield return (this.CurrentMode.OnStart());
       this.IsSwitching = false;
+      if (App.Instance.IsEditor) {
+        this.CurrentMode.OnStartFromEditor();
+      }
     }
   }
 }

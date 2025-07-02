@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
   m_Name: TestWater
   m_EditorClassIdentifier: 
+  uuid: 02da8be3-eefc-4a28-a534-be0929ca3335
+  recipes: []
   itemName: Water
   image: {fileID: 21300000, guid: 93ba8691a6908bb1fa73ea3be8a17fa9, type: 3}
   prefab: {fileID: 6945446762825401387, guid: b212faf593155376fb82ece12f70b52a, type: 3}
-  emptyEfficacyCheck: 0
-  amountCheck: 0
+  description: 
   efficacy:
   - Stat: 2
     Amount: 10

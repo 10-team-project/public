@@ -10,13 +10,21 @@ public partial class Item
   public static Item CreateItemFrom(ItemData itemData)
   {
     Item item;
-    if (itemData is RecoveryItemData recoveryItemData) {
-      item = new RecoveryItem(recoveryItemData); 
-    }
-    else if (itemData is PlainItemData plainItemData) {
-      item = new PlainItem(itemData);
-    }
-    else {
+    switch (itemData)
+    {
+      case RecoveryItemData recoveryItemData:
+        item = new RecoveryItem(recoveryItemData); 
+        break;
+      case PlainItemData plainItemData:
+        item = new PlainItem(itemData);
+        break;
+      case EquipmentItemData equipmentItemData:
+        item = new EquipmentItem(equipmentItemData);
+        break;
+      case StoryItemData storyItemData:
+        item = new StoryItem(storyItemData);
+        break;
+      default:
       throw (new NotImplementedException());
     }
     return (item);
@@ -36,7 +44,7 @@ public partial class Item
     }
     #endif
     var itemObject = gameObject.AddComponent<ItemObject>();
-    itemObject.OnPickedUp += Inventory.Instance.AddItem;
+    itemObject.OnPickedUp += App.Instance.Inventory.AddItem;
     itemObject.SetItem(item);
     return (itemObject);
   }

@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
+using LTH;
 
 public class PlayerInteraction : MonoBehaviour
 {
-    [SerializeField] float interactRange; // 상호작용 범위
+    [SerializeField] float interactRange;
 
-    [SerializeField] string[] interactLayerNames; // 상호작용을 볼 수 있는 레이어 설정 (한 가지가 아니기 때문에 배열로 배치)
-    private LayerMask interactLayer; // 
+    [SerializeField] Transform interactPoint;
 
-    // [SerializeField] private Transform eyeTransform; // 눈 위치 (헤드, 머리 위치 등)
+    [SerializeField] string[] interactLayerNames;
+    private LayerMask interactLayer;
 
-    [SerializeField] float interactionCooldown = 0.5f; // 연속으로 아이템 획득 방지 쿨타임
+    [SerializeField] float interactionCooldown = 0.5f;
     private float lastInteractionTime = float.MinValue;
-
 
     private void Start()
     {
@@ -23,53 +20,64 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Update()
     {
-        LookItem();
+        AllInteraction();
     }
 
-
-    private void LookItem()
+    private void AllInteraction()
     {
+        if (InputManager.Instance.IsBlocked(InputType.Interaction)) return;
+
+
+        Vector3 center;
+
+        if (interactPoint != null)
+        {
+            center = interactPoint.position;
+        }
+        else
+        {
+            center = transform.position;
+        }
+
         Collider[] hits = Physics.OverlapSphere(transform.position, interactRange, interactLayer);
+
+        IInteractable closest = null;
+        float closestDist = float.MaxValue;
 
         foreach (var hit in hits)
         {
             IInteractable interactable = hit.GetComponent<IInteractable>();
             if (interactable != null)
             {
-                Debug.Log($"아이템 {hit.gameObject.name} E키를 눌러 줍기");
-
-                if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractionTime > interactionCooldown)
+                float dist = Vector3.Distance(transform.position, hit.transform.position);
+                if (dist < closestDist)
                 {
-                    lastInteractionTime = Time.time;
-                    interactable.Interact();
-                    break;
+                    closestDist = dist;
+                    closest = interactable;
                 }
             }
         }
 
-        //Ray ray = new Ray(eyeTransform.position, eyeTransform.forward);
-
-        //if (Physics.SphereCast(ray, 0.3f, out RaycastHit hit, interactRange, interactLayer))
-        //{
-        //    IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-        //    if (interactable != null)
-        //    {
-        //        if (Input.GetKeyDown(KeyCode.E) && Time.time - lastInteractionTime > interactionCooldown)
-        //        {
-        //            lastInteractionTime = Time.time;
-        //            interactable.Interact();
-        //        }
-        //    }
-        //}
+        if (closest != null && Input.GetKeyDown(KeyCode.F) && Time.time - lastInteractionTime > interactionCooldown)
+        {
+            lastInteractionTime = Time.time;
+            closest.Interact();
+        }
     }
 
     private void OnDrawGizmos()
     {
-       // if (eyeTransform == null) return;
+        Vector3 center;
+        if (interactPoint != null)
+        {
+            center = interactPoint.position;
+        }
+        else
+        {
+            center = transform.position;
+        }
+
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, interactRange);
+        Gizmos.DrawWireSphere(center, interactRange);
     }
 }
-
-
-
