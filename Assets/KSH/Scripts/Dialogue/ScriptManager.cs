@@ -79,15 +79,16 @@ public class ScriptManager
 
         if (curOrder >= scriptDataDic[curId].Count) //현재 순서가 현재 아이디의 수보다 크거나 같으면
         {
-            int nectidx = scriptDataDic[curId][curOrder - 1].GetNextID(); //마지막에 실행한 노드의 다음 아이디를 가져옴
+            int nextIdx = scriptDataDic[curId][curOrder - 1].GetNextID(); //마지막에 실행한 노드의 다음 아이디를 가져옴
 
-            if (nectidx == -1 || !scriptDataDic.ContainsKey(nectidx))
+            if (nextIdx == 0 || !scriptDataDic.ContainsKey(nextIdx))
             {
                 NotifyNextNode(null);
+                return;
             }
             else
             {
-                StartScript(nectidx);
+                StartScript(nextIdx);
             }
 
             return;
