@@ -81,7 +81,7 @@ public class DialogueController : BaseController
         {
             stringBuilder.Append(fulltext[i]);
             text.text = stringBuilder.ToString();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.05f);
         }
     }
 
