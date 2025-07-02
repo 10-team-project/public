@@ -1,4 +1,5 @@
 using KSH;
+using SHG;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -42,14 +43,14 @@ namespace NTJ
                 GameData data = SaveManager.LoadData();
                 if (data != null)
                 {
-                    currentDay = data.day; 
+                    currentDay = data.day;
                     LoadFromData(data);
-                    player.position = bedSpawnPoint.position; // 침대 위치에서 시작
+                    player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
                 }
             }
             else
             {
-                player.position = bedSpawnPoint.position;
+                player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
             }
 
             gameTime = 9 * 3600f;
@@ -146,7 +147,9 @@ namespace NTJ
             // 체력 회복
             var stat = PlayerStatManager.Instance;
             var maxHP = stat.HP.MaxHP;
-            stat.HP.CurrentHP = isManual ? maxHP * 0.7f : maxHP * 0.3f;
+            float healAmount = isManual ? maxHP * 0.7f : maxHP * 0.3f;
+            stat.HP.CurrentHP = Mathf.Min(stat.HP.CurrentHP + healAmount, maxHP);
+
 
             // 자동 저장
             var saveData = CreateSaveData(currentDay);
@@ -167,7 +170,7 @@ namespace NTJ
             dayTextPanel.SetActive(false);
             isSleeping = false;
 
-            player.transform.position = bedSpawnPoint.position; // 플레이어가 침대에서 리스폰
+            player.transform.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 플레이어가 침대에서 리스폰
         }
         public void OnTimeScaleChanged(float value)
         {
@@ -186,8 +189,8 @@ namespace NTJ
             data.thirst = stat.Thirsty.ThirstyCur;
             data.fatigue = stat.Fatigue.FatigueCur;
 
-            data.inventoryItems = Inventory.Instance.GetItemSaveDataList();
-            data.quickSlotItemIDs = Inventory.Instance.GetQuickSlotItemIDs();
+            data.inventoryItems = App.Instance.Inventory.GetItemSaveDataList();
+            //data.quickSlotItemIDs = App.Instance.Inventory.GetQuickSlotItemIDs();
 
             return data;
         }
@@ -200,9 +203,8 @@ namespace NTJ
             stat.Thirsty.SetThirst(data.thirst);
             stat.Fatigue.SetFatigue(data.fatigue);
 
-            Inventory.Instance.LoadFromItemSaveDataList(data.inventoryItems);
-            Inventory.Instance.LoadQuickSlotItems(data.quickSlotItemIDs);
+            App.Instance.Inventory.LoadFromItemSaveDataList(data.inventoryItems);
+            // App.Instance.Inventory.LoadQuickSlotItems(data.quickSlotItemIDs);
         }
     }
-
 }
