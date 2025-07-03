@@ -9,6 +9,7 @@ namespace SHG
     public string Name => this.eventName;
     public GameEventReward[] Rewards => this.eventRewards;
     public string[] Prolouge => this.startMessages;
+    public bool IsSkipable => this.skipable;
 
     [SerializeField]
     [Validate("Event name is empty", nameof(IsNameEmpty), MessageMode.Error)]
@@ -24,6 +25,8 @@ namespace SHG
     string[] startMessages;
     [Validate("Some starte message is none", nameof(HasNullStartMessage), MessageMode.Error)]
     Void nullStartMessageCheck;
+    [SerializeField]
+    bool skipable;
 
     protected bool IsNameEmpty() => (this.eventName == null || this.eventName.Replace(" ", "").Length == 0);
     protected bool IsRewardEmpty() => (this.eventRewards == null || this.eventRewards.Length == 0);

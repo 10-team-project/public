@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7214b9905845690debdf4b1e08d3e327, type: 3}
-  m_Name: TestDateChangeTrigger
+  m_Script: {fileID: 11500000, guid: e7c63ca9751dd3d1ab49b1a3184a23b3, type: 3}
+  m_Name: TestHintReward
   m_EditorClassIdentifier: 
-  chance: 0.475
-  triggerDate: 2
+  hintMessages:
+  - test hit 1
+  - test hit 2

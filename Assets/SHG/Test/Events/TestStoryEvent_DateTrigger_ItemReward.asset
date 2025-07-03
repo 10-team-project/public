@@ -9,13 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8a85a703d97d75039d942d8ed809572, type: 3}
-  m_Name: TestNormalEvent
+  m_Script: {fileID: 11500000, guid: 36cb458a83e35ab3aaf01fa0b756db28, type: 3}
+  m_Name: TestStoryEvent_DateTrigger_ItemReward
   m_EditorClassIdentifier: 
-  uuid: 0b298ab7-2a92-4f7d-bd39-6b9a5e8d78cd
-  eventName: TestStoryEvent
+  uuid: 82cc0fbd-bcf7-49b7-b0bf-6758c0398f24
+  eventName: TestNormalEvent_DateTrigger_ItemReward
   eventRewards:
   - {fileID: 11400000, guid: 3a6a1697f8d50ac828fd852db741a378, type: 2}
   startMessages: []
   skipable: 0
-  effectSound: {fileID: 0}
+  eventTrigger: {fileID: 11400000, guid: be25b732795f2f618837bde28c2c1ed6, type: 2}
+  eventPriority: 1

@@ -36,6 +36,7 @@ namespace SHG
     public CameraController CameraController { get; private set; }
     public ItemTracker ItemTracker { get; private set; }
     public DropTable DropTable { get; private set; }
+    public GameEventHandler GameEventHandler { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -65,6 +66,7 @@ namespace SHG
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
+      this.GameEventHandler = new GameEventHandler();
       //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
