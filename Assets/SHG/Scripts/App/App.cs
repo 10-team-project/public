@@ -34,6 +34,9 @@ namespace SHG
     public UIController UIController { get; private set; }
     public PopupManager PopupManager { get; private set; }
     public CameraController CameraController { get; private set; }
+    public ItemTracker ItemTracker { get; private set; }
+    public DropTable DropTable { get; private set; }
+    public GameEventHandler GameEventHandler { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -57,9 +60,14 @@ namespace SHG
       this.SceneManager = TestSceneManager.CreateInstance();
       this.Inventory = new Inventory();
       this.ItemStorage = new ItemLocker();
+      this.ItemTracker = new ItemTracker(this.Inventory);
+      this.DropTable = new DropTable();
+      this.DropTable.RegisterInventoryEvent(this.Inventory);
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
+      this.GameEventHandler = new GameEventHandler();
+      this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
@@ -95,12 +103,12 @@ namespace SHG
         this.gameModeManager.CurrentMode = LoadingMode.Instance; 
       }
       else {
-        var nextGameMode = this.selectGameMode(gameMode); 
+        var nextGameMode = this.SelectGameMode(gameMode); 
         this.gameModeManager.CurrentMode = nextGameMode;
       }
     }
 
-    IGameMode selectGameMode(GameMode gameMode)
+    IGameMode SelectGameMode(GameMode gameMode)
     {
       switch (gameMode)
       {

@@ -53,13 +53,13 @@ namespace SHG
         }
         yield return (this.dissolveController.StartDisappear());
       }
+      OnEnded?.Invoke();
       if (player != null) {
         App.Instance.CameraController.OnCommandEnd();
         App.Instance.CameraController.AddReset();
       }
-      Destroy(this.gameObject);
       yield return (null);
-      OnEnded?.Invoke();
+      Destroy(this.gameObject);
     }
   }
 }
