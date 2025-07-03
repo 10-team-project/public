@@ -121,6 +121,7 @@ namespace SHG
         this.player.TriggerAnimation("Hit"); 
         yield return (this.player.WaitForHitDelay);
       }
+      OnEnded?.Invoke();
     }
 
     void OnHit(PlayerItemController player)

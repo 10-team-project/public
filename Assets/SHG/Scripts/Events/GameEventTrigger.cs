@@ -1,0 +1,14 @@
+using UnityEngine;
+using EditorAttributes;
+
+namespace SHG
+{
+  public abstract class GameEventTrigger : ScriptableObject
+  {
+    public float Percentage => this.chance;
+    [Range(0f, 1f)] [Validate("Invalid chance", nameof(IsInvalidChance), MessageMode.Warning)]
+    float chance;
+
+    protected bool IsInvalidChance() => (this.chance < 0f || this.chance > 1f);
+  }
+}

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using EditorAttributes;
 
@@ -28,6 +27,12 @@ namespace SHG
       this.opendedRotation = Quaternion.Euler(0, this.openedAngle, 0);
       this.closedRotation = Quaternion.Euler(0, this.closedAngle, 0);
       this.IsClosed = this.isClosed;
+      if (this.IsClosed) {
+        this.doorHinge.rotation = this.closedRotation;
+      }
+      else {
+        this.doorHinge.rotation = this.opendedRotation;
+      }
     }
 
     [Button ("Open")]
