@@ -131,11 +131,13 @@ namespace SHG
       float oldValue,
       float newValue)
     {
-      if (this.eventsByStatTrigger.TryGetValue(stat, out List<StoryGameEvent> events)) {
-        foreach (var gameEvent in events) {
-          var trigger = gameEvent.Trigger as ResourceChangeTrigger;
-          if (this.IsInTriggerRange(trigger, stat, oldValue, newValue)) {
-            this.OnFoundEventByTrigger(gameEvent);
+      if (oldValue != newValue) {
+        if (this.eventsByStatTrigger.TryGetValue(stat, out List<StoryGameEvent> events)) {
+          foreach (var gameEvent in events) {
+            var trigger = gameEvent.Trigger as ResourceChangeTrigger;
+            if (this.IsInTriggerRange(trigger, stat, oldValue, newValue)) {
+              this.OnFoundEventByTrigger(gameEvent);
+            }
           }
         }
       }
@@ -150,9 +152,11 @@ namespace SHG
       }
       switch (trend) {
         case (ChangeTrend.Decrease):
-          return (oldValue > trigger.Value && newValue < trigger.Value);
+          return (oldValue + float.Epsilon >= trigger.Value &&
+            newValue - float.Epsilon <= trigger.Value);
         case (ChangeTrend.Increase):
-          return (oldValue < trigger.Value && newValue > trigger.Value);
+          return (oldValue - float.Epsilon <= trigger.Value &&
+            newValue + float.Epsilon >= trigger.Value);
         default: 
           throw (new NotImplementedException());
       }
