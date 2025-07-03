@@ -34,6 +34,7 @@ namespace SHG
     public UIController UIController { get; private set; }
     public PopupManager PopupManager { get; private set; }
     public CameraController CameraController { get; private set; }
+    public ItemTracker ItemTracker { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -57,6 +58,7 @@ namespace SHG
       this.SceneManager = TestSceneManager.CreateInstance();
       this.Inventory = new Inventory();
       this.ItemStorage = new ItemLocker();
+      this.ItemTracker = new ItemTracker(this.Inventory);
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
