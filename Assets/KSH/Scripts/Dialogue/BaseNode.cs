@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using TreeEditor;
 using UnityEngine;
+using KSH;
 
-public enum NodeType
+namespace KSH
 {
-    dialogue, //대사
-    option //선택지
+    public enum NodeType
+{
+    dialogue = 1, //대사
+    option = 2 //선택지
 }
 [System.Serializable]
 public abstract class BaseNode
@@ -15,6 +18,7 @@ public abstract class BaseNode
 
     protected int nextID = -1;
     protected int saveAllID;
+   // public int nodeForce = 1; //기본값
 
     public virtual int GetNextID()
     {
@@ -32,7 +36,7 @@ public class DialogueNode : BaseNode
     {
         nodetype = NodeType.dialogue; //노드타입을 dialogue로 설정
         
-        allId = datas["AllID"].ToString();
+        allId = datas["CharacterEmotion"].ToString();
         if (!string.IsNullOrEmpty(allId))
             saveAllID = int.Parse(allId);
         
@@ -41,6 +45,9 @@ public class DialogueNode : BaseNode
         
         if(!string.IsNullOrEmpty(reference)) //만약 reference 값이 비어있지않다면
             nextID = int.Parse(reference); //정수로 변환해서 nextID에 저장
+
+      // string Force = datas.ContainsKey("NodeForce") ? datas["NodeForce"]?.ToString() : null;
+      // nodeForce = string.IsNullOrEmpty(Force) ? 1 : int.Parse(Force);
     }
 }
 
@@ -53,7 +60,7 @@ public class OptionNode : BaseNode
     {
         nodetype = NodeType.option; //노드타입을 option으로 저장
 
-        allId = datas["AllID"].ToString();
+        allId = datas["CharacterEmotion"].ToString();
         if (!string.IsNullOrEmpty(allId))
             saveAllID = int.Parse(allId);
         
@@ -84,4 +91,5 @@ public class OptionNode : BaseNode
             nextID = n;
         }
     }
+}
 }
