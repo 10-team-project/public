@@ -1,21 +1,29 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KSH
 {
     public class Fatigue : MonoBehaviour
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
+        [SerializeField] private Slider FatigueSlider;
 
         public float FatigueCur => resourceDegenerator.Resource.Cur;
+        public float FatigueMax => resourceDegenerator.Resource.Max;
 
-        public void Sleep(float amount)
+        private void Start() => SetFatigue(FatigueMax);
+        
+        private void Update() => FatigueUI();
+
+        private void FatigueUI()
         {
-            resourceDegenerator.Resource.Increase(amount);
+            if (FatigueSlider != null)
+                FatigueSlider.value = FatigueCur / FatigueMax;
         }
 
-        public void SetFatigue(float value)
-        {
-            resourceDegenerator.Resource.Cur = value;
-        }
+        public void Sleep(float amount) => resourceDegenerator.Resource.Increase(amount);
+        public void WakeUp(float amount) => resourceDegenerator.Resource.Decrease(amount);
+
+        public void SetFatigue(float value) => resourceDegenerator.Resource.Cur = value;
     }
 }
