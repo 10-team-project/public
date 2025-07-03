@@ -6,37 +6,59 @@ namespace SHG
 {
   public class DropTable : MonoBehaviour
   {
-    HashSet<ItemData> additionalItems;
+    HashSet<ItemData> addedItems;
     HashSet<ItemData> removedItems;
 
-    public List<ItemData> GetAdditionalItems() => new (this.additionalItems);
+    public List<ItemData> GetAddedItems() => new (this.addedItems);
     public List<ItemData> GetRemovedItems() => new (this.removedItems);
     
     public DropTable()
     {
-
+      this.addedItems = new ();
+      this.removedItems = new ();
     }
 
     public void RegisterInventoryEvent(Inventory inventory)
     {
       inventory.OnDropChangeItemUsed += this.OnUseDropChangeItem;
+      inventory.OnObtainItem += this.OnObtainItem;
     }
 
     void OnUseDropChangeItem(DropChangeItem item)
     {
       if (item.OnUse != null) {
         foreach (var changeOnUse in item.OnUse) {
-          switch (changeOnUse.TableChange)
-          {
-            case ItemDropChange.DropTableChange.AddToTable:
-              break;
-            case ItemDropChange.DropTableChange.RemoveFromTable:
-              break;
-            default:
-              throw (new NotImplementedException());
-          }
+          this.ApplyItemChange(changeOnUse);
         }
       }
+    }
+
+    void OnObtainItem(ItemData item)
+    {
+      if (item is DropChangeItemData dropChangeItem &&
+        dropChangeItem.OnObtain != null) {
+        foreach (var changeOnObtain in dropChangeItem.OnObtain) {
+          this.ApplyItemChange(changeOnObtain);
+        }
+      }
+    }
+
+    void ApplyItemChange(ItemDropChange change)
+    {
+      switch (change.TableChange)
+      {
+        case ItemDropChange.DropTableChange.AddToTable:
+          this.addedItems.Add(change.Item);
+          this.removedItems.Remove(change.Item);
+          break;
+        case ItemDropChange.DropTableChange.RemoveFromTable:
+          this.addedItems.Remove(change.Item);
+          this.removedItems.Add(change.Item);
+          break;
+        default:
+          throw (new NotImplementedException());
+      }
+
     }
   }
 }

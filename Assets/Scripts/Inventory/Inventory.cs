@@ -117,6 +117,7 @@ public class Inventory : ItemStorageBase
       }
     }
     else if (item is DropChangeItem dropChangeItem) {
+      this.OnDropChangeItemUsed?.Invoke(dropChangeItem);
     }
     else {
       throw (new NotImplementedException());
