@@ -31,16 +31,27 @@ namespace KSH
     
         public Sprite GetPortraitData(string allId)
         {
-            int portraitID = int.Parse(allId);
+            if (!int.TryParse(allId?.Trim(), out int portraitID))
+            {
+                return null;
+            }
             portraitID %= 100;
             return portraitDict.TryGetValue(portraitID, out var sprite) ? sprite : null;
         }
 
         public string GetCharacterData(string allId)
         {
-            int characterID = int.Parse(allId);
+            if (!int.TryParse(allId?.Trim(), out int characterID))
+            {
+                return "???";
+            }
+
             characterID /= 100;
-            return characterDict.TryGetValue(characterID, out var name) ? name : "???";
+
+            if(characterDict.TryGetValue(characterID, out var name))
+                return name;
+            else
+                return "???";
         }
 
         private void LoadCharacterData(string file)
@@ -48,7 +59,12 @@ namespace KSH
             var datas = CSVParser.Parse(file);
             foreach (var data in datas)
             {
-                int id = Convert.ToInt32(data["ID"]);
+                string idStr = data["ID"]?.ToString()?.Trim();
+
+                if (string.IsNullOrEmpty(idStr) || !int.TryParse(idStr, out int id))
+                {
+                    continue;
+                }
                 string name = data["Character"].ToString();
                 characterDict[id] = name;
             }
@@ -59,8 +75,13 @@ namespace KSH
             var datas = CSVParser.Parse(file);
             foreach (var data in datas)
             {
-                int id = Convert.ToInt32(data["ID"]);
-                string path = data["Portrait"].ToString();
+                string idStr = data["ID"]?.ToString()?.Trim();
+
+                if (string.IsNullOrEmpty(idStr) || !int.TryParse(idStr, out int id))
+                {
+                    continue;
+                }
+                string path = data["Portrait"]?.ToString();
                 Sprite sprite = Resources.Load<Sprite>(path);
                 if (sprite != null)
                 {

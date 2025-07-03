@@ -18,11 +18,11 @@ public class PlayerSpawn : MonoBehaviour
     {
         CharacterType character = (CharacterType)PlayerPrefs.GetInt("PlayerSelect"); //Enum의 타입으로 데이터를 얻어온다.
 
-        if (character == CharacterType.Character1) //만약 Character1 타입이면
+        if (character == CharacterType.GangHana) //만약 강하나면
         {
             player1.SetActive(true); // player1 활성화
         }
-        else if (character == CharacterType.Character2)
+        else if (character == CharacterType.Seonahyun)
         {
             player2.SetActive(true);
         }

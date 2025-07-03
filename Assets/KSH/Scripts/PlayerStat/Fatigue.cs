@@ -11,9 +11,15 @@ namespace KSH
         public float FatigueCur => resourceDegenerator.Resource.Cur;
         public float FatigueMax => resourceDegenerator.Resource.Max;
 
-        private void Start() => SetFatigue(FatigueMax);
+        private void Start()
+        {
+            SetFatigue(FatigueMax);
+            resourceDegenerator.Resource.OnResourceChanged += OnFatigueChanged;
+        }
         
-        private void Update() => FatigueUI();
+        private void OnDestroy() => resourceDegenerator.Resource.OnResourceChanged -= OnFatigueChanged;
+
+        private void OnFatigueChanged(Resource resource, float oldValue, float newValue) => FatigueUI();
 
         private void FatigueUI()
         {
