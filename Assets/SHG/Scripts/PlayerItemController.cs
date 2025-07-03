@@ -4,8 +4,11 @@ using UnityEngine;
 
 namespace SHG
 {
+  [RequireComponent(typeof(Animator))]
   public class PlayerItemController : MonoBehaviour
   {
+    public Action<PlayerItemController> OnHit;
+    public WaitForSeconds WaitForHitDelay;
     [SerializeField] [Range(0.5f, 5f)]
     float mapObjectIntractDist;
     [SerializeField] [Range(0.5f, 2f)]
@@ -13,11 +16,36 @@ namespace SHG
     LayerMask mapObjectLayer;
     [SerializeField] 
     Vector3 footOffset;
+    [SerializeField]
+    AnimationClip hitClip;
+    [SerializeField] [Range(0f, 2f)]
+    float hitTriggerTime;
+    [SerializeField] [Range (0f, 5f)]
+    float hitDelay;
     Coroutine itemAction;
+    Animator animator;
+
+    public void TriggerAnimation(string name)
+    {
+      this.animator.SetTrigger(name);
+    }
 
     void Awake()
     {
-      this.mapObjectLayer = (1 << LayerMask.NameToLayer("Blocker"));
+      this.animator = this.GetComponent<Animator>();
+      this.mapObjectLayer = (1 << LayerMask.NameToLayer("ItemInteractObject"));
+      var clips = this.animator.runtimeAnimatorController.animationClips;
+      var hitClip = Array.Find(clips, clip => clip.name == this.hitClip.name);
+      AnimationEvent hitEvent =  new AnimationEvent();
+      hitEvent.time = this.hitTriggerTime;
+      hitEvent.functionName = nameof(this.OnHitTrigger);
+      hitClip.AddEvent(hitEvent);
+      this.WaitForHitDelay = new WaitForSeconds(this.hitDelay);
+    }
+
+    void OnHitTrigger()
+    {
+      this.OnHit?.Invoke(this);
     }
 
     // Start is called before the first frame update

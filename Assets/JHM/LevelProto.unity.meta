@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/JHM/LevelProto.unity.meta
 guid: 33fbd77feca97cf4a93359aca8ee8404
 DefaultImporter:
+========
+guid: 89498a06d2da418489dff1674d7260bb
+PrefabImporter:
+>>>>>>>> shg:Assets/SHG/Prefabs/BreakBookcase.prefab.meta
   externalObjects: {}
   userData: 
   assetBundleName: 
