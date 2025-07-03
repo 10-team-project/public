@@ -16,8 +16,11 @@ namespace SHG
     public Character.Stat Stat => this.statType;
     public ChangeTrend Trend => this.changeTrend;
     public float Value => this.statValue;
+    [SerializeField]
     Character.Stat statType;
+    [SerializeField]
     ChangeTrend changeTrend;
+    [SerializeField]
     float statValue;
   }
 }

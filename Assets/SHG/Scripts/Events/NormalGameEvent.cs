@@ -9,13 +9,15 @@ namespace SHG
   public class NormalGameEvent : GameEvent
   {
     public GameEventTrigger Trigger => this.eventTrigger;
+    public int Priority => this.eventPriority;
+    [SerializeField]
     [Validate("Event trigger is none", nameof(IsNullTrigger), MessageMode.Error)]
     GameEventTrigger eventTrigger;
-    public int Priority => this.eventPriority;
-
-    protected bool IsNullTrigger() => (this.Trigger == null);
+    [SerializeField]
     [Range(1, 100)] [Validate("priority range is 1 to 100", nameof(IsInvalidPriority), MessageMode.Error)]
     int eventPriority;
+
+    protected bool IsNullTrigger() => (this.Trigger == null);
 
     protected bool IsInvalidPriority => (this.Priority < 1 || this.Priority > 100);
   }

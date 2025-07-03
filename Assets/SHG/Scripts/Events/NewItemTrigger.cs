@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using EditorAttributes;
 
 namespace SHG
 {
@@ -8,6 +9,9 @@ namespace SHG
   public class NewItemTrigger : GameEventTrigger
   {
     public ItemData Item => this.triggerItem;
+    [SerializeField] [Validate("Trigger item is none", nameof(IsNullTriggerItem), MessageMode.Error)]
     ItemData triggerItem;
+
+    protected bool IsNullTriggerItem() => (this.triggerItem == null);
   }
 }

@@ -9,6 +9,7 @@ namespace SHG
   public class DateChangeTrigger : GameEventTrigger
   {
     public int Date => this.triggerDate;
+    [SerializeField]
     [Validate("Invalid date", nameof(IsInvalidDate), MessageMode.Error)]
     int triggerDate;
 
