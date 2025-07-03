@@ -1,16 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace KSH
 {
-    public class InteractUI : MonoBehaviour
+    public class InteractUI : MonoBehaviour, IInteractableUI
     {
         [Header("InteractUI")]
-        [SerializeField] private Image imageUI; // UI이미지
+        [SerializeField] private Canvas interactUI; // UI이미지
         
         [Header("Interact Radius")]
         [SerializeField] private float radius; //상호작용할 원의 범위
@@ -22,8 +22,8 @@ namespace KSH
         
         void Start()
         {
-            imageUI.enabled = false;
-            OnInteract += ImageInteract; // 이벤트에 연결
+            interactUI.enabled = false;
+            OnInteract += Interact; // 이벤트에 연결
         }
     
         void Update()
@@ -31,7 +31,7 @@ namespace KSH
             Detect();
         }
     
-        private void Detect()
+        public void Detect()
         {
             isreach = false;
             Vector3 center = transform.position; // 스크립트가 붙은 오브젝트의 위치를 센터로 함 
@@ -44,7 +44,7 @@ namespace KSH
                 {
                     isreach = true;
                     break;
-                }
+                } 
             }
     
            if (previousisreach != isreach) //전의 bool 값과 현재 bool값이 다르면
@@ -54,9 +54,9 @@ namespace KSH
            }
         }
     
-        private void ImageInteract(bool state)
+        public void Interact(bool state) //bool값에 따른 상호작용
         {
-            imageUI.enabled = state;
+            interactUI.enabled = state;
         }
     
         private void OnDrawGizmosSelected() //기즈모

@@ -34,7 +34,7 @@ namespace SHG
         Debug.Log("No Item is selected");
         return ;
       }
-      var recipes = Inventory.Instance.GetCraftableRecipes(this.itemToCraft);
+      var recipes = App.Instance.Inventory.GetCraftableRecipes(this.itemToCraft);
       Debug.Log($"craftable recipe: {recipes.Count} for {this.itemToCraft.Name} from current inventory");
       this.PrintRecipes(recipes);
     }
@@ -48,7 +48,7 @@ namespace SHG
       }
       var recipe = new ItemRecipe(this.selectedRecipeData);
       try {
-        var item = Inventory.Instance.CraftItem(recipe);      
+        var item = App.Instance.Inventory.CraftItem(recipe);      
         Item.CreateItemObjectFrom(item);
       }
       catch (Exception e) {

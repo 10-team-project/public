@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0620495320dc2fd2866611ad094cda8, type: 3}
+  m_Name: TestShovelRecipe
+  m_EditorClassIdentifier: 
+  uuid: 5570de96-144b-4a46-9aa5-2f7842022260
+  product: {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
+  materials:
+  - {fileID: 11400000, guid: 64d3c3e93b6b24c6db239f3ead48a8b8, type: 2}
+  - {fileID: 11400000, guid: 64d3c3e93b6b24c6db239f3ead48a8b8, type: 2}
+  - {fileID: 11400000, guid: 4a16e2d7f3955160b8595e94b29b5afd, type: 2}

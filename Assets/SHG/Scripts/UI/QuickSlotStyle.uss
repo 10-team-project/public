@@ -1,0 +1,20 @@
+#quick-slot-window-container
+{
+  position: absolute;
+  left: 30%;
+  bottom: 5%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-color: black;
+  border-width: 2px;
+  max-width: 40%;
+}
+
+.quick-slot-window-item-box
+{
+  border-color: grey; 
+  border-width: 1px;
+  min-width: 150px;
+  min-height: 130px;
+}

@@ -5,7 +5,7 @@ using EditorAttributes;
 public class ItemObject : MonoBehaviour, IInteractable, IPickupable
 {
   public event Action<Item> OnPickedUp;
-  [SerializeField, ShowInInspector]
+  [SerializeField]
   Item item;
 
   public void SetItem(Item item) 
@@ -24,6 +24,5 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
     OnPickedUp?.Invoke(item);
     Destroy(gameObject);
   }
-
 }
 
