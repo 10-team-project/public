@@ -67,6 +67,7 @@ namespace SHG
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
       this.GameEventHandler = new GameEventHandler();
+      this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {

@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
 
 namespace SHG
@@ -8,15 +7,24 @@ namespace SHG
   public class GameEventHandler
   {
     const string EVENT_DIR = "Assets/SHG/Test/Events";
+    public bool IsEventTriggerable;
+    public Action<StoryGameEvent> OnStoryEventStart;
+    public Action<NormalGameEvent> OnNormalEventStart;
 
     List<GameEvent> storyEvents;
     List<GameEvent> normalEvents;
-    Dictionary<ItemData, GameEvent> eventsByItemTrigger;
-    Dictionary<int, GameEvent> eventsByDateTrigger;
-    Dictionary<Character.Stat, List<GameEvent>> eventsByStatTrigger; 
+    Dictionary<ItemData, StoryGameEvent> eventsByItemTrigger;
+    Dictionary<int, StoryGameEvent> eventsByDateTrigger;
+    Dictionary<Character.Stat, List<StoryGameEvent>> eventsByStatTrigger; 
     Dictionary<string, GameEvent> eventsByName;
+    public List<GameEvent> EventCandidates { get; private set; }
 
-    bool TryFindStoryEvent(out NormalGameEvent result, Func<GameEvent, bool> query)
+    public void ClearEventCandiates()
+    {
+      this.EventCandidates.Clear();
+    }
+
+    public bool TryFindStoryEvent(out NormalGameEvent result, Func<GameEvent, bool> query)
     {
       foreach (var storyEvent in this.storyEvents) {
         if (query(storyEvent)) {
@@ -28,7 +36,7 @@ namespace SHG
       return (false);
     }
 
-    bool TryFindEventByName(in string name, out GameEvent result) 
+    public bool TryFindEventByName(in string name, out GameEvent result) 
     {
       if (this.eventsByName.TryGetValue(name, out GameEvent found)) {
         result = found;
@@ -38,16 +46,36 @@ namespace SHG
       return (false);
     }
 
-    //bool TryFindEventByDateTrigger(int date, out GameEvent)
+    public bool TryFindEventByDateTrigger(int date, out GameEvent result)
+    {
+      if (this.eventsByDateTrigger.TryGetValue(date, out StoryGameEvent found)) {
+        result = found;
+        return (true);
+      }
+      result = null;
+      return (false);
+    }
+    
+    public bool TryFindEventByItem(ItemData item, out GameEvent result)
+    {
+      if (this.eventsByItemTrigger.TryGetValue(item, out StoryGameEvent found))
+      {
+        result = found;
+        return (true);
+      }
+      result = null;
+      return (false);
+    }
 
     public GameEventHandler()
     {
       this.storyEvents = new ();
       this.normalEvents = new ();
       this.eventsByName = new ();
+      this.EventCandidates = new ();
       this.eventsByItemTrigger = new ();
       this.eventsByDateTrigger = new ();
-      this.eventsByStatTrigger = new Dictionary<Character.Stat, List<GameEvent>> {
+      this.eventsByStatTrigger = new Dictionary<Character.Stat, List<StoryGameEvent>> {
         {Character.Stat.Hp, new () },
         {Character.Stat.Fatigue, new ()},
         {Character.Stat.Hunger, new () },
@@ -56,21 +84,99 @@ namespace SHG
       this.LoadAllEvents();
     }
 
+    public void RegisterItemTracker(ItemTracker itemTracker)
+    {
+      itemTracker.OnChanged += this.OnItemTrackerChanged;
+    }
+
+    void OnItemsObtained(List<ItemData> items)
+    {
+      foreach (var item in items) {
+        this.OnObtainItem(item); 
+      } 
+    }
+
+    void OnItemTrackerChanged(ItemTracker tracker)
+    {
+      if (tracker.NewObtainedItems.Count > 0) {
+        tracker.ConsumeNewObtainedItems(this.OnItemsObtained);
+      }
+    }
+
     void LoadAllEvents()
     {
       var allEvents = Utils.LoadAllFrom<GameEvent>(EVENT_DIR);
       foreach (var gameEvent in allEvents) {
-        Debug.Log(gameEvent.Name); 
         this.eventsByName.TryAdd(gameEvent.Name, gameEvent);
-        foreach (var reward in gameEvent.Rewards) {
-          Debug.Log(reward); 
-        }
         if (gameEvent is StoryGameEvent normalGameEvent) {
           this.AddNormalGameEvent(normalGameEvent);
         }
         else if (gameEvent is NormalGameEvent storyGameEvent) {
           this.AddStoryGameEvent(storyGameEvent);
         }
+      }
+    }
+
+    public void OnDateChanged(int date)
+    {
+      if (this.TryFindEventByDateTrigger(date, out GameEvent gameEvent)) {
+        this.OnFoundEventByTrigger(gameEvent);
+        return ;
+      } 
+  
+    }
+
+    public void OnResourceChanged(
+      Character.Stat stat, 
+      float oldValue,
+      float newValue)
+    {
+      if (this.eventsByStatTrigger.TryGetValue(stat, out List<StoryGameEvent> events)) {
+        foreach (var gameEvent in events) {
+          var trigger = gameEvent.Trigger as ResourceChangeTrigger;
+          if (this.IsInTriggerRange(trigger, stat, oldValue, newValue)) {
+            this.OnFoundEventByTrigger(gameEvent);
+          }
+        }
+      }
+    }
+
+    bool IsInTriggerRange(ResourceChangeTrigger trigger, Character.Stat stat, float oldValue, float newValue)
+    {
+      ChangeTrend trend = oldValue > newValue ? ChangeTrend.Decrease: ChangeTrend.Increase;
+      if (trigger.Stat != stat &&
+            trigger.Trend != trend ) {
+        return (false);
+      }
+      switch (trend) {
+        case (ChangeTrend.Decrease):
+          return (oldValue > trigger.Value && newValue < trigger.Value);
+        case (ChangeTrend.Increase):
+          return (oldValue < trigger.Value && newValue > trigger.Value);
+        default: 
+          throw (new NotImplementedException());
+      }
+    }
+
+    void OnObtainItem(ItemData item)
+    {
+      if (this.eventsByItemTrigger.TryGetValue(item, out StoryGameEvent gameEvent)) {
+        this.OnFoundEventByTrigger(gameEvent);  
+      }
+    }
+
+    void OnFoundEventByTrigger(GameEvent gameEvent)
+    {
+      if (this.IsEventTriggerable) {
+        if (gameEvent.IsStoryEvent) {
+          this.OnStoryEventStart?.Invoke(gameEvent as StoryGameEvent);
+        } 
+        else {
+          this.OnNormalEventStart?.Invoke(gameEvent as NormalGameEvent);
+        }
+      }
+      else {
+        this.EventCandidates.Add(gameEvent);
       }
     }
 

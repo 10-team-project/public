@@ -1,28 +1,27 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using EditorAttributes;
 
 namespace SHG
 {
   public class ItemTracker: IObservableObject<ItemTracker>
   {
-    HashSet<ItemData> ObtainedItems;
-    HashSet<ItemData> UsedItems;
-    [SerializeField] [ReadOnly]
-    List<ItemData> newObtainedItems;
-    [SerializeField] [ReadOnly]
-    List<ItemData> newUsedItems;
+    HashSet<ItemData> obtainedItems;
+    HashSet<ItemData> usedItems;
+    [SerializeField] 
+    public List<ItemData> NewObtainedItems { get; private set; }
+    [SerializeField] 
+    public List<ItemData> NewUsedItems { get; private set; }
 
     public Action<ItemTracker> WillChange { get; set; }
     public Action<ItemTracker> OnChanged { get; set; }
 
     public ItemTracker(Inventory inventory)
     {
-      this.ObtainedItems = new ();
-      this.UsedItems = new ();
-      this.newObtainedItems = new ();
-      this.newUsedItems = new ();
+      this.obtainedItems = new ();
+      this.usedItems = new ();
+      this.NewObtainedItems = new ();
+      this.NewUsedItems = new ();
       this.RegisterEvents(inventory);
     }
 
@@ -32,38 +31,38 @@ namespace SHG
       inventory.OnObtainItem += this.OnObtainItem;
     }
 
-    void ConsumeNewUsedItems(Action<List<ItemData>> handler)
+    public void ConsumeNewUsedItems(Action<List<ItemData>> handler)
     {
       this.WillChange?.Invoke(this);
-      handler.Invoke(this.newUsedItems);
-      this.newUsedItems.Clear();
+      handler.Invoke(this.NewUsedItems);
+      this.NewUsedItems.Clear();
       this.OnChanged?.Invoke(this);
     }
 
-    void ConsumeNewObtainedItems(Action<List<ItemData>> handler)
+    public void ConsumeNewObtainedItems(Action<List<ItemData>> handler)
     {
       this.WillChange?.Invoke(this);
-      handler.Invoke(this.newObtainedItems);
-      this.newObtainedItems.Clear();
+      handler.Invoke(this.NewObtainedItems);
+      this.NewObtainedItems.Clear();
       this.OnChanged?.Invoke(this);
     }
 
     void OnObtainItem(ItemData item) 
     {
-      if (!this.ObtainedItems.Contains(item)) {
+      if (!this.obtainedItems.Contains(item)) {
         this.WillChange?.Invoke(this);
-        this.newObtainedItems.Add(item); 
-        this.ObtainedItems.Add(item);
+        this.NewObtainedItems.Add(item); 
+        this.obtainedItems.Add(item);
         this.OnChanged?.Invoke(this);
       }
     }
 
     void OnItemUse(ItemData item)
     {
-      if (!this.UsedItems.Contains(item)) {
+      if (!this.usedItems.Contains(item)) {
         this.WillChange?.Invoke(this);
-        this.newUsedItems.Add(item); 
-        this.UsedItems.Add(item);
+        this.NewUsedItems.Add(item); 
+        this.usedItems.Add(item);
         this.OnChanged?.Invoke(this);
       }
     }

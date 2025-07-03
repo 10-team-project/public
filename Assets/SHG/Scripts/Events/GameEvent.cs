@@ -10,6 +10,7 @@ namespace SHG
     public GameEventReward[] Rewards => this.eventRewards;
     public string[] Prolouge => this.startMessages;
     public bool IsSkipable => this.skipable;
+    public abstract bool IsStoryEvent { get; }
 
     [SerializeField]
     [Validate("Event name is empty", nameof(IsNameEmpty), MessageMode.Error)]

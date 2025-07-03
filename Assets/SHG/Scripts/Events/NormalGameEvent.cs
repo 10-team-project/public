@@ -8,6 +8,7 @@ namespace SHG
   public class NormalGameEvent : GameEvent
   {
     public bool Repeatable => this.repeat;
+    public override bool IsStoryEvent => false;
     [SerializeField]
     bool repeat;
   }

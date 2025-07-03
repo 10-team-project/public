@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using Character = SHG.TempCharacter;
 
@@ -11,6 +10,8 @@ namespace SHG
     Decrease
   }
 
+  [Serializable]
+  [CreateAssetMenu (menuName = "ScriptableObjects/Event/Resource Trigger")]
   public class ResourceChangeTrigger : GameEventTrigger
   {
     public Character.Stat Stat => this.statType;
