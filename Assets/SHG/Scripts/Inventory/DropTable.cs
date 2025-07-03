@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace SHG
 {
-  public class DropTable : MonoBehaviour
+  public class DropTable 
   {
     HashSet<ItemData> addedItems;
     HashSet<ItemData> removedItems;
