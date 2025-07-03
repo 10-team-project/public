@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KSH;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KSH
 {
@@ -25,6 +26,8 @@ namespace KSH
         [SerializeField] private float HpLossFromHunger;
         [SerializeField] private float HpLossFromThirsty;
         [SerializeField] private float HpLossFromFatigue;
+        [Header("UI")]
+        [SerializeField] private Slider HpBarSlider;
 
         private float hungerTimer = 0f;
         private float thirstyTimer = 0f;
@@ -38,6 +41,13 @@ namespace KSH
         private void Update()
         {
             HealthDecay();
+            HpBar();
+        }
+
+        private void HpBar()
+        {
+            if (HpBarSlider != null)
+                HpBarSlider.value = resource.Cur / resource.Max;
         }
 
         private void HealthDecay() //Hunger, Thirsty, Fatigue의 정해진 수치 이하가 되면 체력 떨어짐
@@ -71,10 +81,9 @@ namespace KSH
             }
         }
 
-        public void Heal(float amount)
-        {
-            resourceDegenerator.Resource.Increase(amount);
-        }
+        public void Heal(float amount) => resourceDegenerator.Resource.Increase(amount);
+        
+        public void Damage(float amount) => resourceDegenerator.Resource.Decrease(amount);
 
         public float CurrentHP
         {

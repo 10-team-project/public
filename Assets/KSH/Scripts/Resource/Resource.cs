@@ -9,8 +9,8 @@ namespace KSH
     public class Resource : MonoBehaviour, IResource
     {
         [Header("Resource Amount")]
-        [Range(0, 100)][SerializeField] private float max;//최대 자원 양
-        [Range(0, 100)] [SerializeField] private float cur; //현재 자원 양
+        [Range(0, 140)][SerializeField] private float max;//최대 자원 양
+        [Range(0, 140)] [SerializeField] private float cur; //현재 자원 양
         
         public event Action<Resource> OnResourceChanged; //코드용 이벤트
         
