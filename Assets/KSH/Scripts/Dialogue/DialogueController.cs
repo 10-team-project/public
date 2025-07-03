@@ -29,7 +29,7 @@ namespace KSH
     public override void NextNode(BaseNode b)
     {
         base.NextNode(b);
-        if (b==null || b.nodetype != nodeType)
+        if (b==null)
         {
             dialoguePanel.SetActive(false);
             leftportrait.gameObject.SetActive(false);
