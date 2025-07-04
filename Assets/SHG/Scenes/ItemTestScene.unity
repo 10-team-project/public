@@ -444,9 +444,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0139b46385bb990b76d2e64ea1ddc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headAimTarget: {fileID: 0}
+  headAim: {fileID: 0}
+  bodyAim: {fileID: 0}
+  leftHandTarget: {fileID: 0}
+  rightHandTarget: {fileID: 0}
+  lookAtSpeed: 0
   mapObjectIntractDist: 3
   mapObjectIntractRadius: 1
   footOffset: {x: 0, y: -0.3, z: 0}
+<<<<<<< HEAD
+  hitDelay: 0
+  lootTriggerTime: 0
+--- !u!95 &186235112
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186235103}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 3955de6a24970f840996fe77051507ee, type: 3}
+  m_Controller: {fileID: 9100000, guid: 357d4502ba14f7c4d9c60882d9d36f68, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+=======
+>>>>>>> 0af44d8281573a1886756f709a0f7f349968da7f
 --- !u!1 &263099201
 GameObject:
   m_ObjectHideFlags: 0
