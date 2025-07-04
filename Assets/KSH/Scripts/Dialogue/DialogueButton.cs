@@ -37,7 +37,7 @@ namespace KSH
                 ScriptManager.Instance.StartScript(11701);
                 mainDialogue.SetActive(false);
                 isEvent = false;
-                
+                UpdateEvent();
             });
             
             OnInteract += Interact; // 이벤트에 연결
@@ -76,6 +76,11 @@ namespace KSH
                 OnInteract?.Invoke(isreach); // 이벤트 호출
                 previousisreach = isreach;
             }
+
+            if (!isreach && isEvent)
+            {
+                eventBubbleIcon?.SetActive(true);
+            }
         }
         
         public void Interact(bool state) //bool값에 따른 상호작용
@@ -85,6 +90,7 @@ namespace KSH
                 mainDialogue.SetActive(state);
                 talkButton.gameObject.SetActive(state);
                 eventButton.gameObject.SetActive(isEvent);
+                eventBubbleIcon.gameObject.SetActive(false);
             }
         }
 
