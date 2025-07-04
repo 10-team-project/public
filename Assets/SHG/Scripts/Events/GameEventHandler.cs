@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using KSH;
+using NTJ;
 
 namespace SHG
 {
@@ -87,6 +89,14 @@ namespace SHG
     public void RegisterItemTracker(ItemTracker itemTracker)
     {
       itemTracker.OnChanged += this.OnItemTrackerChanged;
+    }
+
+    public void RegisterStatTracker(PlayerStatManager playerStat) {
+      
+    }
+
+    public void RegisterGameTimeTracker(GameTimeManager gameTimeManager) {
+      gameTimeManager.OnDayChanged += this.OnDateChanged; 
     }
 
     void OnItemsObtained(List<ItemData> items)
