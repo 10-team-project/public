@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace SHG
 {
+
   public struct ItemAndCount: IEquatable<ItemAndCount>
   {
     public ItemData Item;
@@ -56,11 +57,13 @@ namespace SHG
   {
     public ItemRecipeData RecipeData { get; private set; }
     public List<ItemAndCount> RequiredItems { get; private set; }
+    public CraftProvider Provider { get; private set; }
 
     public ItemRecipe(ItemRecipeData recipeData)
     {
       this.RecipeData = recipeData;
       this.RequiredItems = new ();
+      this.Provider = recipeData.Provider;
       foreach (var material in recipeData.Materials) {
         int index = RequiredItems.FindIndex(
             itemAndCount => itemAndCount.Item == material

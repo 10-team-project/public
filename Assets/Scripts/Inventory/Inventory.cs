@@ -156,12 +156,12 @@ public class Inventory : ItemStorageBase
 
   }
 
-  public List<ItemRecipe> GetCraftableRecipes(ItemData product)
+  public List<ItemRecipe> GetCraftableRecipes(ItemData product, CraftProvider provider)
   {
     if (product.Recipes.Length == 0) {
       return (RecipeRegistry.EMPTY_RECIPES);
     }
-    var recipes = RecipeRegistry.Instance.GetRecipes(product);
+    var recipes = RecipeRegistry.Instance.GetRecipes(product, provider);
     if (recipes.Count == 0) {
       return (RecipeRegistry.EMPTY_RECIPES);
     }

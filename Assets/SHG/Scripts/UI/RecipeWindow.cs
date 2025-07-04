@@ -43,7 +43,7 @@ namespace SHG
 
     void PresentRecipeForProduct(ItemData product)
     {
-      var recipes = RecipeRegistry.Instance.GetRecipes(product);
+      var recipes = RecipeRegistry.Instance.GetRecipes(product, CraftWindow.CurrentProvider);
       if (recipes.Count == 0) {
         throw (new ApplicationException($"No recipe found for {product.Name}"));
       }

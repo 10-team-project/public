@@ -7,6 +7,7 @@ namespace SHG
 {
   public class CraftWindow : VisualElement, IHideableUI
   {
+    public static CraftProvider CurrentProvider { get; set; }
     ProductListWindow productListWindow;
     RecipesWindow recipeWindow;
     public bool IsVisiable { get; private set; }

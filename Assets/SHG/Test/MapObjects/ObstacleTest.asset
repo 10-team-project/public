@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cef0004ddb56e4239a42fc3f85b6c3af, type: 3}
   m_Name: ObstacleTest
   m_EditorClassIdentifier: 
+  uuid: b1c47ec9-19a6-41b8-a573-1fc15d87f50e
   objectName: Test obstacle
   description: 
   requiredItems:
