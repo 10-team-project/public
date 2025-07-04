@@ -6,7 +6,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  border-color: black;
+  border-color: "6b6b6b";
   border-width: 2px;
   max-width: 40%;
 }
