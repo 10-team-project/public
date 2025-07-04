@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,9 +12,15 @@ namespace KSH
         public float ThirstyCur => resourceDegenerator.Resource.Cur;
         public float ThirstyMax => resourceDegenerator.Resource.Max;
 
-        private void Start() => SetThirst(ThirstyMax);
+        private void Start()
+        {
+            SetThirst(ThirstyMax);
+            resourceDegenerator.Resource.OnResourceChanged += OnThirstyChanged;
+        }
+
+        private void OnDestroy() => resourceDegenerator.Resource.OnResourceChanged -= OnThirstyChanged;
         
-        private void Update() => ThirstyUI();
+        private void OnThirstyChanged(Resource resource, float oldValue, float newValue) => ThirstyUI();
 
         private void ThirstyUI()
         {

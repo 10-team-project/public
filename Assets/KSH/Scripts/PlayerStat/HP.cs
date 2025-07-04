@@ -36,13 +36,17 @@ namespace KSH
         private void Start()
         {
             resource.Cur = resource.Max; //체력 초기화
+            resourceDegenerator.Resource.OnResourceChanged += OnHpChanged;
         }
 
         private void Update()
         {
             HealthDecay();
-            HpBar();
         }
+        
+        private void OnDestroy() => resourceDegenerator.Resource.OnResourceChanged -= OnHpChanged;
+        
+        private void OnHpChanged(Resource resource, float oldValue, float newValue) => HpBar();
 
         private void HpBar()
         {

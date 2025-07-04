@@ -29,6 +29,7 @@ namespace KSH
 
         int curId = 0;
         NodeType lastNodeType = NodeType.dialogue; //이전 값
+       
         for (int i = 0; i < datas.Count; i++) //행을 하나씩 반복
         {
             if (int.TryParse(datas[i]["ID"].ToString(), out int id)) //만약 ID의 값을 정수로 변환 가능하면 id에 저장
@@ -39,7 +40,7 @@ namespace KSH
                     scriptDataDic.Add(curId, new List<BaseNode>()); //새로운 리스트 추가
                 }
             }
-
+            
             int nodeTypeInt;
             string nodeTypestr = datas[i]["NodeType"]?.ToString(); //NodeType값을 문자열로 저장
 

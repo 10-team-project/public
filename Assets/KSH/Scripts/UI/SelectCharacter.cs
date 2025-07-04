@@ -13,16 +13,12 @@ namespace KSH
 {
     enum CharacterType
     {
-        Character1, Character2
+        GangHana, Seonahyun
     }
     public class SelectCharacter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler //이 기능은 마우스가 ui위에 있는지 없는지 판단
     {
         [Header("Text BackGround Image")]
         [SerializeField] private Image CenterImage; //텍스트 배경 이미지
-        [Header("Character Name Text")]
-        [SerializeField] private TextMeshProUGUI TitleText; //이름 텍스트
-        [Header("Character Description Text")]
-        [SerializeField] private TextMeshProUGUI DescriptionText; //설명 텍스트
         [Header("Character Type")]
         [SerializeField] private CharacterType CharacterType; //캐릭터 타입
         
@@ -38,8 +34,6 @@ namespace KSH
         {
             Alpha(image, amount);
             Alpha(CenterImage, amount);
-            Alpha(TitleText, amount);
-            Alpha(DescriptionText, amount);
         }
 
         private void Alpha(Graphic graphic, float amount) // 알파 값 가져오는 기능

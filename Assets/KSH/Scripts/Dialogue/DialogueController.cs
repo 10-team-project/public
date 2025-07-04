@@ -13,10 +13,10 @@ namespace KSH
     public Image leftportrait;
     public Image rightportrait;
     public GameObject dialoguePanel; // 대사 오브젝트
-    public GameObject leftnamePanel; //이름 오브젝트
-    public GameObject rightnamePanel;
     public TMP_Text leftnameText; //이름텍스트
     public TMP_Text rightnameText;
+    public GameObject leftnamePanel;
+    public GameObject rightnamePanel;
     public TMP_Text dialogueText; // 대사 텍스트
     public string leftcharacter; //왼쪽에 배치될 캐릭터
     public float delay;
@@ -29,13 +29,13 @@ namespace KSH
     public override void NextNode(BaseNode b)
     {
         base.NextNode(b);
-        if (b==null || b.nodetype != nodeType)
+        if (b==null)
         {
             dialoguePanel.SetActive(false);
-            leftnamePanel.SetActive(false);
-            rightnamePanel.SetActive(false);
             leftportrait.gameObject.SetActive(false);
             rightportrait.gameObject.SetActive(false);
+            leftnamePanel.SetActive(false);
+            rightnamePanel.SetActive(false);
             return;
         }
         
@@ -77,7 +77,7 @@ namespace KSH
         leftnamePanel.SetActive(isLeft);
         rightportrait.gameObject.SetActive(!isLeft);
         rightnamePanel.SetActive(!isLeft);
-
+        
         if (isLeft)
         {
             leftnameText.text = charname;
