@@ -13,10 +13,10 @@ namespace KSH
     public Image leftportrait;
     public Image rightportrait;
     public GameObject dialoguePanel; // 대사 오브젝트
-    public GameObject leftnamePanel; //이름 오브젝트
-    public GameObject rightnamePanel;
     public TMP_Text leftnameText; //이름텍스트
     public TMP_Text rightnameText;
+    public GameObject leftnamePanel;
+    public GameObject rightnamePanel;
     public TMP_Text dialogueText; // 대사 텍스트
     public string leftcharacter; //왼쪽에 배치될 캐릭터
     public float delay;
@@ -29,13 +29,13 @@ namespace KSH
     public override void NextNode(BaseNode b)
     {
         base.NextNode(b);
-        if (b==null || b.nodetype != nodeType)
+        if (b==null)
         {
             dialoguePanel.SetActive(false);
-            leftnamePanel.SetActive(false);
-            rightnamePanel.SetActive(false);
             leftportrait.gameObject.SetActive(false);
             rightportrait.gameObject.SetActive(false);
+            leftnamePanel.SetActive(false);
+            rightnamePanel.SetActive(false);
             return;
         }
         
@@ -44,15 +44,27 @@ namespace KSH
         DialogueNode dNode = b as DialogueNode;
         if(dNode == null) return;
 
+        int nodeforce = dNode.nodeForce; //nodeforce 불러옴
+        
+        SetDialogue(dNode);
+
+        if (nodeforce == 2)
+        {
+            //강제대사 효과 있으면 쓰기
+        }
+    }
+
+    private void SetDialogue(DialogueNode dNode)
+    {
         string charname = CharacterManager.Instance.GetCharacterData(dNode.allId);
         
         leftnameText.text = charname;
         rightnameText.text = charname;
        
         fulltext = dNode.dialogue; // 대사 저장
-       StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue)); //타이핑 효과
+        StartCoroutine(TypeTextEffect(dialogueText, dNode.dialogue)); //타이핑 효과
 
-       Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
+        Sprite portrait = CharacterManager.Instance.GetPortraitData(dNode.allId);
         if (portrait != null)
         {
             leftportrait.sprite = portrait;
@@ -65,7 +77,7 @@ namespace KSH
         leftnamePanel.SetActive(isLeft);
         rightportrait.gameObject.SetActive(!isLeft);
         rightnamePanel.SetActive(!isLeft);
-
+        
         if (isLeft)
         {
             leftnameText.text = charname;
@@ -131,6 +143,30 @@ namespace KSH
             onNode = false;
             timer = 0f;
             ScriptManager.Instance.NextNode();       
+        }
+    }
+
+    public void OnDialogueClick() //대화창 클릭용
+    {
+        if (!onNode) return;
+        
+        if (isTyping) //타이핑 중이라면
+        {
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+                
+            dialogueText.text = fulltext;
+            isTyping = false;
+            timer = 0f;
+        }
+        else
+        {
+            onNode = false;
+            timer = 0f;
+            ScriptManager.Instance.NextNode();  
         }
     }
 }

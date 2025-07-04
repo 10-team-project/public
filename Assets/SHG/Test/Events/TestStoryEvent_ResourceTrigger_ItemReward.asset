@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cb458a83e35ab3aaf01fa0b756db28, type: 3}
+  m_Name: TestStoryEvent_ResourceTrigger_ItemReward
+  m_EditorClassIdentifier: 
+  uuid: b0c9e625-f2e1-44c2-8ca0-a333f649f772
+  eventName: TestStoryEvent_ResourceTrigger_ItemReward
+  eventRewards:
+  - {fileID: 11400000, guid: 3a6a1697f8d50ac828fd852db741a378, type: 2}
+  startMessages: []
+  skipable: 0
+  eventTrigger: {fileID: 11400000, guid: 68c6e339775147031929df759ccd0d78, type: 2}
+  eventPriority: 3
+  effectSound: {fileID: 0}
+  traumaEffect: {fileID: 0}

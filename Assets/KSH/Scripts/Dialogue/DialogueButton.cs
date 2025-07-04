@@ -27,16 +27,22 @@ namespace KSH
         {
             talkButton.onClick.AddListener(() =>
             {
-                ScriptManager.Instance.StartScript(601);
+                ScriptManager.Instance.StartScript(10101);
                 mainDialogue.SetActive(false);
             });
             eventButton.onClick.AddListener(() =>
             {
-                ScriptManager.Instance.StartScript(101);
+                ScriptManager.Instance.StartScript(11701);
                 mainDialogue.SetActive(false);
             });
             
             OnInteract += Interact; // 이벤트에 연결
+            
+            ScriptManager.Instance.OnEnd += () => //대화가 끝나면
+            {
+                if(isreach) //만약 범위 안에 있으면
+                    Interact(true);
+            };
         }
 
         private void Update()
@@ -69,7 +75,10 @@ namespace KSH
         
         public void Interact(bool state) //bool값에 따른 상호작용
         {
-            mainDialogue.SetActive(state);
+            if (!ScriptManager.Instance.IsTalk)
+            {
+                mainDialogue.SetActive(state);
+            }
         }
     
         private void OnDrawGizmosSelected() //기즈모

@@ -10,8 +10,10 @@ namespace SHG
   public class HintReward : GameEventReward
   {
     public string[] Messages => this.hintMessages;
+    [SerializeField]
     [Validate("Empty messages", nameof(HasEmptyMessage), MessageMode.Error)]
     string[] hintMessages;
+    [SerializeField, ReadOnly]
     [Validate("Some message is none", nameof(HasInvalidMessage), MessageMode.Error)]
     Void nullMessageCheck;
 
