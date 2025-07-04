@@ -445,12 +445,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0139b46385bb990b76d2e64ea1ddc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headAimTarget: {fileID: 0}
+  headAim: {fileID: 0}
+  bodyAim: {fileID: 0}
+  leftHandTarget: {fileID: 0}
+  rightHandTarget: {fileID: 0}
+  lookAtSpeed: 0
   mapObjectIntractDist: 3
   mapObjectIntractRadius: 1
   footOffset: {x: 0, y: -0.3, z: 0}
-  hitClip: {fileID: 0}
-  hitTriggerTime: 0
   hitDelay: 0
+  lootTriggerTime: 0
 --- !u!95 &186235112
 Animator:
   serializedVersion: 5
