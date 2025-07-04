@@ -22,7 +22,8 @@ namespace SHG
     protected bool IsDraggingItem => this.currentDraggingTarget != null;
     protected Vector2 dragStartPosition;
     protected ItemBox floatingItemBox;
-    protected Label itemDescription;
+    protected Label itemDescriptionTitle;
+    protected Label itemDescriptionContent;
     protected VisualElement itemDescriptionContainer;
     protected virtual Vector2 DescriptionOffset => Vector2.zero;
 
@@ -80,7 +81,7 @@ namespace SHG
     protected abstract bool IsAbleToDropOutSide(ItemData item);
     protected virtual void OnHoverItemBox(ItemBox boxElement, PointerOverEvent pointerOverEvent) {
       if (boxElement.ItemData != ItemAndCount.None) {
-        this.itemDescription.text = boxElement.ItemData.Item.Description;
+        this.itemDescriptionTitle.text = boxElement.ItemData.Item.Description;
         var pos = boxElement.localBound.position;
         this.itemDescriptionContainer.style.left = pos.x + this.DescriptionOffset.x;
          this.itemDescriptionContainer.style.top = pos.y + this.DescriptionOffset.y;

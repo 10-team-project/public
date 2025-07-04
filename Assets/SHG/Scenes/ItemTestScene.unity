@@ -445,12 +445,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0139b46385bb990b76d2e64ea1ddc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headAimTarget: {fileID: 0}
+  headAim: {fileID: 0}
+  bodyAim: {fileID: 0}
+  leftHandTarget: {fileID: 0}
+  rightHandTarget: {fileID: 0}
+  lookAtSpeed: 0
   mapObjectIntractDist: 3
   mapObjectIntractRadius: 1
   footOffset: {x: 0, y: -0.3, z: 0}
-  hitClip: {fileID: 0}
-  hitTriggerTime: 0
   hitDelay: 0
+  lootTriggerTime: 0
 --- !u!95 &186235112
 Animator:
   serializedVersion: 5
@@ -572,7 +577,7 @@ Transform:
   m_GameObject: {fileID: 263099201}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0, z: -0.4}
   m_LocalScale: {x: 10, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -986,7 +991,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 351b67a40e74338cb9f8532fd24976e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToAdd: {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
+  itemToAdd: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
   itemToGet: {fileID: 0}
   itemToMoveQuickSlot: {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6,
     type: 2}

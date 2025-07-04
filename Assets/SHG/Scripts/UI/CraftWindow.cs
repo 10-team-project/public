@@ -36,6 +36,8 @@ namespace SHG
       closeButton.RegisterCallback<ClickEvent>(this.OnClickCloseButton);
       this.Add(closeButton);
       var scrollView = new ScrollView(ScrollViewMode.Vertical);
+      scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+      scrollView.verticalScrollerVisibility = ScrollerVisibility.Auto;
       scrollView.AddToClassList("item-container-scroll-view");
       this.productListWindow = new ProductListWindow();   
       scrollView.Add(this.productListWindow);

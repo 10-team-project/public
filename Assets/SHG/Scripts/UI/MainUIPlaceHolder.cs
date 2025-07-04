@@ -302,6 +302,21 @@ namespace SHG
       return (floatingItemBox);
     }
 
+    VisualElement CreateFloatingDescription()
+    {
+    {
+      this.itemDescriptionContainer = new VisualElement();
+      this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
+      this.itemDescriptionTitle = new Label();
+      this.itemDescriptionTitle.AddToClassList("window-label");
+      this.itemDescriptionTitle.AddToClassList("item-storage-item-description-title");
+      this.itemDescriptionContent = new Label();
+      this.itemDescriptionTitle.AddToClassList("item-storage-item-description-content");
+      this.itemDescriptionContainer.Add(this.itemDescriptionTitle);
+      this.Add(this.itemDescriptionContainer);
+
+    }
+
     void Update()
     {
       if (this.hpLabel == null || this.hp == null) {

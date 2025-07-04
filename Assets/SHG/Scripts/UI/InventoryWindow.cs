@@ -11,7 +11,7 @@ namespace SHG
     const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
     Func<ItemData, bool> filterItem;
     protected override Vector2 DescriptionOffset => DESCRIPTION_OFFSET;
-    readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0f, 150f);
+    readonly Vector2 DESCRIPTION_OFFSET = new Vector2(100f, 100f);
 
     public InventoryWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
@@ -22,9 +22,12 @@ namespace SHG
     {
       this.itemDescriptionContainer = new VisualElement();
       this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
-      this.itemDescription = new Label();
-      this.itemDescription.AddToClassList("item-storage-item-description");
-      this.itemDescriptionContainer.Add(this.itemDescription);
+      this.itemDescriptionTitle = new Label();
+      this.itemDescriptionTitle.AddToClassList("window-label");
+      this.itemDescriptionTitle.AddToClassList("item-storage-item-description-title");
+      this.itemDescriptionContent = new Label();
+      this.itemDescriptionTitle.AddToClassList("item-storage-item-description-content");
+      this.itemDescriptionContainer.Add(this.itemDescriptionTitle);
       this.Add(this.itemDescriptionContainer);
       Utils.HideVisualElement(this.itemDescriptionContainer);
     }

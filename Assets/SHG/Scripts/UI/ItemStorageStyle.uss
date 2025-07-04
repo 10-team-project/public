@@ -4,15 +4,21 @@
   flex: 1;
   align-items: center;
   justify-content: flex-start;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .item-container-scroll-view>.item-storage-container
 {
-  min-height: 500px;
+  min-height: 430px;
 }
 
 .item-storage-container {
   width: 100%;
+  padding: 28px;
+  padding-top: 20px;
+  margin: 3px;
 }
 
 .item-storage-items-container
@@ -24,17 +30,37 @@
 
 .item-storage-item-description-container
 {
-  background-color: white;
+  background-color: rgba(65, 65, 65, 0.78);
   align-items: center;
   position: absolute;
-  min-width: 200px;
-  min-height: 50px;
+  min-width: 550px;
+  min-height: 350px;
+  border-radius: 10px;
+  padding: 35px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.item-storage-item-description
+.item-storage-item-description-container>.window-label 
 {
-  font-size: 20px;
-  color: black;
+  border-bottom-color: white;
+}
+
+.item-storage-item-description-title
+{
+  color: white;
+  font-size: 32px;
+  padding-bottom: 5px;
+  align-self: flex-start;
+  min-width: 90%;
+  border-color: white;
+  border-bottom-width: 3px;
+}
+
+.item-storage-item-description-content
+{
+  color: white;
+  font-size: 24px;
 }
 
 .item-storage-item-box {
@@ -60,8 +86,12 @@
 }
 
 .item-box-item-label {
-  font-size: 20px;
-  color: green;
+  position: absolute;
+  font-size: 25px;
+  color: black;
+  bottom: 0px;
+  -unity-font-style: bold;
+  right: 0px;
 }
 
 .item-box-floating {

@@ -22,9 +22,9 @@ namespace SHG
     {
       this.itemDescriptionContainer = new VisualElement();
       this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
-      this.itemDescription = new Label();
-      this.itemDescription.AddToClassList("item-storage-item-description");
-      this.itemDescriptionContainer.Add(this.itemDescription);
+      this.itemDescriptionTitle = new Label();
+      this.itemDescriptionTitle.AddToClassList("item-storage-item-description");
+      this.itemDescriptionContainer.Add(this.itemDescriptionTitle);
       this.Add(this.itemDescriptionContainer);
       Utils.HideVisualElement(this.itemDescriptionContainer);
     }

@@ -57,11 +57,22 @@ namespace SHG
       this.CreateUI();
       this.StoryItemTab.Hide();
       this.StoryItemTab.Content.SetEnabled(false);
-      this.storyItemTabButton.SetEnabled(true);
+      this.SetButtonEnable(this.storyItemTabButton, true);
       this.CurrentTab = new (this.NormalItemTab);
       this.CurrentTab.Value.Show();
       this.CurrentTab.Value.Content.SetEnabled(true);
-      this.normalItemTabButton.SetEnabled(false);
+      this.SetButtonEnable(this.normalItemTabButton, false);
+    }
+
+    void SetButtonEnable(Button button, bool enable)
+    {
+      button.SetEnabled(enable);
+      if (enable) {
+        button.RemoveFromClassList("inventory-window-tab-button-inactive");
+      }
+      else {
+        button.AddToClassList("inventory-window-tab-button-inactive");
+      }
     }
 
     public void AddDropTargets(IEnumerable<ItemStorageWindow> targets)
@@ -112,6 +123,7 @@ namespace SHG
         new InventoryWindow(this.IsStoryItem, this.floatingBox)
         );
       var scrollView = new ScrollView(ScrollViewMode.Vertical);
+      scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
       scrollView.AddToClassList("item-container-scroll-view");
       scrollView.Add(this.NormalItemTab.Content);
       scrollView.Add(this.StoryItemTab.Content);
@@ -145,12 +157,12 @@ namespace SHG
     void ChangeTabTo(WindowTab tab)
     {
       if (tab.Equals(this.StoryItemTab)) {
-        this.storyItemTabButton.SetEnabled(false);
-        this.normalItemTabButton.SetEnabled(true);
+        this.SetButtonEnable(this.storyItemTabButton, false);
+        this.SetButtonEnable(this.normalItemTabButton, true);
       }
       else {
-        this.storyItemTabButton.SetEnabled(true);
-        this.normalItemTabButton.SetEnabled(false);
+        this.SetButtonEnable(this.storyItemTabButton, true);
+        this.SetButtonEnable(this.normalItemTabButton, false);
       }
       this.CurrentTab.Value.Hide();
       this.CurrentTab.Value.Content.SetEnabled(false);
