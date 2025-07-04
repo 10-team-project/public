@@ -15,8 +15,10 @@ namespace KSH
         {
             var list = new List<Dictionary<string, object>>();
             TextAsset data = Resources.Load(file) as TextAsset; //파일을 읽고 TextAsset으로 변환
+
+            string text = data.text.Replace('|', ',');
         
-            var lines = Regex.Split(data.text, line_split); //텍스트 전체를 line_split을 기준으로 분리
+            var lines = Regex.Split(text, line_split); //텍스트 전체를 line_split을 기준으로 분리
 
             if (lines.Length <= 1) return list; //만약 줄이 1이하라면 리스트 반환
         
@@ -27,7 +29,7 @@ namespace KSH
                 var entry = new Dictionary<string, object>(); //한 줄의 데이터를 저장할 Dictionary 생성
                 for (var j = 0; j < header.Length; j++) //각 줄의 값을 하나씩 가져옴
                 {
-                    string value = values[j]; //각 열의 값을 value에 저장
+                    string value = j < values.Length ? values[j] : ""; //각 열의 값을 value에 저장
                     value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\",""); //불필요한 문자들 제거
                     object finalValue = value; //최종값을 value로 설정
                     int intValue;
