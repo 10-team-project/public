@@ -14,6 +14,7 @@ namespace SHG
     public QuickSlotWindow(ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
       this.name = "quick-slot-window-container";
+      this.RemoveFromClassList("item-storage-container");
       this.Show();
     }
     

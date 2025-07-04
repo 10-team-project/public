@@ -86,7 +86,6 @@ namespace SHG
          this.itemDescriptionContainer.style.top = pos.y + this.DescriptionOffset.y;
         Utils.ShowVisualElement(this.itemDescriptionContainer);
       }
-
     }
 
     protected virtual void OnLeaveItemBox(ItemBox boxElement, PointerLeaveEvent pointerLeaveEvent) { 

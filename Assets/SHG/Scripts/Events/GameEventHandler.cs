@@ -92,7 +92,6 @@ namespace SHG
     }
 
     public void RegisterStatTracker(PlayerStatManager playerStat) {
-      
     }
 
     public void RegisterGameTimeTracker(GameTimeManager gameTimeManager) {

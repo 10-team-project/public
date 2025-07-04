@@ -5,10 +5,12 @@
   bottom: 5%;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  border-color: "6b6b6b";
-  border-width: 2px;
-  max-width: 40%;
+  justify-content: flex-start;
+  border-color: #6b6b6b;
+  border-width: 5px;
+  padding: 0;
+  margin: 0;
+  flex-shrink: 1;
 }
 
 .quick-slot-window-item-box
