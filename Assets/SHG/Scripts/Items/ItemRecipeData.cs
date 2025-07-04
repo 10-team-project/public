@@ -5,6 +5,13 @@ using Void = EditorAttributes.Void;
 
 namespace SHG
 {
+  public enum CraftProvider
+  {
+    All, 
+    NPC,
+    Table
+  }
+
   [Serializable]
   [CreateAssetMenu (menuName = "ScriptableObjects/Items/ItemRecipe")]
   public class ItemRecipeData : IdentifiableScriptableObject
@@ -12,6 +19,8 @@ namespace SHG
     public ItemData Product => this.product;
     public ItemData[] Materials => this.materials;
     public ItemData[] UnlockItemByUse => this.itemsToUseForUnlock;
+    public CraftProvider Provider => this.recipeProvider;
+    public bool IsLock => this.locked;
 
     [SerializeField, Required]
     protected ItemData product;
@@ -23,8 +32,12 @@ namespace SHG
     protected ItemData[] itemsToUseForUnlock;
     [Validate("Some unlock item is none", nameof(HasInvalidUnlockItem), MessageMode.Error)]
     protected Void invalidUnlockItemCheck;
+    [SerializeField]
+    bool locked;
 
     protected bool IsMaterialEmpty() => (this.Materials == null || this.Materials.Length == 0);
+    [SerializeField]
+    CraftProvider recipeProvider;
 
     protected bool HasNullMaterial()
     {

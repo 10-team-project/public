@@ -1,6 +1,8 @@
 using System;
-using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
+using EditorAttributes;
 
 namespace SHG
 {
@@ -8,7 +10,21 @@ namespace SHG
   public class PlayerItemController : MonoBehaviour
   {
     public Action<PlayerItemController> OnHit;
+    public Action OnMidLootItem;
+    public Action OnEndLootItem;
     public WaitForSeconds WaitForHitDelay;
+    [SerializeField] [Required]
+    Transform headAimTarget;
+    [SerializeField] [Required]
+    MultiAimConstraint headAim;
+    [SerializeField] [Required]
+    MultiAimConstraint bodyAim;
+    [SerializeField] [Required]
+    Transform leftHandTarget;
+    [SerializeField] [Required]
+    Transform rightHandTarget;
+    [SerializeField] [Range(1f, 3f)]
+    float lookAtSpeed;
     [SerializeField] [Range(0.5f, 5f)]
     float mapObjectIntractDist;
     [SerializeField] [Range(0.5f, 2f)]
@@ -16,36 +32,143 @@ namespace SHG
     LayerMask mapObjectLayer;
     [SerializeField] 
     Vector3 footOffset;
-    [SerializeField]
-    AnimationClip hitClip;
-    [SerializeField] [Range(0f, 2f)]
-    float hitTriggerTime;
     [SerializeField] [Range (0f, 5f)]
     float hitDelay;
+    [SerializeField] [Range(0f, 2f)]
+    float lootTriggerTime;
     Coroutine itemAction;
+    Coroutine lookAction;
+    Coroutine lootAction;
     Animator animator;
+    ItemObject itemToLoot;
 
     public void TriggerAnimation(string name)
     {
       this.animator.SetTrigger(name);
     }
 
+    public void LootItem(ItemObject item)
+    {
+      this.itemToLoot = item;
+      this.leftHandTarget.position = item.transform.position;
+      this.TriggerAnimation("LootItem");
+    }
+
     void Awake()
     {
       this.animator = this.GetComponent<Animator>();
       this.mapObjectLayer = (1 << LayerMask.NameToLayer("ItemInteractObject"));
-      var clips = this.animator.runtimeAnimatorController.animationClips;
-      var hitClip = Array.Find(clips, clip => clip.name == this.hitClip.name);
-      AnimationEvent hitEvent =  new AnimationEvent();
-      hitEvent.time = this.hitTriggerTime;
-      hitEvent.functionName = nameof(this.OnHitTrigger);
-      hitClip.AddEvent(hitEvent);
       this.WaitForHitDelay = new WaitForSeconds(this.hitDelay);
+    }
+
+    void LookTarget(Transform target)
+    {
+      if (this.lookAction != null) {
+        this.ClearLookAction();
+      }
+      this.headAimTarget.position = target.position;
+      this.lookAction = this.StartCoroutine(this.StartLookAt(target));
+    }
+
+    [Button ("Look at")]
+    void LookAt(Vector3 position)
+    {
+      if (this.lookAction != null) {
+        this.ClearLookAction();
+      }
+      this.headAimTarget.position = position;
+      this.lookAction = this.StartCoroutine(this.StartLookAt());
+    }
+
+    [Button ("Look foward")]
+    void LookForward()
+    {
+      if (this.lookAction != null) {
+        this.ClearLookAction();
+      }
+      this.lookAction = this.StartCoroutine(this.StartLookFoward());
+    }
+
+    void ClearLookAction()
+    {
+      this.StopCoroutine(this.lookAction);
+      this.lookAction = null;
+    }
+
+    IEnumerator StartLookAt(Transform target = null)
+    {
+      if (target != null) {
+        while (this.headAim.weight <= 1f) {
+          this.headAim.weight = Mathf.Lerp(
+            this.headAim.weight,
+            1f,
+            this.lookAtSpeed * Time.deltaTime
+            );
+          this.bodyAim.weight = Mathf.Lerp(
+            this.headAim.weight,
+            0.5f,
+            this.lookAtSpeed * Time.deltaTime
+            );
+
+          this.headAimTarget.position = target.position;
+          yield return (null);
+        }
+      }
+      else {
+        while (this.headAim.weight <= 1f) {
+          this.headAim.weight =  Mathf.Lerp(
+            this.headAim.weight,
+            1f,
+            this.lookAtSpeed * Time.deltaTime
+            );
+          this.bodyAim.weight = Mathf.Lerp(
+            this.headAim.weight,
+            0.5f,
+            this.lookAtSpeed * Time.deltaTime
+            );
+          yield return (null);
+        }
+      }
+      this.headAim.weight = 1f;
+      this.bodyAim.weight = 0.5f;
+    }
+
+    IEnumerator StartLookFoward()
+    {
+      float weight = 0f;
+      while (this.headAim.weight >= 0f) {
+        weight = Mathf.Lerp(
+          this.headAim.weight,
+          0f,
+          this.lookAtSpeed * Time.deltaTime
+          );
+        this.headAim.weight = weight;
+        this.bodyAim.weight = weight;
+        yield return (null);
+      }
+      this.headAim.weight = 0f;
+      this.bodyAim.weight = 0f;
     }
 
     void OnHitTrigger()
     {
       this.OnHit?.Invoke(this);
+    }
+
+    void OnMidPointLoot()
+    {
+      if (this.itemToLoot != null && this.leftHandTarget != null) {
+        this.itemToLoot.transform.SetParent(this.leftHandTarget.transform);
+        this.itemToLoot.transform.position = this.leftHandTarget.position;
+      }
+    }
+
+    void OnEndPointLoot()
+    {
+      if (this.itemToLoot != null) {
+        this.itemToLoot.Pickup();
+        this.itemToLoot = null;
+      }
     }
 
     // Start is called before the first frame update
