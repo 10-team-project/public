@@ -26,7 +26,16 @@ namespace SHG
       this.itemLabel.text = this.ItemData.Count.ToString();
     }
 
-    public void SetLabelText(string text)
+    public void SetLocked()
+    {
+      this.Clear();
+      this.AddToClassList("item-storage-item-box-lock"); 
+      var icon = new VisualElement();
+      this.Add(icon);
+      icon.AddToClassList("item-storage-item-box-lock-icon");
+    }
+
+    public void SetLabel(string text)
     {
       this.itemLabel.text = text; 
     }

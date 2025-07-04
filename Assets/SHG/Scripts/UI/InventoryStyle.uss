@@ -1,9 +1,9 @@
 #inventory-window-container 
 {
   width: 480px;
-  height: 600px;
-  left: 60%;
-  top: 10%;
+  height: 650px;
+  left: 40%;
+  top: 15%;
   position: absolute;
   background-color: #e9e9e9;
   border-radius: 3px;

@@ -45,15 +45,19 @@ namespace SHG
     public WindowTab NormalItemTab { get; private set; }
     public ObservableValue<WindowTab> CurrentTab;
     ItemBox floatingBox;
+    VisualElement floatingDescriptionContainer;
     Button normalItemTabButton;
     Button storyItemTabButton;
     Label title;
 
-    public InventoryContainerWindow(ItemBox floatingBox)
+    public InventoryContainerWindow(
+      ItemBox floatingBox,
+      VisualElement floatingDescriptionContainer)
     {
       this.name = "inventory-window-container";
       this.AddToClassList("window-container");
       this.floatingBox = floatingBox;
+      this.floatingDescriptionContainer = floatingDescriptionContainer;
       this.CreateUI();
       this.StoryItemTab.Hide();
       this.StoryItemTab.Content.SetEnabled(false);
@@ -117,10 +121,10 @@ namespace SHG
       this.Add(tabButtonContainer);
 
       this.NormalItemTab = new WindowTab(
-        new InventoryWindow(this.IsNormalItem, this.floatingBox)
+        new InventoryWindow(this.IsNormalItem, this.floatingBox, this.floatingDescriptionContainer)
         );
       this.StoryItemTab = new WindowTab(
-        new InventoryWindow(this.IsStoryItem, this.floatingBox)
+        new InventoryWindow(this.IsStoryItem, this.floatingBox, this.floatingDescriptionContainer)
         );
       var scrollView = new ScrollView(ScrollViewMode.Vertical);
       scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
@@ -129,9 +133,14 @@ namespace SHG
       scrollView.Add(this.StoryItemTab.Content);
       this.Add(scrollView);
       var closeButton = new Button();
-      closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
+      closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
       closeButton.AddToClassList("window-close-button"); 
       this.Add(closeButton);
+    }
+
+    void OnClickClose(ClickEvent click)
+    {
+      App.Instance.UIController.CloseInventoryWindow(); 
     }
 
     void OnClickNormalTab(ClickEvent click)

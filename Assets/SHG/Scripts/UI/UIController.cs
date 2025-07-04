@@ -30,6 +30,11 @@ namespace SHG
     public void OnInteractCraft(CraftProvider provider)
     {
       CraftWindow.CurrentProvider = provider;
+      this.OpenCraftWindow();
+    }
+
+    public void OpenCraftWindow()
+    {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
@@ -80,15 +85,27 @@ namespace SHG
     {
       if (this.MainUI.IsWindowOpened(MainUIPlaceHolder.WindowType.Inventory)) {
 
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
-        App.Instance.InputManager.EndInput(this);
+        this.CloseInventoryWindow();
       }
       else {
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
-        App.Instance.InputManager.StartInput(this);
+        this.OpenInventoryWindow();
       }
+    }
+
+    void OpenInventoryWindow()
+    {
+      this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+      App.Instance.InputManager.StartInput(this);
+    }
+
+    public void CloseInventoryWindow()
+    {
+      this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
+      if (this.MainUI.IsWindowOpened(
+          MainUIPlaceHolder.WindowType.Craft)) {
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, false);
+      }
+      App.Instance.InputManager.EndInput(this);
     }
 
     void OnDisable()

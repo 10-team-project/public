@@ -180,6 +180,26 @@ namespace SHG
       return (item, count);
     }
 
+    public void RemoveItem(ItemData itemData, int count)
+    {
+      int itemCount = this.GetItemCount(itemData);
+      if (itemCount < count) {
+        #if UNITY_EDITOR
+        throw (new ApplicationException($"RemoveItem")); 
+        #else
+        return ;
+        #endif
+      }
+      this.WillChange?.Invoke(this);
+      if (itemCount - count < 1) {
+        this.Items.Remove(itemData);
+      }
+      else {
+        this.Items[itemData] = itemCount - count;
+      }
+      this.OnChanged?.Invoke(this);
+    }
+
     public Item GetItem(ItemData itemData)
     {
       int itemCount = this.GetItemCount(itemData);

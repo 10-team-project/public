@@ -29,7 +29,9 @@ namespace SHG
         App.Instance.Inventory.AddItem(craftedItem);
       }
       catch (Exception e) {
+        #if UNITY_EDITOR
         Debug.LogError($"Fail to craf {recipe.RecipeData.Product.Name} {e.Message}");
+        #endif
       }
     }
 
@@ -63,5 +65,4 @@ namespace SHG
       recipeView.Show();
     }
   }
-
 }

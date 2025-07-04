@@ -129,7 +129,8 @@ namespace SHG
 
       if (windowType == WindowType.Craft) {
         this.SetInventoryWindowPosition(
-          visible ? 63f: 40f);
+          visible ? 60f: 40f
+          );
       }
 
       if (visible && !window.IsVisiable) {
