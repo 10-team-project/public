@@ -266,7 +266,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
             {
                 animator.SetBool("LadderUpPlay", false);
                 animator.SetBool("LadderDownPlay", false);
-            }   
+            }
             return;
         }
 
