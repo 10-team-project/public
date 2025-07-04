@@ -15,4 +15,4 @@ MonoBehaviour:
   chance: 1
   statType: 0
   changeTrend: 1
-  statValue: 10
+  statValue: 50

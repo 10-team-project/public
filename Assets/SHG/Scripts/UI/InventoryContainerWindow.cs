@@ -57,7 +57,6 @@ namespace SHG
       this.CreateUI();
       this.StoryItemTab.Hide();
       this.StoryItemTab.Content.SetEnabled(false);
-      this.title.text = "Normal Item";
       this.storyItemTabButton.SetEnabled(true);
       this.CurrentTab = new (this.NormalItemTab);
       this.CurrentTab.Value.Show();
@@ -89,7 +88,8 @@ namespace SHG
     void CreateUI()
     {
       this.title = new Label();
-      title.AddToClassList("window-label");
+      this.title.AddToClassList("window-label");
+      this.title.text = "가방";
       this.Add(title);
       var tabButtonContainer = new VisualElement();
       tabButtonContainer.name = "inventory-window-tab-button-container";
@@ -146,12 +146,10 @@ namespace SHG
     void ChangeTabTo(WindowTab tab)
     {
       if (tab.Equals(this.StoryItemTab)) {
-        this.title.text = "Story Item"; 
         this.storyItemTabButton.SetEnabled(false);
         this.normalItemTabButton.SetEnabled(true);
       }
       else {
-        this.title.text = "Normal Item";
         this.storyItemTabButton.SetEnabled(true);
         this.normalItemTabButton.SetEnabled(false);
       }

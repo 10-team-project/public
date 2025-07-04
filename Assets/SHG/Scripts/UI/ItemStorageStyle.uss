@@ -43,11 +43,13 @@
 .item-storage-item-box {
   align-self: center;
   align-items: center;
-  padding: 10px;
-  width: 150px;
-  height: 130px;
+  margin: 7px;
+  width: 74px;
+  height: 75px;
   opacity: 1;
   visibility: visible;
+  background-color: #ffffff;
+  border-radius: 3px;
 }
 
 .item-box-inactive {

@@ -34,11 +34,14 @@ namespace SHG
       this.slots = new ItemBox[Inventory.QUICKSLOT_COUNT];
       for (int i = 0; i < Inventory.QUICKSLOT_COUNT; i++)
       {
-        this.slots[i]= new ItemBox(this);
+        this.slots[i] = new ItemBox(this);
+        var slotLabel = new Label();
+        slotLabel.text = (i + 1).ToString();
+        slotLabel.AddToClassList("quick-slot-itembox-label");
+        this.slots[i].Add(slotLabel);
         this.slots[i].RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
         this.slots[i].RegisterCallback<PointerUpEvent>(this.OnPointerUp);
         this.slots[i].RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
-        this.slots[i].AddToClassList("quick-slot-window-item-box");
         this.itemsContainer.Add(this.slots[i]); 
       }
     }

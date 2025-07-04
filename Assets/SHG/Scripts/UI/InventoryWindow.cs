@@ -22,14 +22,6 @@ namespace SHG
     protected override void CreateUI()
     {
       this.label = new Label();
-      this.label.AddToClassList("window-label");
-      this.Add(this.label);
-      this.itemDescriptionContainer = new VisualElement();
-      this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
-      this.itemDescription = new Label();
-      this.itemDescription.AddToClassList("item-storage-item-description");
-      this.itemDescriptionContainer.Add(this.itemDescription);
-      this.Add(this.itemDescriptionContainer);
       Utils.HideVisualElement(this.itemDescriptionContainer);
     }
 
