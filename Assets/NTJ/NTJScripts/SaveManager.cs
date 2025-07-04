@@ -12,11 +12,16 @@ namespace NTJ
         {
             string json = JsonUtility.ToJson(data, true);
             File.WriteAllText(SavePath, json);
+            Debug.Log("게임 저장 완료: " + SavePath);
         }
 
         public static GameData LoadData()
         {
-            if (!File.Exists(SavePath)) return null;
+            if (!File.Exists(SavePath))
+            {
+                Debug.LogWarning("저장된 게임 데이터가 없습니다.");
+                return null;
+            }
 
             string json = File.ReadAllText(SavePath);
             return JsonUtility.FromJson<GameData>(json);

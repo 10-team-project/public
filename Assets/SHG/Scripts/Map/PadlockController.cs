@@ -6,7 +6,7 @@ using EditorAttributes;
 namespace SHG
 {
   [RequireComponent (typeof(Rigidbody), typeof(CharacterJoint))]
-  public class PadlockController : MonoBehaviour
+  public class PadlockController : MonoBehaviour, IMapObject
   {
     public bool IsLocked { get; private set; }
     [SerializeField] [Required]
@@ -17,14 +17,23 @@ namespace SHG
     Transform bodyPart; 
     [SerializeField] [Required]
     Transform bodyHinge;
+    [SerializeReference]
+    Transform focusPoint;
     [SerializeField]
     Vector3 forceDirection;
     [SerializeField] [Range (1f, 10f)]
     float impactPower;
     [SerializeField] [Range (0.1f, 2f)]
     float lockSpeed;
+    [SerializeField] [Range(1f, 5f)]
+    int numberOfHitsForUnlock;
+    [SerializeField]
+    CameraController.FocusDirection focusDirection;
+    [SerializeField] [Range(0f, 2f)]
+    float focusDistance;
     Rigidbody rb;
     Coroutine lockRoutine;
+    PlayerItemController player;
 
     void Awake()
     {
@@ -112,6 +121,55 @@ namespace SHG
         this.transform.up,
         angle
         );
+    }
+
+    public bool IsInteractable(EquipmentItemData item)
+    {
+      if (this.player == null) {
+        this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();
+      }
+      if (this.player == null) {
+        return (false);
+      }
+      return true;
+    }
+
+    public IEnumerator Interact(EquipmentItem item, Action OnEnded)
+    {
+      //TODO: check item
+      #if UNITY_EDITOR
+      if (this.numberOfHitsForUnlock < 1) {
+        Debug.LogError($"invalid numberOfHitsForUnlock: {this.numberOfHitsForUnlock}");
+      }
+      #endif
+      App.Instance.CameraController.AddFocus(
+        this.focusPoint != null ? this.focusPoint.transform:
+        this.transform,
+        this.focusDirection,
+        (camera) => {},
+        this.focusDistance
+        );
+      int count = 1;
+      player.OnHit = (player) => {
+        this.OnHit(player, count);
+        count += 1;
+      };
+      for (int i = 0; i < this.numberOfHitsForUnlock; i++) {
+        this.player.TriggerAnimation("Hit");
+        yield return (this.player.WaitForHitDelay);
+      }
+      yield return null;
+    }
+
+    void OnHit(PlayerItemController player, int count)
+    { 
+      this.Hit(this.forceDirection, this.impactPower);
+      if (count >= this.numberOfHitsForUnlock && this.IsLocked) {
+        this.ToggleLock();
+        player.OnHit = null;
+        App.Instance.CameraController.OnCommandEnd();
+        App.Instance.CameraController.AddReset();
+      }
     }
   }
 }

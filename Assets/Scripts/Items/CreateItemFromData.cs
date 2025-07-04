@@ -21,6 +21,9 @@ public partial class Item
       case EquipmentItemData equipmentItemData:
         item = new EquipmentItem(equipmentItemData);
         break;
+      case DropChangeItemData dropChangeItemData:
+        item = new DropChangeItem(dropChangeItemData);
+        break;
       case StoryItemData storyItemData:
         item = new StoryItem(storyItemData);
         break;

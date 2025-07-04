@@ -28,16 +28,16 @@ TagManager:
   - Ground
   - Ladder
   - Blocker
-  - 
+  - LadderPlacePoint
   - 
   - 
   - Teleport
   - Mask
   - SeeThrough
-  - Block
-  - 
-  - 
-  - 
+  - ItemInteractObject
+  - Body
+  - Parts
+  - MapInteractObject
   - 
   - 
   - 
