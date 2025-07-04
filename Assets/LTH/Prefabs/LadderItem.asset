@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a9cdb8d5d09f8e69ac435b4f545c8bf, type: 3}
-  m_Name: ItemTest2
+  m_Name: LadderItem
   m_EditorClassIdentifier: 
-  itemName: Test2
-  image: {fileID: 21300000, guid: 8bdfa67b51c030fd98def7968a493c8a, type: 3}
-  prefab: {fileID: 4907931070248181609, guid: 77697984206cff6499d94677d6221bd7, type: 3}
+  uuid: edf7038f-5690-475d-932c-2f8226413a09
+  itemName: Ladder
+  image: {fileID: 21300000, guid: e3318a6e4c331ff43b9ee92d893d0474, type: 3}
+  prefab: {fileID: 6204102221917358789, guid: e733640cdfc25d04f96e016c7fed5afc, type: 3}
   description: 
   recipes: []
-  isWeapon: 1
-  mounting: 0
+  usePurpose: 0
