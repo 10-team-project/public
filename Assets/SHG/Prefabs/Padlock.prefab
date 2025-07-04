@@ -357,13 +357,9 @@ MonoBehaviour:
   unlockedUpperPart: {fileID: 1039751507784818391}
   bodyPart: {fileID: 8557914562269888834}
   bodyHinge: {fileID: 3123488128981507167}
-  focusPoint: {fileID: 0}
   forceDirection: {x: 1, y: 0, z: 0.5}
   impactPower: 1
   lockSpeed: 2
-  numberOfHitsForUnlock: 1
-  focusDirection: 0
-  focusDistance: 0
 --- !u!1 &4867161933060968861
 GameObject:
   m_ObjectHideFlags: 0

@@ -23,7 +23,7 @@ namespace SHG
     {
       foreach (var productBox in this.productBoxes) {
         if (productBox.ItemData != ItemAndCount.None) {
-          var recipes = App.Instance.Inventory.GetCraftableRecipes(productBox.ItemData.Item, CraftWindow.CurrentProvider);
+          var recipes = App.Instance.Inventory.GetCraftableRecipes(productBox.ItemData.Item);
           if (recipes.Count == 0) {
             productBox.AddToClassList("product-list-item-box-inactive");
           }
@@ -67,7 +67,7 @@ namespace SHG
         this.productBoxes[index].SetData(new ItemAndCount {
           Item = product, Count = 1
           });
-        var recipes = App.Instance.Inventory.GetCraftableRecipes(product, CraftWindow.CurrentProvider);
+        var recipes = App.Instance.Inventory.GetCraftableRecipes(product);
         if (recipes.Count == 0) {
           this.productBoxes[index].AddToClassList("product-list-item-box-inactive");
         }

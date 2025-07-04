@@ -27,9 +27,8 @@ namespace SHG
       return (false);
     }
 
-    public void OnInteractCraft(CraftProvider provider)
+    public void OnInteractCraft()
     {
-      CraftWindow.CurrentProvider = provider;
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 

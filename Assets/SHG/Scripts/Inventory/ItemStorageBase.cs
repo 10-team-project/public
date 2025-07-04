@@ -14,7 +14,6 @@ namespace SHG
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
     public const string ITEM_DIR = "Assets/SHG/Test/Items";
-    public Action<ItemData> OnObtainItem;
 
   #if UNITY_EDITOR
     [SerializeField]
@@ -82,9 +81,9 @@ namespace SHG
 
     public void AddItem(Item item)
     {
+      Debug.Log($"item add {item.Data.Name}");
       this.WillChange?.Invoke(this);
 #if UNITY_EDITOR
-      Debug.Log($"item add {item.Data.Name}");
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = 1})) {
         throw (new ApplicationException($"Unable to add more {item.Data.Name}"));
       }
@@ -96,7 +95,6 @@ namespace SHG
       else {
         this.Items.Add(item.Data, 1);
       }
-      this.OnObtainItem.Invoke(item.Data);
       this.OnChanged?.Invoke(this);
     }
 
@@ -123,7 +121,6 @@ namespace SHG
       else {
         this.Items.Add(item.Data, count);
       }
-      this.OnObtainItem.Invoke(item.Data);
       this.OnChanged?.Invoke(this);
     }
 

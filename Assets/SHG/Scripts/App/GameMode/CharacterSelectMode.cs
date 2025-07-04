@@ -4,7 +4,6 @@ using Patterns;
 
 namespace SHG
 {
-  using Character = TempCharacter;
   public class CharacterSelectMode : Singleton<CharacterSelectMode>, IGameMode
   {
 
