@@ -11,6 +11,7 @@ namespace KSH
         [SerializeField] private ResourceDegenerator resourceDegenerator;
         [Header("Assign a script")] [Tooltip("No changes needed inside ResourceDecay")] 
         [SerializeField] private Resource resource;
+        public Resource Resource => resource;
         [SerializeField] private Hunger hunger;
         [SerializeField] private Thirsty thirsty;
         [SerializeField] private Fatigue fatigue;

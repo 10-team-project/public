@@ -10,6 +10,7 @@ namespace KSH
 
         public float FatigueCur => resourceDegenerator.Resource.Cur;
         public float FatigueMax => resourceDegenerator.Resource.Max;
+        public Resource Resource => resourceDegenerator.Resource;
 
         private void Start()
         {

@@ -11,6 +11,7 @@ namespace KSH
 
         public float ThirstyCur => resourceDegenerator.Resource.Cur;
         public float ThirstyMax => resourceDegenerator.Resource.Max;
+        public Resource Resource => resourceDegenerator.Resource;
 
         private void Start()
         {
