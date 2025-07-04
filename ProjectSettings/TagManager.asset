@@ -35,9 +35,9 @@ TagManager:
   - Mask
   - SeeThrough
   - ItemInteractObject
-  - 
-  - 
-  - 
+  - Body
+  - Parts
+  - MapInteractObject
   - 
   - 
   - 
