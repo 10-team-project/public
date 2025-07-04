@@ -44,10 +44,17 @@ public class DialogueNode : BaseNode
         string reference = datas["Reference"].ToString(); // 선택지 번호를 문자열로 저장
         
         if(!string.IsNullOrEmpty(reference)) //만약 reference 값이 비어있지않다면
-            nextID = int.Parse(reference); //정수로 변환해서 nextID에 저장
+            if (int.TryParse(reference, out int result))
+            {
+                nextID = result;
+            }
+            else
+            {
+                nextID = -1;
+            }
 
       string Force = datas.ContainsKey("NodeForce") ? datas["NodeForce"]?.ToString() : null;
-      nodeForce = string.IsNullOrEmpty(Force) ? 1 : int.Parse(Force);
+      nodeForce = int.TryParse(Force, out int result2) ? result2 : 1;
     }
 }
 
