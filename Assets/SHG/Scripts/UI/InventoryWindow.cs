@@ -10,7 +10,6 @@ namespace SHG
     const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
     const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
     Func<ItemData, bool> filterItem;
-    Label label;
     protected override Vector2 DescriptionOffset => DESCRIPTION_OFFSET;
     readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0f, 150f);
 
@@ -21,7 +20,12 @@ namespace SHG
 
     protected override void CreateUI()
     {
-      this.label = new Label();
+      this.itemDescriptionContainer = new VisualElement();
+      this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
+      this.itemDescription = new Label();
+      this.itemDescription.AddToClassList("item-storage-item-description");
+      this.itemDescriptionContainer.Add(this.itemDescription);
+      this.Add(this.itemDescriptionContainer);
       Utils.HideVisualElement(this.itemDescriptionContainer);
     }
 

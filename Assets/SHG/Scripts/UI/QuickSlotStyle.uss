@@ -34,6 +34,5 @@
   top: -10px; 
   color: #1a53ce;
   font-size: 30px;
-  -unity-font-definition: url("project://database/Assets/Imports/Fonts/Moneygraphy-Rounded.ttf");
   -unity-font-style: bold;
 }

@@ -23,12 +23,7 @@ namespace SHG
     {
       this.ItemData = itemData;
       this.itemImage.style.backgroundImage = new StyleBackground(this.ItemData.Item.Image);
-      if (this.ItemData.Count < 2) {
-        this.itemLabel.text = this.ItemData.Item.Name;
-      }
-      else {
-        this.itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
-      }
+      this.itemLabel.text = this.ItemData.Count.ToString();
     }
 
     public void SetLabelText(string text)

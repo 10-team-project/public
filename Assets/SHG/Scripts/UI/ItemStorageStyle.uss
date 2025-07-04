@@ -20,7 +20,6 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
-  border-width: 2px;
 }
 
 .item-storage-item-description-container
@@ -30,8 +29,6 @@
   position: absolute;
   min-width: 200px;
   min-height: 50px;
-  border-color: red;
-  border-width: 2px;
 }
 
 .item-storage-item-description
@@ -70,6 +67,4 @@
 .item-box-floating {
   opacity: 0.5;
   position: absolute;
-  border-color: red;
-  border-width: 2px;
 }

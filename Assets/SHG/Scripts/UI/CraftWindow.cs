@@ -32,7 +32,6 @@ namespace SHG
       label.text = "Craft";
       this.Add(label);
       var closeButton = new Button();
-      closeButton.text = "close";
       closeButton.AddToClassList("window-close-button");
       closeButton.RegisterCallback<ClickEvent>(this.OnClickCloseButton);
       this.Add(closeButton);

@@ -92,6 +92,7 @@ namespace SHG
     }
 
     public void RegisterStatTracker(PlayerStatManager playerStat) {
+      return ;
       playerStat.HP.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
         TempCharacter.Stat.Hp,
         oldValue, 

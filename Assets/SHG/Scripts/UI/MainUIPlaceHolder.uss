@@ -1,16 +1,17 @@
 .window-container 
 {
-  background-color: white;
+  -unity-font-definition: url("project://database/Assets/Imports/Fonts/Moneygraphy-Rounded.ttf");
 }
 
 .window-label 
 {
   font-size: 30px;
-  -unity-text-align: middle-center;
+  -unity-text-align: middle-left;
   align-self: center;
   color: black;
   margin-top: 20px;
   margin-bottom: 20px;
+  padding-left: 10px;
 }
 
 .window-close-button 
@@ -18,14 +19,15 @@
   position: absolute;
   top: 20px;
   right: 20px;
+  width: 27px;
+  height: 27px;
+  background-image: url("project://database/Assets/SHG/Sprites/close_icon.png");
 }
 
 .window-tab-container
 {
   width: 90%;
   height: 100%;
-  border-color: green;
-  border-width: 2px;
 }
 
 .test-button 

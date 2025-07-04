@@ -94,15 +94,15 @@ namespace SHG
       var tabButtonContainer = new VisualElement();
       tabButtonContainer.name = "inventory-window-tab-button-container";
       this.storyItemTabButton = new Button();
-      this.storyItemTabButton.text = "Story";
+      this.storyItemTabButton.text = "귀\n중\n품";
       this.storyItemTabButton.AddToClassList("inventory-window-tab-button");
       this.storyItemTabButton.RegisterCallback<ClickEvent>(this.OnClickStoryTab);
       this.normalItemTabButton = new Button();
-      this.normalItemTabButton.text = "Normal";
+      this.normalItemTabButton.text = "아\n이\n템";
       this.normalItemTabButton.AddToClassList("inventory-window-tab-button");
       this.normalItemTabButton.RegisterCallback<ClickEvent>(this.OnClickNormalTab);
-      tabButtonContainer.Add(this.storyItemTabButton);
       tabButtonContainer.Add(this.normalItemTabButton);
+      tabButtonContainer.Add(this.storyItemTabButton);
       this.Add(tabButtonContainer);
 
       this.NormalItemTab = new WindowTab(
@@ -117,7 +117,6 @@ namespace SHG
       scrollView.Add(this.StoryItemTab.Content);
       this.Add(scrollView);
       var closeButton = new Button();
-      closeButton.text = "close";
       closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
       closeButton.AddToClassList("window-close-button"); 
       this.Add(closeButton);

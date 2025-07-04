@@ -146,7 +146,6 @@ namespace SHG
       label.AddToClassList("window-label");
       this.Add(label);
       var closeButton = new Button();
-      closeButton.text = "close";
       closeButton.AddToClassList("window-close-button");
       closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
       this.Add(closeButton); 
