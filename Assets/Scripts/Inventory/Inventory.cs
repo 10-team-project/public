@@ -10,8 +10,6 @@ public class Inventory : ItemStorageBase
 {
   public const int QUICKSLOT_COUNT = 4;
   public List<ItemData> QuickSlotItems { get; private set;}
-  public Action<ItemData> OnUseItem;
-  public Action<DropChangeItem> OnDropChangeItemUsed;
 
 #if UNITY_EDITOR
   [SerializeField]
@@ -116,14 +114,8 @@ public class Inventory : ItemStorageBase
         }
       }
     }
-    else if (item is DropChangeItem dropChangeItem) {
-      this.OnDropChangeItemUsed?.Invoke(dropChangeItem);
-    }
     else {
       throw (new NotImplementedException());
-    }
-    if (item is Item itemClass) {
-      this.OnUseItem?.Invoke(itemClass.Data);
     }
   }
 
@@ -156,12 +148,12 @@ public class Inventory : ItemStorageBase
 
   }
 
-  public List<ItemRecipe> GetCraftableRecipes(ItemData product, CraftProvider provider)
+  public List<ItemRecipe> GetCraftableRecipes(ItemData product)
   {
     if (product.Recipes.Length == 0) {
       return (RecipeRegistry.EMPTY_RECIPES);
     }
-    var recipes = RecipeRegistry.Instance.GetRecipes(product, provider);
+    var recipes = RecipeRegistry.Instance.GetRecipes(product);
     if (recipes.Count == 0) {
       return (RecipeRegistry.EMPTY_RECIPES);
     }

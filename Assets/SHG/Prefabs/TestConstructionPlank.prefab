@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6752738233514809686}
   - component: {fileID: 101415971841679628}
   - component: {fileID: 7615280274693299845}
-  m_Layer: 23
+  m_Layer: 16
   m_Name: TestConstructionPlank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,11 +176,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3916353573482009338, guid: f8cf453c1ba9491b3a655126afe11a8c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 21
-      objectReference: {fileID: 0}
     - target: {fileID: 5592109330677064727, guid: f8cf453c1ba9491b3a655126afe11a8c,
         type: 3}
       propertyPath: m_Materials.Array.size
@@ -195,11 +190,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TestPlankPlaceholder
-      objectReference: {fileID: 0}
-    - target: {fileID: 7954794032117512477, guid: f8cf453c1ba9491b3a655126afe11a8c,
-        type: 3}
-      propertyPath: m_Layer
-      value: 16
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

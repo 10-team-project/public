@@ -15,9 +15,5 @@ namespace NTJ
 
         public List<ItemSaveData> inventoryItems = new(); // ScriptableObject 이름 또는 고유 ID
         public List<string> quickSlotItemIDs = new();
-        public int characterID;
-        public string currentTalkID;
-        public string currentEventID;
-        public List<string> completedEventIDs = new();
     }
 }

@@ -21,12 +21,10 @@ namespace SHG
       return (this.recipeTable.Keys);
     }
 
-    public List<ItemRecipe> GetRecipes(ItemData craftableItem, CraftProvider provider)
+    public List<ItemRecipe> GetRecipes(ItemData craftableItem)
     {
       if (this.recipeTable.TryGetValue(craftableItem, out List<ItemRecipe> recipes)) {
-        return (recipes.FindAll(
-          recipe => (recipe.Provider == CraftProvider.All ||
-          recipe.Provider == provider)));
+        return (recipes);
       }
       return (EMPTY_RECIPES);
     }
