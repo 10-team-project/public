@@ -14,12 +14,14 @@ namespace KSH
         [SerializeField] private Button eventButton;
         [SerializeField] private GameObject mainDialogue;
         [SerializeField] private GameObject NPC;
+        [SerializeField] private GameObject eventBubbleIcon;
         
         [Header("Interact Radius")]
         [SerializeField] private float radius; //상호작용할 원의 범위
     
         private bool isreach = false;
         private bool previousisreach = false;
+        private bool isEvent = false;
         
         public event Action<bool> OnInteract; // bool 이벤트
 
@@ -34,6 +36,8 @@ namespace KSH
             {
                 ScriptManager.Instance.StartScript(11701);
                 mainDialogue.SetActive(false);
+                isEvent = false;
+                UpdateEvent();
             });
             
             OnInteract += Interact; // 이벤트에 연결
@@ -43,6 +47,7 @@ namespace KSH
                 if(isreach) //만약 범위 안에 있으면
                     Interact(true);
             };
+            UpdateEvent();
         }
 
         private void Update()
@@ -71,6 +76,11 @@ namespace KSH
                 OnInteract?.Invoke(isreach); // 이벤트 호출
                 previousisreach = isreach;
             }
+
+            if (!isreach && isEvent)
+            {
+                eventBubbleIcon?.SetActive(true);
+            }
         }
         
         public void Interact(bool state) //bool값에 따른 상호작용
@@ -78,7 +88,23 @@ namespace KSH
             if (!ScriptManager.Instance.IsTalk)
             {
                 mainDialogue.SetActive(state);
+                talkButton.gameObject.SetActive(state);
+                eventButton.gameObject.SetActive(isEvent);
+                eventBubbleIcon.gameObject.SetActive(false);
             }
+        }
+
+        [EditorAttributes.Button("Event Trigger")]
+        public void TriggerEvent() //이벤트발동
+        {
+            isEvent = true;
+            UpdateEvent();
+        }
+
+        private void UpdateEvent()
+        {
+            eventBubbleIcon?.SetActive(isEvent);
+            eventButton?.gameObject.SetActive(false);
         }
     
         private void OnDrawGizmosSelected() //기즈모
