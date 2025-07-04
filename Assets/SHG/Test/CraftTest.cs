@@ -21,7 +21,7 @@ namespace SHG
         Debug.Log("No Item is selected");
         return ;
       }
-      var recipes = RecipeRegistry.Instance.GetRecipes(this.itemToCraft);
+      var recipes = RecipeRegistry.Instance.GetRecipes(this.itemToCraft, CraftProvider.All);
       
       Debug.Log($"found {recipes.Count} recipes for {this.itemToCraft.Name}");
       this.PrintRecipes(recipes);
@@ -34,7 +34,7 @@ namespace SHG
         Debug.Log("No Item is selected");
         return ;
       }
-      var recipes = App.Instance.Inventory.GetCraftableRecipes(this.itemToCraft);
+      var recipes = App.Instance.Inventory.GetCraftableRecipes(this.itemToCraft, CraftProvider.All);
       Debug.Log($"craftable recipe: {recipes.Count} for {this.itemToCraft.Name} from current inventory");
       this.PrintRecipes(recipes);
     }
