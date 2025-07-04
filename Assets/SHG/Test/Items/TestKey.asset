@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457ab381b75f8581bb3be5b0b2833474, type: 3}
   m_Name: TestKey
   m_EditorClassIdentifier: 
+  uuid: f8d9c242-7f94-4349-bf21-11ca0e941864
   recipes: []
   itemName: Test key
   image: {fileID: 21300000, guid: 22a21fb7673b08028980d3b54e2364de, type: 3}

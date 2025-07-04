@@ -1,22 +1,37 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace KSH
 {
     public class Hunger : MonoBehaviour
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
+        [SerializeField] private Slider HungerSlider;
 
         public float HungerCur => resourceDegenerator.Resource.Cur;
+        public float HungerMax => resourceDegenerator.Resource.Max;
 
-        public void Eat(float amount)
+        private void Start()
         {
-            resourceDegenerator.Resource.Increase(amount);
+            SetHunger(HungerMax);
+            resourceDegenerator.Resource.OnResourceChanged += OnHungerChanged;
         }
 
-        public void SetHunger(float value)
+        private void OnDestroy() => resourceDegenerator.Resource.OnResourceChanged -= OnHungerChanged;
+        
+        private void OnHungerChanged(Resource resource, float oldValue, float newValue) => HungerUI();
+
+        private void HungerUI()
         {
-            resourceDegenerator.Resource.Cur = value;
+            if (HungerSlider != null)
+                HungerSlider.value = HungerCur / HungerMax;
         }
+
+        public void Eat(float amount) => resourceDegenerator.Resource.Increase(amount);
+        public void Starve(float amount) => resourceDegenerator.Resource.Decrease(amount);
+
+        public void SetHunger(float value) => resourceDegenerator.Resource.Cur = value;
     }
 }
 

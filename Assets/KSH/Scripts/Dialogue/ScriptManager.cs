@@ -29,6 +29,7 @@ namespace KSH
 
         int curId = 0;
         NodeType lastNodeType = NodeType.dialogue; //이전 값
+       
         for (int i = 0; i < datas.Count; i++) //행을 하나씩 반복
         {
             if (int.TryParse(datas[i]["ID"].ToString(), out int id)) //만약 ID의 값을 정수로 변환 가능하면 id에 저장
@@ -39,7 +40,7 @@ namespace KSH
                     scriptDataDic.Add(curId, new List<BaseNode>()); //새로운 리스트 추가
                 }
             }
-
+            
             int nodeTypeInt;
             string nodeTypestr = datas[i]["NodeType"]?.ToString(); //NodeType값을 문자열로 저장
 
@@ -74,14 +75,16 @@ namespace KSH
 
     int curId;
     int curOrder;
-
+    public bool IsTalk = false;
     public void StartScript(int id)
     {
         curId = id;
         curOrder = -1;
+        IsTalk = true;
         NextNode();
     }
-
+    public event Action OnEnd; //
+    
     public void NextNode()
     {
         curOrder++; //순서 이동
@@ -89,9 +92,11 @@ namespace KSH
         if (curOrder >= scriptDataDic[curId].Count) //현재 순서가 현재 아이디의 수보다 크거나 같으면
         {
             int nextIdx = scriptDataDic[curId][curOrder - 1].GetNextID(); //마지막에 실행한 노드의 다음 아이디를 가져옴
-
+            
             if (nextIdx == 0 || !scriptDataDic.ContainsKey(nextIdx)) //nextIdx가 0이거나 유효하지 않으면
             {
+                IsTalk = false;
+                OnEnd?.Invoke(); //끝난다는 이벤트 호출
                 NotifyNextNode(null); // Null 처리
                 return;
             }
@@ -101,7 +106,8 @@ namespace KSH
             }
             return;
         }
-        NotifyNextNode(scriptDataDic[curId][curOrder]); //현재ID와 현재 순서 전달
+        BaseNode bnode = scriptDataDic[curId][curOrder];
+        NotifyNextNode(bnode); //현재ID와 현재 순서 전달
     }
 }
 }

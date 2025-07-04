@@ -1,3 +1,4 @@
+using UnityEngine;
 using EditorAttributes;
 using Void = EditorAttributes.Void;
 
@@ -6,19 +7,27 @@ namespace SHG
   public abstract class GameEvent : IdentifiableScriptableObject
   {
     public string Name => this.eventName;
-    public GameEventReward[] Rewards;
+    public GameEventReward[] Rewards => this.eventRewards;
     public string[] Prolouge => this.startMessages;
+    public bool IsSkipable => this.skipable;
+    public abstract bool IsStoryEvent { get; }
 
+    [SerializeField]
     [Validate("Event name is empty", nameof(IsNameEmpty), MessageMode.Error)]
     string eventName;
-    [Validate("Event reward is empty", nameof(IsRewardEmpty), MessageMode.Warning)]
-    GameEventReward[] eventRewards;
+    [SerializeField]
     [Validate("Some event reward is none", nameof(HasNullReward), MessageMode.Error)]
+    GameEventReward[] eventRewards;
+    [SerializeField, ReadOnly]
+    [Validate("Event reward is empty", nameof(IsRewardEmpty), MessageMode.Warning)]
     Void nullRewardCheck;
+    [SerializeField]
     [Validate("Empty start message", nameof(IsStartMessageEmpty), MessageMode.Warning)]
     string[] startMessages;
     [Validate("Some starte message is none", nameof(HasNullStartMessage), MessageMode.Error)]
     Void nullStartMessageCheck;
+    [SerializeField]
+    bool skipable;
 
     protected bool IsNameEmpty() => (this.eventName == null || this.eventName.Replace(" ", "").Length == 0);
     protected bool IsRewardEmpty() => (this.eventRewards == null || this.eventRewards.Length == 0);
