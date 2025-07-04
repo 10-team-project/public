@@ -19,5 +19,6 @@ namespace NTJ
         public string currentTalkID;
         public string currentEventID;
         public List<string> completedEventIDs = new();
+        public string lastScene;
     }
 }

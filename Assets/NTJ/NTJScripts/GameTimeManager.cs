@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace NTJ
@@ -39,9 +40,9 @@ namespace NTJ
 
         void Start()
         {
-#if UNITY_EDITOR
-            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
-#endif
+//#if UNITY_EDITOR
+//            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
+//#endif
             if (SaveManager.HasSavedData())
             {
                 GameData data = SaveManager.LoadData();
@@ -207,6 +208,7 @@ namespace NTJ
             data.quickSlotItemIDs = App.Instance.Inventory.GetQuickSlotItemIDs();
             // data.characterID = CharacterManager.Instance.CurrentCharacterID;
             // data.currentTalkID = StoryManager.Instance.GetCurrentTalkID();
+            data.lastScene = SceneManager.GetActiveScene().name;
             return data;
         }
         private void LoadFromData(GameData data)
