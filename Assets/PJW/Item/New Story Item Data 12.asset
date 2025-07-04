@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 457ab381b75f8581bb3be5b0b2833474, type: 3}
+  m_Name: New Story Item Data 12
+  m_EditorClassIdentifier: 
+  uuid: e015cc7c-e2a7-426f-abe9-f7f4d28eb993
+  itemName: "\uD578\uB4DC\uD3F0"
+  image: {fileID: 21300000, guid: c95aef131250aad4e87da8412bf541f2, type: 3}
+  prefab: {fileID: 0}
+  description: "\uC774\uBCA4\uD2B8\uC640 \uAD00\uB828\uB41C \uC544\uC774\uD15C"
+  recipes:
+  - {fileID: 0}
