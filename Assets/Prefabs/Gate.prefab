@@ -302,7 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gateLabel: {fileID: 3777634967866886869}
-  sceneToMove: Assets/Scenes/LibraryArtScienceCafe.unity
+  sceneToMove: Assets/Scenes/Classroom.unity
 --- !u!135 &9070973278750746574
 SphereCollider:
   m_ObjectHideFlags: 0

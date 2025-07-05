@@ -25,7 +25,6 @@ namespace SHG
       if (this.player == null) {
         this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();
       }
-      Debug.Log("IsInteractable");
       return (this.player != null);
     }
 
@@ -41,6 +40,7 @@ namespace SHG
         this.player.TriggerAnimation("OneHandAttack"); 
         yield return (this.player.WaitForHitDelay);
       }
+      this.trigger.enabled = false;
       OnEnded?.Invoke();
     }
 

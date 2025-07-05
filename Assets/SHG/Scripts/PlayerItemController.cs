@@ -222,11 +222,11 @@ namespace SHG
 
     bool TryFindMapObject(EquipmentItemData item, out IMapObject mapObject)
     {
-      bool isHit = Physics.SphereCast(
+
+      RaycastHit[] hitObjects = Physics.SphereCastAll(
         origin: this.transform.position + this.sphereCastOffset,
         radius: this.mapObjectIntractRadius,
         direction: this.transform.forward,
-        hitInfo: out RaycastHit hitInfo,
         maxDistance: this.mapObjectIntractDist,
         layerMask: this.mapObjectLayer);
       #if UNITY_EDITOR
@@ -237,9 +237,20 @@ namespace SHG
         0.3f
         );
       #endif
+      bool isHit = hitObjects.Length > 0;
       mapObject = null;
       if (isHit) {
-        mapObject = (hitInfo.collider.GetComponent<IMapObject>());
+        float dist = float.MaxValue;
+        foreach (var hit in hitObjects) {
+          if (dist < hit.distance) {
+            continue;
+          } 
+          var found = hit.collider.GetComponent<IMapObject>();
+          if (found != null) {
+            dist = hit.distance;
+            mapObject = found; 
+          }
+        }
       }
       return (mapObject != null);
     }

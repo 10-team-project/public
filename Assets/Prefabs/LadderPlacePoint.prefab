@@ -67,7 +67,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60291f26ab6dc8343ad244612edd1ae7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PointData: {fileID: 11400000, guid: c13d5b9827baaf143a4c751b3c3e74db, type: 2}
+  PointData: {fileID: 11400000, guid: f77c91252c09d6148af6c5f1c808697c, type: 2}
   placeHolder: {fileID: 1821604614610667559}
   spawnPoint: {fileID: 5445005592755995430}
   blockingCollider: {fileID: 1265294053217233099}

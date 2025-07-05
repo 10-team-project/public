@@ -108,9 +108,17 @@ public class CameraController : MonoBehaviour
     Action<CameraController> onEnded = null,
     Nullable<float> focusDist = null)
   {
-    this.cameraCommandQueue.Enqueue(
-      (this.MoveCameraRoutine(target, focusDirection, focusDist), 
-       onEnded ?? this.onCommandEnded));
+    if (onEnded != null) {
+
+      this.cameraCommandQueue.Enqueue(
+        (this.MoveCameraRoutine(target, focusDirection, focusDist), 
+         onEnded));
+    }
+    else {
+      this.cameraCommandQueue.Enqueue(
+        (this.MoveCameraRoutine(target, focusDirection, focusDist), 
+         this.OnCommandEnd));
+    }
     return (this);
   }
 

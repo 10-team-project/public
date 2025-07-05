@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f1ce728e14621b4d889e9de5cd519c0, type: 3}
   m_Name: LadderPoint
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 3410208210069620777, guid: 679c2382f99916c46b9be84d9ba799ea, type: 3}
+  Prefab: {fileID: 3410208210069620777, guid: 526fca45e92e1cda995c811472476c89, type: 3}
   RequiredItems: []

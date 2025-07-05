@@ -32,6 +32,7 @@ namespace LTH
                 spawnPoint = go.transform,
                 gradeEntries = sample.gradeEntries
                 });
+              go.SetActive(false);
             }
           }
         }
