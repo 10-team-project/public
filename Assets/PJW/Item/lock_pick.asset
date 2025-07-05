@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e2cfc229f83fd1986c0d7538ccdd43, type: 3}
+  m_Name: lock_pick
+  m_EditorClassIdentifier: 
+  uuid: 02e339a4-b6be-40ff-b125-543af1d87b57
+  itemName: "\uB77D\uD53D"
+  image: {fileID: 21300000, guid: a9076214a5f24214baf59e433e644ca6, type: 3}
+  prefab: {fileID: 0}
+  description: "\uC7A0\uACA8\uC788\uB294 \uBB38\uACFC \uC0C1\uD638\uC791\uC6A9\uD560
+    \uC218 \uC788\uB294 \uC544\uC774\uD15C"
+  recipes:
+  - {fileID: 0}
+  onObtainChange: []
+  onUseChange: []
+  unlockedRecipes: []
