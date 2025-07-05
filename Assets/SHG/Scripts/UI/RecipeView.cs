@@ -32,7 +32,7 @@ namespace SHG
 
     void PresentRecipe(ItemRecipe recipe)
     {
-      bool isCraftable = true;
+      bool isCraftable = App.Instance.PlayerStatManager.Fatigue.FatigueCur > 5f;
       foreach (var itemAndCount in recipe.RequiredItems) {
         ItemBox itemBox = new ItemBox(this);
         var currentItemCount = App.Instance.Inventory.GetItemCount(itemAndCount.Item);

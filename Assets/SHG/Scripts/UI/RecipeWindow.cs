@@ -25,12 +25,18 @@ namespace SHG
     void OnClickCraft(ItemRecipe recipe)
     {
       try {
+        var currentFatigue = App.Instance.PlayerStatManager.Fatigue.FatigueCur;
+        if (currentFatigue < 5f) {
+          return ;
+        }
+        App.Instance.PlayerStatManager.Fatigue.SetFatigue(
+          currentFatigue - 5f);
         var craftedItem = App.Instance.Inventory.CraftItem(recipe);
         App.Instance.Inventory.AddItem(craftedItem);
       }
       catch (Exception e) {
         #if UNITY_EDITOR
-        Debug.LogError($"Fail to craf {recipe.RecipeData.Product.Name} {e.Message}");
+        Debug.LogError($"Fail to craft {recipe.RecipeData.Product.Name} {e.Message}");
         #endif
       }
     }
