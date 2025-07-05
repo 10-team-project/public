@@ -34,8 +34,6 @@ namespace SHG
     Vector3 footOffset;
     [SerializeField] [Range (0f, 5f)]
     float hitDelay;
-    [SerializeField] [Range(0f, 2f)]
-    float lootTriggerTime;
     Coroutine itemAction;
     Coroutine lookAction;
     Coroutine lootAction;

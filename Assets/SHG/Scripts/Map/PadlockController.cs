@@ -155,7 +155,7 @@ namespace SHG
         count += 1;
       };
       for (int i = 0; i < this.numberOfHitsForUnlock; i++) {
-        this.player.TriggerAnimation("Hit");
+        this.player.TriggerAnimation("OneHandAttack");
         yield return (this.player.WaitForHitDelay);
       }
       yield return null;

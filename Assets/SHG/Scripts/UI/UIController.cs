@@ -8,9 +8,9 @@ namespace SHG
 {
   public class UIController : SingletonBehaviour<UIController>, IInputLockHandler
   {
-    public MainUIPlaceHolder MainUI { get; private set; }
+    public WindowUI MainUI { get; private set; }
 
-    public void SetMainUI(MainUIPlaceHolder ui)
+    public void SetMainUI(WindowUI ui)
     {
       this.MainUI = ui;
     }
@@ -37,8 +37,8 @@ namespace SHG
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, true); 
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.Craft, true); 
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -52,9 +52,9 @@ namespace SHG
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.ItemLocker, true);
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true);
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.ItemLocker, true);
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true);
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -70,7 +70,7 @@ namespace SHG
         if (Input.GetKeyDown(Settings.InputSettings.CloseWindowKey) &&
           !App.Instance.InputManager.IsBlocked(InputType.UI)) {
           this.MainUI.CloseAllWindows();
-          this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
+          this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, true);
           App.Instance.InputManager.EndInput(this);
         }
         else if (
@@ -83,7 +83,7 @@ namespace SHG
 
     void ToggleInventoryWindow()
     {
-      if (this.MainUI.IsWindowOpened(MainUIPlaceHolder.WindowType.Inventory)) {
+      if (this.MainUI.IsWindowOpened(WindowUI.WindowType.Inventory)) {
 
         this.CloseInventoryWindow();
       }
@@ -94,16 +94,21 @@ namespace SHG
 
     void OpenInventoryWindow()
     {
-      this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+      this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 
       App.Instance.InputManager.StartInput(this);
     }
 
     public void CloseInventoryWindow()
     {
-      this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
+      this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, false); 
       if (this.MainUI.IsWindowOpened(
-          MainUIPlaceHolder.WindowType.Craft)) {
-        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, false);
+          WindowUI.WindowType.Craft)) {
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.Craft, false);
+      }
+      if (this.MainUI.IsWindowOpened(
+          WindowUI.WindowType.ItemLocker
+          )) {
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.ItemLocker, false);
       }
       App.Instance.InputManager.EndInput(this);
     }

@@ -9,7 +9,7 @@ namespace SHG
   {
 
     public virtual int MAX_STACK_COUNT => 20;
-    public virtual int MAX_SLOT_COUNT => 20;
+    public virtual int MAX_SLOT_COUNT => 30;
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
@@ -96,7 +96,7 @@ namespace SHG
       else {
         this.Items.Add(item.Data, 1);
       }
-      this.OnObtainItem.Invoke(item.Data);
+      this.OnObtainItem?.Invoke(item.Data);
       this.OnChanged?.Invoke(this);
     }
 

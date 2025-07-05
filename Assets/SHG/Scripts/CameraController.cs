@@ -16,12 +16,14 @@ public class CameraController : MonoBehaviour
     Right
   }
 
-  [SerializeField, ReadOnly]
-  Transform cameraFollow;
-  [SerializeField, ReadOnly]
-  Transform cameraLook;
+  [SerializeField]
+  Transform cameraFollowObject;
+  [SerializeField]
+  Transform cameraLookObject;
   [SerializeField]
   Vector3 followOffset;
+  Rigidbody cameraFollow;
+  Rigidbody cameraLook;
   Coroutine cameraRoutine;
   Action<CameraController> onCommandEnded;
   CinemachineVirtualCamera virtualCamera; 
@@ -30,7 +32,9 @@ public class CameraController : MonoBehaviour
   [SerializeField] [Range (1f, 10f)]
   float forwardFocusDist;
   [SerializeField] [Range(0.1f, 1f)]
-  float cameraMoveSpeed;
+  float cameraFocusSpeed;
+  [SerializeField] [Range(5f, 20f)]
+  float cameraFollowSpeed;
   float cameraMoveProgress;
   float depthHeightRatio;
   Queue<(IEnumerator, Action<CameraController>)> cameraCommandQueue;
@@ -44,26 +48,27 @@ public class CameraController : MonoBehaviour
   void Awake()
   {
     this.cameraCommandQueue = new ();
-    this.cameraFollow = new GameObject("Camera Follow").transform;
-    this.cameraLook = new GameObject("Camera Look").transform;
     this.virtualCamera = this.GetComponent<CinemachineVirtualCamera>();
-    this.virtualCamera.Follow = this.cameraFollow;
-    this.virtualCamera.LookAt = this.cameraLook;
     this.depthHeightRatio = Math.Abs(this.followOffset.y / this.followOffset.z );
+    this.cameraFollow = this.cameraFollowObject.GetComponent<Rigidbody>();
+    this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
   }
   
   // Start is called before the first frame update
   void Start()
   {
     this.player = GameObject.FindWithTag("Player").transform;
+    this.cameraLookObject.position = this.player.position;
+    this.cameraFollow.position = this.player.position + this.followOffset;
   }
 
   void LateUpdate()
   {
     if (this.cameraRoutine == null) {
       if (!this.cameraCommandQueue.TryDequeue(out (IEnumerator routine, Action<CameraController> onEnded) command)) {
-        this.cameraLook.position = this.player.position;
-        this.cameraFollow.position = this.player.position + this.followOffset;
+        this.cameraLook.velocity = (this.player.position - this.cameraLook.position) * this.cameraFollowSpeed;
+        this.cameraFollow.velocity = 
+         (this.player.position + this.followOffset - this.cameraFollow.position ) * this.cameraFollowSpeed;
       }
       else {
         this.onCommandEnded = command.onEnded;
@@ -155,12 +160,12 @@ public class CameraController : MonoBehaviour
         followPosition,
         this.cameraMoveProgress
         );
-      this.cameraLook.position = Vector3.Lerp(
-        this.cameraLook.position,
+      this.cameraLookObject.position = Vector3.Lerp(
+        this.cameraLookObject.position,
         lookTarget != null ? lookTarget.position : targetPosition,
         this.cameraMoveProgress
         );
-      this.cameraMoveProgress += this.cameraMoveSpeed * Time.deltaTime;
+      this.cameraMoveProgress += this.cameraFocusSpeed * Time.deltaTime;
       yield return (null);
     }
     this.onCommandEnded?.Invoke(this);
@@ -175,12 +180,12 @@ public class CameraController : MonoBehaviour
         followDest,
         this.cameraMoveProgress
         );
-      this.cameraLook.position = Vector3.Lerp(
-        this.cameraLook.position,
+      this.cameraLookObject.position = Vector3.Lerp(
+        this.cameraLookObject.position,
         this.player.position,
         this.cameraMoveProgress
         );
-      this.cameraMoveProgress += this.cameraMoveSpeed * Time.deltaTime;
+      this.cameraMoveProgress += this.cameraFocusSpeed * Time.deltaTime;
       yield return (null);
     }
     this.onCommandEnded?.Invoke(this);

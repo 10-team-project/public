@@ -81,7 +81,8 @@ namespace SHG
     protected abstract void DropItemOutSide(ItemAndCount itemAndCount);
     protected abstract bool IsAbleToDropOutSide(ItemData item);
     protected virtual void OnHoverItemBox(ItemBox boxElement, PointerOverEvent pointerOverEvent) {
-      if (boxElement.ItemData != ItemAndCount.None && this.itemDescriptionContainer != null) {
+      if (boxElement.ItemData != ItemAndCount.None &&
+        this.itemDescriptionContainer != null) {
         this.itemDescriptionTitle.text = boxElement.ItemData.Item.Name;
         this.itemDescriptionContent.text = boxElement.ItemData.Item.Description;
         var pos = boxElement.worldBound.position;

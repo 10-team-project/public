@@ -88,7 +88,7 @@ namespace SHG
         }
       } 
       int boxCount = this.itemsContainer.childCount;
-      int maxSlotCount = App.Instance.Inventory.MAX_SLOT_COUNT;
+      int maxSlotCount = inventory.MAX_SLOT_COUNT;
       for (int i = boxCount; i < DEFAULT_BOX_COUNT; i++) {
         var box = this.CreateItembox(ItemAndCount.None);
         if (i > maxSlotCount - 1) {
