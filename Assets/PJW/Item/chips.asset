@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
-  m_Name: New Recovery Item Data 1
+  m_Name: chips
   m_EditorClassIdentifier: 
   uuid: 8c922ba4-03fe-4397-b793-0a94d547a322
-  itemName: "\uBBF9\uC2A4 \uCEE4\uD53C"
-  image: {fileID: 0}
+  itemName: "\uACFC\uC790"
+  image: {fileID: 21300000, guid: a23c70fa173a02143ad91b0979412404, type: 3}
   prefab: {fileID: 0}
-  description: "\uBAA9\uB9C8\uB984\uC744 50\uB9CC\uD07C \uD68C\uBCF5"
+  description: "\uBC30\uACE0\uD514\uC744 35\uB9CC\uD07C \uD68C\uBCF5"
   recipes: []
   efficacy:
-  - Stat: 2
-    Amount: 50
+  - Stat: 1
+    Amount: 35

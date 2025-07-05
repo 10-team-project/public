@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
-  m_Name: New Recovery Item Data 8
+  m_Name: energy_booster
   m_EditorClassIdentifier: 
   uuid: 8c922ba4-03fe-4397-b793-0a94d547a322
   itemName: "\uD53C\uB85C \uD68C\uBCF5\uC81C"
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: c6dee013e82e7d548ba5f63ad492f552, type: 3}
   prefab: {fileID: 0}
   description: "\uD53C\uB85C\uB3C4\uB97C 30\uB9CC\uD07C \uD68C\uBCF5"
   recipes: []

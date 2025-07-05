@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
-  m_Name: New Recovery Item Data 2
+  m_Name: coffee
   m_EditorClassIdentifier: 
   uuid: 8c922ba4-03fe-4397-b793-0a94d547a322
-  itemName: "\uBB3C"
-  image: {fileID: 0}
+  itemName: "\uBBF9\uC2A4 \uCEE4\uD53C"
+  image: {fileID: 21300000, guid: cf0ba5532192df742858087f65bcebdd, type: 3}
   prefab: {fileID: 0}
-  description: "\uBAA9\uB9C8\uB984\uC744 75\uB9CC\uD07C \uD68C\uBCF5"
+  description: "\uBAA9\uB9C8\uB984\uC744 50\uB9CC\uD07C \uD68C\uBCF5"
   recipes: []
   efficacy:
   - Stat: 2
-    Amount: 75
+    Amount: 50
