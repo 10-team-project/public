@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0620495320dc2fd2866611ad094cda8, type: 3}
-  m_Name: pannel_recipe
+  m_Name: New Item Recipe Data 9
   m_EditorClassIdentifier: 
   uuid: 2ce99674-4edb-432d-b091-ec0e48de4247
-  product: {fileID: 11400000, guid: 4743e2b7be0f30d43b3986bda04e738e, type: 2}
+  product: {fileID: 11400000, guid: ce4d80360fcb49f4988b77629c4b506f, type: 2}
   materials:
-  - {fileID: 11400000, guid: 28436e34d3509db41a02a3d7682085cd, type: 2}
-  - {fileID: 11400000, guid: 28436e34d3509db41a02a3d7682085cd, type: 2}
-  - {fileID: 11400000, guid: 28436e34d3509db41a02a3d7682085cd, type: 2}
-  - {fileID: 11400000, guid: ce4d80360fcb49f4988b77629c4b506f, type: 2}
   - {fileID: 11400000, guid: ce4d80360fcb49f4988b77629c4b506f, type: 2}
   locked: 0
   recipeProvider: 0

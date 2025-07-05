@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: headlamp_recipe
   m_EditorClassIdentifier: 
   uuid: 2ce99674-4edb-432d-b091-ec0e48de4247
-  product: {fileID: 0}
+  product: {fileID: 11400000, guid: 57159de10f4467049b212e6c0d255ed5, type: 2}
   materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  locked: 0
+  - {fileID: 11400000, guid: 8537d223c24ed274eba21dd9c7c6e246, type: 2}
+  - {fileID: 11400000, guid: 8352c55b4c219944492659b08715cf7a, type: 2}
+  - {fileID: 11400000, guid: 76cc6ac0d239cdc41b302588a80097f8, type: 2}
+  locked: 1
   recipeProvider: 0

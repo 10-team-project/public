@@ -19,4 +19,4 @@ MonoBehaviour:
   description: "\uC81C\uC791 \uC2DC \uC911\uC694\uD55C \uC815\uBCF4\uB97C \uD68D\uB4DD\uD560
     \uC218 \uC788\uC74C"
   recipes:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: fb9cdcf5e3d0a084ab6742855c8aed56, type: 2}

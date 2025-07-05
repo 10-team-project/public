@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: New Item Recipe Data 8
   m_EditorClassIdentifier: 
   uuid: 2ce99674-4edb-432d-b091-ec0e48de4247
-  product: {fileID: 0}
+  product: {fileID: 11400000, guid: 28436e34d3509db41a02a3d7682085cd, type: 2}
   materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 5e5f5f4f32f2797409c18689a82c4796, type: 2}
+  - {fileID: 11400000, guid: 5e5f5f4f32f2797409c18689a82c4796, type: 2}
   locked: 0
   recipeProvider: 0

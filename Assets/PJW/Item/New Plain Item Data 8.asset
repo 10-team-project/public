@@ -17,4 +17,5 @@ MonoBehaviour:
   image: {fileID: 0}
   prefab: {fileID: 0}
   description: "\uC81C\uC791\uC5D0 \uD544\uC694\uD55C \uC7AC\uB8CC \uC544\uC774\uD15C"
-  recipes: []
+  recipes:
+  - {fileID: 11400000, guid: 693bfaf863ae2ae46ab9c232a775d373, type: 2}

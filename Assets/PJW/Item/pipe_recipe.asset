@@ -13,10 +13,13 @@ MonoBehaviour:
   m_Name: pipe_recipe
   m_EditorClassIdentifier: 
   uuid: 2ce99674-4edb-432d-b091-ec0e48de4247
-  product: {fileID: 0}
+  product: {fileID: 11400000, guid: 735714c2f3a1b9043b101998493925d0, type: 2}
   materials:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  locked: 0
+  - {fileID: 11400000, guid: af1b89a6bbf222c4c8c0c622f2c844b0, type: 2}
+  - {fileID: 11400000, guid: af1b89a6bbf222c4c8c0c622f2c844b0, type: 2}
+  - {fileID: 11400000, guid: af1b89a6bbf222c4c8c0c622f2c844b0, type: 2}
+  - {fileID: 11400000, guid: af1b89a6bbf222c4c8c0c622f2c844b0, type: 2}
+  - {fileID: 11400000, guid: cc1743210a18f254d9968b3fdeb1c84d, type: 2}
+  - {fileID: 11400000, guid: 76cc6ac0d239cdc41b302588a80097f8, type: 2}
+  locked: 1
   recipeProvider: 0

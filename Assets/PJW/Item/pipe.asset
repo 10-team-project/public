@@ -19,7 +19,7 @@ MonoBehaviour:
   description: "\uCC45\uC7A5\uACFC \uC0C1\uD638\uC791\uC6A9\uD560 \uC218 \uC788\uB294
     \uC544\uC774\uD15C"
   recipes:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 8592c67c9cedd2c4e80020989a12533e, type: 2}
   onObtainChange: []
   onUseChange: []
   unlockedRecipes: []
