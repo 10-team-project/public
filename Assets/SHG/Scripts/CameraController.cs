@@ -123,28 +123,31 @@ public class CameraController : MonoBehaviour
 
   Vector3 CalcFollowPosition(Transform target, FocusDirection focusDirection, Nullable<float> dist = null)
   {
-    var depth = dist ?? this.forwardFocusDist;
+    if (dist == null) {
+      dist = focusDirection == FocusDirection.Foward ? this.forwardFocusDist: this.horizontalFocusDist;
+    }
+    float depth = dist.Value;
     switch (focusDirection) {
       case FocusDirection.Foward:
         return (target.position + 
           new Vector3(
             0, 
             Math.Abs(depth * this.depthHeightRatio),
-            -(depth)));
+            -depth));
       case FocusDirection.Left:
         return (
           target.position +
           new Vector3(
             -(depth),
             Math.Abs(depth * this.depthHeightRatio),
-            0));
+            -depth));
       case FocusDirection.Right:
         return (
           target.position + 
           new Vector3(
             depth,
             Math.Abs(depth * this.depthHeightRatio),
-            0));
+            -depth));
       default: 
         return this.cameraFollow.position;
     }
@@ -155,8 +158,8 @@ public class CameraController : MonoBehaviour
     var followPosition = this.CalcFollowPosition(lookTarget, focusDirection, focusDist);
     var targetPosition = lookTarget.position;
     while (this.cameraMoveProgress < 1) {
-      this.cameraFollow.position = Vector3.Lerp(
-        this.cameraFollow.position,
+      this.cameraFollowObject.position = Vector3.Lerp(
+        this.cameraFollowObject.position,
         followPosition,
         this.cameraMoveProgress
         );

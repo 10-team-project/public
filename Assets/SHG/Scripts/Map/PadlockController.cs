@@ -29,8 +29,6 @@ namespace SHG
     int numberOfHitsForUnlock;
     [SerializeField]
     CameraController.FocusDirection focusDirection;
-    [SerializeField] [Range(0f, 2f)]
-    float focusDistance;
     Rigidbody rb;
     Coroutine lockRoutine;
     PlayerItemController player;
@@ -146,9 +144,7 @@ namespace SHG
         this.focusPoint != null ? this.focusPoint.transform:
         this.transform,
         this.focusDirection,
-        (camera) => {},
-        this.focusDistance
-        );
+        (camera) => {});
       int count = 1;
       player.OnHit = (player) => {
         this.OnHit(player, count);

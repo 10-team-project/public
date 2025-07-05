@@ -13,6 +13,29 @@ namespace LTH
         [SerializeField] private List<ItemSpawnRule> spawnRules;
         [SerializeField] private DropTable dropTable;
 
+        void Awake()
+        {
+          this.dropTable = App.Instance.DropTable;
+          this.CopySettings(); 
+        }
+
+        void CopySettings()
+        {
+          if (this.spawnRules.Count < 1) {
+            return ;
+          }
+          var sample = this.spawnRules[0];
+          foreach (var point in this.transform) {
+            if (point is GameObject go) {
+              this.spawnRules.Add(
+                new ItemSpawnRule {
+                spawnPoint = go.transform,
+                gradeEntries = sample.gradeEntries
+                });
+            }
+          }
+        }
+
         private void Start()
         {
             SpawnAll();
