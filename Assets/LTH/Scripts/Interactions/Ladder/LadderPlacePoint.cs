@@ -41,6 +41,10 @@ namespace LTH
             construction = Instantiate(PointData.Prefab);
             construction.transform.SetParent(transform);
 
+            if (this.placeHolder != null) {
+              construction.transform.rotation = this.placeHolder.transform.rotation;
+            }
+
             if (spawnPoint != null)
             {
                 construction.transform.position = spawnPoint.position;
@@ -52,7 +56,6 @@ namespace LTH
                 construction.transform.position = transform.position;
                 construction.transform.Rotate(0f, -90f, 0f);
             }
-
             dissolveController = construction.GetComponent<DissolveController>();
         }
 

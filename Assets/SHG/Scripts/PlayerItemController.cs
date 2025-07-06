@@ -15,9 +15,12 @@ namespace SHG
     public Action OnMidLootItem;
     public Action OnEndLootItem;
     public WaitForSeconds WaitForHitDelay;
-    public GameObject Pipe => this.steelPipe;
+    public GameObject Pipe => this.pipe;
+    public GameObject Spanner => this.spanner;
     [SerializeField] [Required]
-    GameObject steelPipe;
+    GameObject pipe;
+    [SerializeField] [Required]
+    GameObject spanner;
     [SerializeField] [Required]
     Transform headAimTarget;
     [SerializeField] [Required]

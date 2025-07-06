@@ -140,6 +140,7 @@ namespace SHG
         Debug.LogError($"invalid numberOfHitsForUnlock: {this.numberOfHitsForUnlock}");
       }
       #endif
+      this.player.Spanner.SetActive(true);
       App.Instance.CameraController.AddFocus(
         this.focusPoint != null ? this.focusPoint.transform:
         this.transform,
@@ -166,6 +167,7 @@ namespace SHG
       if (count >= this.numberOfHitsForUnlock && this.IsLocked) {
         this.ToggleLock();
         player.OnHit = null;
+        player.OnHitFinish = (player) => player.Spanner.SetActive(false) ;
         App.Instance.CameraController.OnCommandEnd();
         App.Instance.CameraController.AddReset();
       }
