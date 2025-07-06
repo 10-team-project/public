@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e2cfc229f83fd1986c0d7538ccdd43, type: 3}
+  m_Name: driver
+  m_EditorClassIdentifier: 
+  uuid: 92e0c0d1-ebbf-4979-8eca-d7b9e416be55
+  itemName: "\uB4DC\uB77C\uC774\uBC84"
+  image: {fileID: 21300000, guid: 3a889fb665e3c6e4fac67bb1ecd2d96a, type: 3}
+  prefab: {fileID: 0}
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC18C\uBAA8 \uC2DC
+    \uC81C\uC791 \uAC00\uB2A5\uD55C \uC544\uC774\uD15C\uC774 \uC99D\uAC00"
+  recipes:
+  - {fileID: 11400000, guid: 207b784a0e818844683a69d6963e3a35, type: 2}
+  onObtainChange: []
+  onUseChange: []
+  unlockedRecipes:
+  - {fileID: 11400000, guid: 83d0b9fba731684458218d2a55a2b213, type: 2}
+  - {fileID: 11400000, guid: adb5bf7702d09d846b32cfc6fdbcfc89, type: 2}
+  - {fileID: 11400000, guid: edf363a722739144fa63412c6c2a5769, type: 2}
+  - {fileID: 11400000, guid: 5a482bb5c9014d241ab11dadc3df356a, type: 2}
+  - {fileID: 11400000, guid: ada6db1f534f5ab47a382a15b609a4c9, type: 2}
+  - {fileID: 11400000, guid: a05b7b4a0507fe145b92a898f6521468, type: 2}
+  - {fileID: 11400000, guid: 7428a80218c771d4b8d8af8ccdc16e46, type: 2}
