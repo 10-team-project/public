@@ -22,6 +22,14 @@ namespace SHG
     [SerializeField, FilePath(filters: "unity")] [Validate("Scene must in build settings", nameof(IsInvalidScene), MessageMode.Error, buildKiller: true)]
     string sceneToMove;
 
+    public void SetScene(GameScene scene)
+    {
+      this.sceneToMove = scene.FileName;
+      if (this.gateLabel != null) {
+        this.gateLabel.text = $"{scene.KorName}로 이동합니다";
+      }
+    }
+
     void Awake()
     {
       this.isPresentingUI = false;

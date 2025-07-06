@@ -30,7 +30,7 @@ namespace KSH
           this.UI.enabled = true;
         }
 
-        public void Hide()
+        public void HideUI()
         {
           this.UI.enabled = false;
         }

@@ -8,6 +8,7 @@ namespace SHG
   public class ShelterMode :Singleton<ShelterMode>, IGameMode
   {
     public string SceneName => "Classroom";
+    MapGate gate;
 
     public bool Equals(IGameMode other)
     {
@@ -19,8 +20,8 @@ namespace SHG
 
     public IEnumerator OnEnd()
     {
-      App.Instance.GameTimeManager.gameObject.SetActive(true);
-      Debug.Log("ShelterMode OnEnd");
+      App.Instance.GameTimeManager.gameObject.SetActive(false);
+      App.Instance.PlayerStatManager.HideUI();
       yield return (null);
     }
 
@@ -31,16 +32,34 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
-      Debug.Log("ShelterMode OnStart");
-      // TODO: 필요시 로딩 보여주기
-      //       방공호 Scene 로드
-      //       BGM 재생
-      //       필요할 경우 튜토리얼 보여주기
-      var gates = GameObject.FindObjectsOfType<MapGate>();
-      foreach (var gate in gates) {
-        gate.OnMove += this.OnEnterFarmingGate; 
+      GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+      GameObject player = null;
+      foreach (var point in spawnPoints) {
+        if (point.name == "PlayerSpawnPoint") {
+          player = GameObject.Instantiate(
+            App.Instance.CharacterPrefab, 
+            point.transform.position,
+            point.transform.rotation);
+        } 
+        else if (point.name == "NpcSpawnPoint") {
+          GameObject.Instantiate(
+            App.Instance.NpcPrefab, 
+            point.transform.position,
+            point.transform.rotation);
+        }
       }
+      //App.Instance.GameTimeManager.gameObject.SetActive(true);
+      App.Instance.PlayerStatManager.ShowUI();
+      App.Instance.CameraController.Player = player.transform;
+      App.Instance.CameraController.gameObject.SetActive(true);
+      this.gate = GameObject.Find("Gate").GetComponent<MapGate>();
       yield return (null);
+    }
+
+    public void SetGateDest(string name)
+    {
+      var scene = GameModeManager.Instance.Scenes[name];
+      this.gate.SetScene(scene);
     }
 
     public void OnStartFromEditor()

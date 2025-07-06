@@ -43,7 +43,7 @@ public class CameraController : MonoBehaviour
   Transform focusTarget;
   #endif
 
-  Transform player;
+  public Transform Player;
 
   void Awake()
   {
@@ -52,23 +52,24 @@ public class CameraController : MonoBehaviour
     this.depthHeightRatio = Math.Abs(this.followOffset.y / this.followOffset.z );
     this.cameraFollow = this.cameraFollowObject.GetComponent<Rigidbody>();
     this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
+    App.Instance.SetCameraController(this);
+    this.gameObject.SetActive(false);
   }
   
   // Start is called before the first frame update
   void Start()
   {
-    this.player = GameObject.FindWithTag("Player").transform;
-    this.cameraLookObject.position = this.player.position;
-    this.cameraFollow.position = this.player.position + this.followOffset;
+    this.cameraLookObject.position = this.Player.position;
+    this.cameraFollow.position = this.Player.position + this.followOffset;
   }
 
   void LateUpdate()
   {
     if (this.cameraRoutine == null) {
       if (!this.cameraCommandQueue.TryDequeue(out (IEnumerator routine, Action<CameraController> onEnded) command)) {
-        this.cameraLook.velocity = (this.player.position - this.cameraLook.position) * this.cameraFollowSpeed;
+        this.cameraLook.velocity = (this.Player.position - this.cameraLook.position) * this.cameraFollowSpeed;
         this.cameraFollow.velocity = 
-         (this.player.position + this.followOffset - this.cameraFollow.position ) * this.cameraFollowSpeed;
+         (this.Player.position + this.followOffset - this.cameraFollow.position ) * this.cameraFollowSpeed;
       }
       else {
         this.onCommandEnded = command.onEnded;
@@ -186,7 +187,7 @@ public class CameraController : MonoBehaviour
 
   IEnumerator ResetCameraRoutine()
   {
-    Vector3 followDest = this.player.position + this.followOffset;
+    Vector3 followDest = this.Player.position + this.followOffset;
     while (this.cameraMoveProgress < 1f) {
       this.cameraFollow.position = Vector3.Lerp(
         this.cameraFollow.position,
@@ -195,7 +196,7 @@ public class CameraController : MonoBehaviour
         );
       this.cameraLookObject.position = Vector3.Lerp(
         this.cameraLookObject.position,
-        this.player.position,
+        this.Player.position,
         this.cameraMoveProgress
         );
       this.cameraMoveProgress += this.cameraFocusSpeed * Time.deltaTime;
@@ -211,17 +212,5 @@ public class CameraController : MonoBehaviour
     cam.cameraMoveProgress = 0f;
     cam.cameraRoutine = null;
     cam.cameraMoveProgress = 0f;
-  }
-
-  void OnEnable()
-  {
-    App.Instance.SetCameraController(this);
-  }
-
-  void OnDisable()
-  {
-    if (App.Instance != null) {
-      App.Instance.SetCameraController(null);
-    }
   }
 }

@@ -41,6 +41,8 @@ namespace SHG
     public PlayerStatManager PlayerStatManager { get; private set; }
     public GameTimeManager GameTimeManager { get; private set; }
     public ScriptManager ScriptManager { get; private set; }
+    public GameObject CharacterPrefab => CharacterSelectMode.Instance.CharacterPrefab;
+    public GameObject NpcPrefab => CharacterSelectMode.Instance.NpcPrefab;
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -70,8 +72,9 @@ namespace SHG
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
-      this.PlayerStatManager = Resources.Load<GameObject>("PlayerStatManager").GetComponent<PlayerStatManager>();
+      this.PlayerStatManager = Instantiate(Resources.Load<GameObject>("PlayerStatManager")).GetComponent<PlayerStatManager>();
       this.GameTimeManager = new GameObject().AddComponent<GameTimeManager>();
+      DontDestroyOnLoad(this.GameTimeManager);
       this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
