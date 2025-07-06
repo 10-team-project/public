@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
+  m_Name: coffee
+  m_EditorClassIdentifier: 
+  uuid: 8c922ba4-03fe-4397-b793-0a94d547a322
+  itemName: "\uBBF9\uC2A4 \uCEE4\uD53C"
+  image: {fileID: 21300000, guid: cf0ba5532192df742858087f65bcebdd, type: 3}
+  prefab: {fileID: 0}
+  description: "\uBAA9\uB9C8\uB984\uC744 50\uB9CC\uD07C \uD68C\uBCF5"
+  recipes: []
+  efficacy:
+  - Stat: 2
+    Amount: 50
