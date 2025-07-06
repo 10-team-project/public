@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Reward_ironBrick
   m_EditorClassIdentifier: 
   rewardItems:
-  - {fileID: 11400000, guid: a47a8a7cd8c39dfeeb44e3cd4475c0fb, type: 2}
+  - {fileID: 11400000, guid: 1c4ab6cff72bdf7419cef28fbe6fb067, type: 2}
