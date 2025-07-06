@@ -29,7 +29,7 @@ namespace KSH
         {
             talkButton.onClick.AddListener(() =>
             {
-                ScriptManager.Instance.StartScript(10801);
+                ScriptManager.Instance.StartScript(12203);
                 mainDialogue.SetActive(false);
             });
             eventButton.onClick.AddListener(() =>
