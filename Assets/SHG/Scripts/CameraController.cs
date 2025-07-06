@@ -165,6 +165,8 @@ public class CameraController : MonoBehaviour
   {
     var followPosition = this.CalcFollowPosition(lookTarget, focusDirection, focusDist);
     var targetPosition = lookTarget.position;
+    this.cameraFollow.velocity = Vector3.zero;
+    this.cameraLook.velocity = Vector3.zero;
     while (this.cameraMoveProgress < 1) {
       this.cameraFollowObject.position = Vector3.Lerp(
         this.cameraFollowObject.position,
