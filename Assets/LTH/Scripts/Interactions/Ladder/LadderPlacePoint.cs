@@ -74,12 +74,12 @@ namespace LTH
         {
             if (placeHolder != null) placeHolder.SetActive(false);
 
-            Construct();
-
             App.Instance.CameraController.AddFocus(
               transform,
-              CameraController.FocusDirection.Foward,
-              onEnded: cam => { });
+              CameraController.FocusDirection.Foward);
+            yield return (new WaitForSeconds(0.5f));
+            Construct();
+
             if (dissolveController != null)
             {
                 dissolveController.DisappearImmediately();
@@ -89,9 +89,6 @@ namespace LTH
             else if (!construction.activeSelf){
               construction.SetActive(true);
             }
-
-            App.Instance.CameraController.OnCommandEnd();
-            App.Instance.CameraController.AddReset();
 
             if (blockingCollider != null) blockingCollider.enabled = false;
 

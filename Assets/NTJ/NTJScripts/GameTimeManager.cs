@@ -1,15 +1,19 @@
 using KSH;
 using SHG;
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using SHG;
 
 namespace NTJ
 {
     public class GameTimeManager : MonoBehaviour
     {
+
+        public static GameTimeManager Instance { get; private set; }
+
         [Header("UI")]
         public TextMeshProUGUI timeText;           // 상단 현재 시간
         public TextMeshProUGUI dayText;            // 상단 현재 Day-X
@@ -32,24 +36,26 @@ namespace NTJ
         private bool isSleeping = false;
         private bool sleepRequested = false;
 
+        public event Action<int> OnDayChanged;
 
         void Start()
         {
-#if UNITY_EDITOR
-            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
-#endif
+//#if UNITY_EDITOR
+//            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
+//#endif
             if (SaveManager.HasSavedData())
             {
                 GameData data = SaveManager.LoadData();
                 if (data != null)
                 {
-                    currentDay = data.day;
+                    SetDay(data.day);
                     LoadFromData(data);
                     player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
                 }
             }
             else
             {
+                SetDay(1);
                 player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
             }
 
@@ -88,6 +94,21 @@ namespace NTJ
             StartCoroutine(SleepWithAnimation(true));
         }
 
+        public void SetDay(int newDay)
+        {
+            if (currentDay != newDay)
+            {
+                currentDay = newDay;
+                UpdateDayText();
+                OnDayChanged?.Invoke(currentDay);
+            }
+        }
+
+        void UpdateDayText()
+        {
+            dayText.text = $"합숙 <color=red>{currentDay}</color>일차";
+        }
+
         private IEnumerator SleepWithAnimation(bool isManual)
         {
             sleepRequested = true;
@@ -109,11 +130,7 @@ namespace NTJ
             sleepRequested = false;
         }
 
-
-        void UpdateDayText()
-        {
-            dayText.text = $"Day - {currentDay}";
-        }
+               
 
         IEnumerator SleepAndStartNextDay(bool isManual)
         {
@@ -133,12 +150,11 @@ namespace NTJ
                 yield return null;
             }
 
-            currentDay++;
-            UpdateDayText();
+            SetDay(currentDay + 1);
 
             // 중앙 Day-X 텍스트 표시
             dayTextPanel.SetActive(true);
-            dayTextDisplay.text = $"Day - {currentDay}";
+            dayTextDisplay.text = $"합숙 <color=red>{currentDay}</color>일차";
             yield return new WaitForSeconds(1.5f); // 텍스트 유지 시간
 
             // 다음 날 시간 리셋
@@ -190,6 +206,9 @@ namespace NTJ
             data.fatigue = stat.Fatigue.FatigueCur;
             data.inventoryItems = App.Instance.Inventory.GetItemSaveDataList();
             data.quickSlotItemIDs = App.Instance.Inventory.GetQuickSlotItemIDs();
+            // data.characterID = CharacterManager.Instance.CurrentCharacterID;
+            // data.currentTalkID = StoryManager.Instance.GetCurrentTalkID();
+            data.lastScene = SceneManager.GetActiveScene().name;
             return data;
         }
         private void LoadFromData(GameData data)
@@ -203,6 +222,16 @@ namespace NTJ
             stat.Hunger.SetHunger(data.hunger);
             stat.Thirsty.SetThirst(data.thirst);
             stat.Fatigue.SetFatigue(data.fatigue);
+
+            // StoryManager.Instance?.SetCurrentTalk(data.currentTalkID); // 스토리 진행 복원
+            // CharacterStats stats = CharacterDatabase.GetCharacterStatsByID(data.characterID); // 캐릭터 ID기반 능력치 적용
+            // if (stats != null)
+            // {
+            //     stat.HP.SetMaxHP(stats.hp);
+            //     stat.Hunger.SetMaxHunger(stats.hunger);
+            //     stat.Thirsty.SetMaxThirst(stats.thirsty);
+            //     stat.Fatigue.SetMaxFatigue(stats.working);
+            // }
         }
     }
 }

@@ -52,7 +52,8 @@ namespace SHG
       }
 
       //FIXME: Change to main menu script
-      Button button = GameObject.Find("GameStartButton").GetComponent<Button>();
+      Button button = GameObject.Find("StartButton").GetComponent<Button>();
+      button.onClick.RemoveAllListeners();
       button.onClick.AddListener(this.OnClickSelectCharacter);
       yield return (null);
     }

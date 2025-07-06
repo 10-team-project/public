@@ -14,6 +14,12 @@ namespace SHG
     [SerializeField]
     ItemRecipeData selectedRecipeData;
 
+    [Button ("Open craft")]
+    void OpenCraftWindow()
+    {
+      App.Instance.UIController.OpenCraftWindow();
+    }
+
     [Button("Get recipes test")]
     void GetRecipe()
     {

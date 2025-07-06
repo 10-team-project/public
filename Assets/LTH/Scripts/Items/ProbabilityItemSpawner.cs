@@ -13,6 +13,30 @@ namespace LTH
 
         private readonly HashSet<Transform> usedSpawnPoints = new();
 
+        void Awake()
+        {
+          this.dropTable = App.Instance.DropTable;
+          this.CopySettings(); 
+        }
+
+        void CopySettings()
+        {
+          if (this.spawnRules.Count < 1) {
+            return ;
+          }
+          var sample = this.spawnRules[0];
+          foreach (var point in this.transform) {
+            if (point is GameObject go) {
+              this.spawnRules.Add(
+                new ItemSpawnRule {
+                spawnPoint = go.transform,
+                gradeEntries = sample.gradeEntries
+                });
+              go.SetActive(false);
+            }
+          }
+        }
+
         private void Start()
         {
             SpawnAll();

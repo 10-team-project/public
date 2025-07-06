@@ -92,7 +92,27 @@ namespace SHG
     }
 
     public void RegisterStatTracker(PlayerStatManager playerStat) {
-      
+      return ;
+      playerStat.HP.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
+        TempCharacter.Stat.Hp,
+        oldValue, 
+        newValue
+        );
+      playerStat.Fatigue.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
+        TempCharacter.Stat.Fatigue,
+        oldValue, 
+        newValue
+        );
+      playerStat.Thirsty.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
+        TempCharacter.Stat.Hydration,
+        oldValue,
+        newValue
+        );
+      playerStat.Hunger.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
+        TempCharacter.Stat.Hunger,
+        oldValue,
+        newValue
+        );
     }
 
     public void RegisterGameTimeTracker(GameTimeManager gameTimeManager) {
