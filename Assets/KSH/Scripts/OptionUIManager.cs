@@ -18,6 +18,8 @@ namespace KSH
         [SerializeField] private Button[] OptionExitButton; //옵션 창 나가기 버튼
         [SerializeField] private Button KeyButton; //조작키 버튼
         [SerializeField] private Button SoundButton; //사운드 버튼
+        
+        public static bool isPause = false;
         protected override void Awake()
         {
             base.Awake();
@@ -33,7 +35,8 @@ namespace KSH
             OptionIconButton.onClick.AddListener(() =>
             {
                 ParseUI.SetActive(true);
-                //게임 멈추기
+                Time.timeScale = 0f; //게임 멈추기
+                isPause = true;
             });
 
             for (int i = 0; i < OptionExitButton.Length; i++)
@@ -46,12 +49,18 @@ namespace KSH
                     {
                         case 0:
                             ParseUI.SetActive(false);
+                            Time.timeScale = 1f;
+                            isPause = false;
                             break;
                         case 1:
                             KeyUI.SetActive(false);
+                            Time.timeScale = 1f;
+                            isPause = false;
                             break;
                         case 2:
                             SoundUI.SetActive(false);
+                            Time.timeScale = 1f;
+                            isPause = false;
                             break;
                     }
                 });
