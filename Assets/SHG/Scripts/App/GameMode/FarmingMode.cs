@@ -25,6 +25,7 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
+      App.Instance.GameTimeManager.gameObject.SetActive(false);
       Debug.Log("FarmingMode OnStart");
       // TODO: 필요하다면 로딩 화면 보여주기
       //       현재 상황에 맞는 scene 불러오기

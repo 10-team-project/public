@@ -5310,7 +5310,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4745320982583021114}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.9051428, z: -0, w: 0.4251077}
   m_LocalPosition: {x: 0, y: 0.818, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -5318,7 +5318,7 @@ Transform:
   - {fileID: 2001759003636535742}
   - {fileID: 8859842062454522193}
   m_Father: {fileID: 428460054122185388}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -129.685, z: 0}
 --- !u!33 &7765570929577491073
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5364,6 +5364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   talkButton: {fileID: 5834017574406398300}
   eventButton: {fileID: 6486438544535449142}
+  craftButton: {fileID: 0}
   mainDialogue: {fileID: 9187609854171584177}
   NPC: {fileID: 4745320982583021114}
   eventBubbleIcon: {fileID: 7660116223307944167}
@@ -7594,7 +7595,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 238593463890205252}

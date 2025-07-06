@@ -8,7 +8,7 @@ namespace SHG
   using Character = TempCharacter;
   public class GameEventHandler
   {
-    const string EVENT_DIR = "Assets/SHG/Test/Events";
+    const string EVENT_DIR = "Assets/ScriptableObjects/Events";
     public bool IsEventTriggerable;
     public Action<StoryGameEvent> OnStoryEventStart;
     public Action<NormalGameEvent> OnNormalEventStart;

@@ -19,6 +19,7 @@ namespace SHG
 
     public IEnumerator OnEnd()
     {
+      App.Instance.GameTimeManager.gameObject.SetActive(true);
       Debug.Log("ShelterMode OnEnd");
       yield return (null);
     }

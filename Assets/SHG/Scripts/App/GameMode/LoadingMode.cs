@@ -41,6 +41,7 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
+      App.Instance.GameTimeManager.gameObject.SetActive(false);
       Debug.Log("LoadingState OnStart");
       this.loadingUI.SetActive(true);
       if (this.SceneToLoad != null) {

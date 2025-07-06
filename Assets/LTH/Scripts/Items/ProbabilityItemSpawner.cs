@@ -26,13 +26,13 @@ namespace LTH
           }
           var sample = this.spawnRules[0];
           foreach (var point in this.transform) {
-            if (point is GameObject go) {
+            if (point is Transform transform) {
               this.spawnRules.Add(
                 new ItemSpawnRule {
-                spawnPoint = go.transform,
+                spawnPoint = transform,
                 gradeEntries = sample.gradeEntries
                 });
-              go.SetActive(false);
+              transform.gameObject.SetActive(false);
             }
           }
         }
