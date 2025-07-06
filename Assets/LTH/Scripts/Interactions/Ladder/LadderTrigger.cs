@@ -37,7 +37,7 @@ public class LadderTrigger : MonoBehaviour, IInteractable
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player")) 
         {
             player = other.GetComponent<PlayerMovement>();
 
@@ -45,7 +45,7 @@ public class LadderTrigger : MonoBehaviour, IInteractable
             {
                 player.SetAtLadderTop(true);
             }
-        }
+        }   
     }
 
     private void OnTriggerExit(Collider other)
@@ -58,7 +58,7 @@ public class LadderTrigger : MonoBehaviour, IInteractable
             }
 
             player = null;
-        }
+        }  
     }
 
     public void Interact()

@@ -15,6 +15,5 @@ public class CharacterSprite : MonoBehaviour
     public void ChangeSprite(Sprite sprite) //이미지 변경
     {
         characterImage.sprite = sprite;
-        characterImage.SetNativeSize();
     }
 }

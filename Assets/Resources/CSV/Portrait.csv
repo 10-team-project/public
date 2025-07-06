@@ -1,11 +1,3 @@
-ID,CharEmotion
-01,hana_standard
-02,hana_happy
-03,hana_sad
-04,hana_cry
-11,nahyun_standard
-12,nahyun_happy
-13,nahyun_sad
-14,nahyun_standard2
-15,nahyun_think
-21,hollow
+ID,Portrait
+1,Hana_Normal
+2,Nahyun_Normal
