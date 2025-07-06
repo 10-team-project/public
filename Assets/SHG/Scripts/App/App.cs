@@ -40,6 +40,7 @@ namespace SHG
     public GameEventHandler GameEventHandler { get; private set; }
     public PlayerStatManager PlayerStatManager { get; private set; }
     public GameTimeManager GameTimeManager { get; private set; }
+    public ScriptManager ScriptManager { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -75,6 +76,7 @@ namespace SHG
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
+      this.ScriptManager = ScriptManager.Instance;
       //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
