@@ -74,21 +74,21 @@ namespace LTH
         {
             if (placeHolder != null) placeHolder.SetActive(false);
 
+            App.Instance.CameraController.AddFocus(
+              transform,
+              CameraController.FocusDirection.Foward);
+            yield return (new WaitForSeconds(0.5f));
             Construct();
 
             if (dissolveController != null)
             {
                 dissolveController.DisappearImmediately();
-                App.Instance.CameraController.AddFocus(
-                  transform,
-                  CameraController.FocusDirection.Foward,
-                  onEnded: cam => { });
 
                 yield return dissolveController.StartAppear();
             }
-
-            App.Instance.CameraController.OnCommandEnd();
-            App.Instance.CameraController.AddReset();
+            else if (!construction.activeSelf){
+              construction.SetActive(true);
+            }
 
             if (blockingCollider != null) blockingCollider.enabled = false;
 
@@ -98,6 +98,7 @@ namespace LTH
 
         public bool IsInteractable(EquipmentItemData item)
         {
+          return (true);
             if (PointData == null) return false;
 
             return item.Purpose == EquipmentItemPurpose.Construct &&

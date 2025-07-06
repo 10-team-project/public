@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0832b6f0ef4e3b99b6f05b6c1de9c2a, type: 3}
+  m_Name: PlankPoint
+  m_EditorClassIdentifier: 
+  uuid: a67423fb-5f51-4a69-ac9a-236ac892561b
+  objectName: TestConstruct
+  description: 
+  requiredItems:
+  - {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
+  prefab: {fileID: 7193341564152819984, guid: a8f5f40fa626074aabf039b9574a5fe4, type: 3}

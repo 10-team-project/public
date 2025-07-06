@@ -71,6 +71,7 @@ namespace SHG
 
     void OnConfirm()
     {
+      Debug.Log("confirm");
       this.isMoved = true;
       this.OnMove?.Invoke(this.sceneToMove); 
     }

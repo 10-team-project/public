@@ -12,6 +12,8 @@ public class Inventory : ItemStorageBase
   public List<ItemData> QuickSlotItems { get; private set;}
   public Action<ItemData> OnUseItem;
   public Action<DropChangeItem> OnDropChangeItemUsed;
+  public override int MAX_SLOT_COUNT => this.slotCount;
+  int slotCount = 10;
 
 #if UNITY_EDITOR
   [SerializeField]

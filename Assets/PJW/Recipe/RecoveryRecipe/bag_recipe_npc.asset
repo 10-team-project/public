@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0620495320dc2fd2866611ad094cda8, type: 3}
+  m_Name: bag_recipe_npc
+  m_EditorClassIdentifier: 
+  uuid: 2ce99674-4edb-432d-b091-ec0e48de4247
+  product: {fileID: 11400000, guid: 69fb896f0e93429498ad43c0866ca6f2, type: 2}
+  materials:
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 8dc329152ee17c540935db28ce16fb8f, type: 2}
+  - {fileID: 11400000, guid: 6858319f20f16e647a2e2df0593f93a6, type: 2}
+  - {fileID: 11400000, guid: 6858319f20f16e647a2e2df0593f93a6, type: 2}
+  - {fileID: 11400000, guid: 6858319f20f16e647a2e2df0593f93a6, type: 2}
+  - {fileID: 11400000, guid: 6858319f20f16e647a2e2df0593f93a6, type: 2}
+  locked: 0
+  recipeProvider: 1

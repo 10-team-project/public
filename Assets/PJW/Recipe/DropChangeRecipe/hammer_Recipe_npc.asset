@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0620495320dc2fd2866611ad094cda8, type: 3}
+  m_Name: hammer_Recipe_npc
+  m_EditorClassIdentifier: 
+  uuid: 40db7900-b5ae-44c2-add5-9e789bb197e5
+  product: {fileID: 11400000, guid: 72d304e643cded7469a4c0ad94885fab, type: 2}
+  materials:
+  - {fileID: 11400000, guid: 5af6e6bb55583b644b1cae66d87a4e8e, type: 2}
+  - {fileID: 11400000, guid: 1c4ab6cff72bdf7419cef28fbe6fb067, type: 2}
+  - {fileID: 11400000, guid: 6858319f20f16e647a2e2df0593f93a6, type: 2}
+  locked: 1
+  recipeProvider: 1

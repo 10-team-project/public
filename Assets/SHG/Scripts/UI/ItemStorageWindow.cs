@@ -12,6 +12,7 @@ namespace SHG
       Left = 0,
       Right = 1
     }
+    static readonly Vector2 DRAG_ITEM_OFFSET = new Vector2(-30f, -30f);
     const MouseButton DRAG_BUTTON = MouseButton.Left;
     const MouseButton USE_BUTTON = MouseButton.Right;
     public bool IsVisiable { get; protected set; }
@@ -22,7 +23,8 @@ namespace SHG
     protected bool IsDraggingItem => this.currentDraggingTarget != null;
     protected Vector2 dragStartPosition;
     protected ItemBox floatingItemBox;
-    protected Label itemDescription;
+    protected Label itemDescriptionTitle;
+    protected Label itemDescriptionContent;
     protected VisualElement itemDescriptionContainer;
     protected virtual Vector2 DescriptionOffset => Vector2.zero;
 
@@ -79,21 +81,19 @@ namespace SHG
     protected abstract void DropItemOutSide(ItemAndCount itemAndCount);
     protected abstract bool IsAbleToDropOutSide(ItemData item);
     protected virtual void OnHoverItemBox(ItemBox boxElement, PointerOverEvent pointerOverEvent) {
-      if (boxElement.ItemData != ItemAndCount.None) {
-        this.itemDescription.text = boxElement.ItemData.Item.Description;
-        var pos = boxElement.localBound.position;
+      if (boxElement.ItemData != ItemAndCount.None &&
+        this.itemDescriptionContainer != null) {
+        this.itemDescriptionTitle.text = boxElement.ItemData.Item.Name;
+        this.itemDescriptionContent.text = boxElement.ItemData.Item.Description;
+        var pos = boxElement.worldBound.position;
         this.itemDescriptionContainer.style.left = pos.x + this.DescriptionOffset.x;
          this.itemDescriptionContainer.style.top = pos.y + this.DescriptionOffset.y;
         Utils.ShowVisualElement(this.itemDescriptionContainer);
       }
-
     }
 
     protected virtual void OnLeaveItemBox(ItemBox boxElement, PointerLeaveEvent pointerLeaveEvent) { 
-      if (boxElement.ItemData != ItemAndCount.None)
-      {
-        Utils.HideVisualElement(this.itemDescriptionContainer);
-      }
+      Utils.HideVisualElement(this.itemDescriptionContainer);
     }
 
     protected abstract void CreateUI();
@@ -124,6 +124,9 @@ namespace SHG
         return ;
       }
       var itemAndCount = boxElement.ItemData;
+      if (itemAndCount == ItemAndCount.None) {
+        return ;
+      }
       if (pointerDownEvent.button == (int)DRAG_BUTTON) {
         this.OnDragPointerButtonDown(pointerDownEvent, boxElement, itemAndCount);
       }
@@ -138,8 +141,8 @@ namespace SHG
         this.dragStartPosition = pointerDownEvent.position;
         boxElement.AddToClassList("inventory-item-box-inactive");
         this.floatingItemBox.SetData(boxElement.ItemData);
-        this.floatingItemBox.style.left = this.dragStartPosition.x;
-        this.floatingItemBox.style.top = this.dragStartPosition.y;
+        this.floatingItemBox.style.left = this.dragStartPosition.x + DRAG_ITEM_OFFSET.x;
+        this.floatingItemBox.style.top = this.dragStartPosition.y + DRAG_ITEM_OFFSET.y;
         this.floatingItemBox.Show();
         this.currentDraggingTarget = boxElement;
         boxElement.CapturePointer(pointerDownEvent.pointerId);
