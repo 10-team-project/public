@@ -15,7 +15,7 @@ MonoBehaviour:
   uuid: a58c5edf-798e-4d72-ab12-b4bab3c360fb
   itemName: "\uC1E0 \uBABD\uB465\uC774"
   image: {fileID: 21300000, guid: ed6036fafe5144849bc915b8f46eb7c5, type: 3}
-  prefab: {fileID: 75542461253771174, guid: cf7743491da794544805940f15560738, type: 3}
+  prefab: {fileID: 2482256368105383341, guid: 6e694c24716dfa74ab41e4942e6e45e7, type: 3}
   description: "\uCC45\uC7A5\uACFC \uC0C1\uD638\uC791\uC6A9\uD560 \uC218 \uC788\uB294
     \uC544\uC774\uD15C"
   recipes:
