@@ -70,14 +70,13 @@ namespace SHG
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
-      this.PlayerStatManager = PlayerStatManager.CreateInstance();
+      this.PlayerStatManager = Resources.Load<GameObject>("PlayerStatManager").GetComponent<PlayerStatManager>();
       this.GameTimeManager = new GameObject().AddComponent<GameTimeManager>();
       this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
       this.ScriptManager = ScriptManager.Instance;
-      //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
         this.SceneManager,

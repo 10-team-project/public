@@ -14,6 +14,7 @@ namespace LTH
         [SerializeField] GameObject placeHolder;
         [SerializeField] Transform spawnPoint;
         [SerializeField] Collider blockingCollider;
+        [SerializeField] bool isLeft;
 
         private GameObject construction;
         private DissolveController dissolveController;
@@ -57,6 +58,14 @@ namespace LTH
                 construction.transform.Rotate(0f, -90f, 0f);
             }
             dissolveController = construction.GetComponent<DissolveController>();
+            foreach (var child in construction.transform) {
+              if (child is Transform transform) {
+                LadderTrigger trigger = transform.GetComponent<LadderTrigger>();
+                if (trigger != null) {
+                  trigger.isLeftLadder = this.isLeft;
+                }
+              }
+            }
         }
 
         public void Interact() // IInteractable Test¿ë

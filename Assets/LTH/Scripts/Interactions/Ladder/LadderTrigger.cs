@@ -12,7 +12,7 @@ public class LadderTrigger : MonoBehaviour, IInteractable
 {
     [HideInInspector] public LadderTriggerType triggerType;
     [SerializeField] public float enterDistance = 1.2f;
-    [SerializeField] private bool isLeftLadder = false;
+    [SerializeField] public bool isLeftLadder = false;
 
     private PlayerMovement player;
 

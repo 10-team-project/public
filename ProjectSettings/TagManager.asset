@@ -10,6 +10,7 @@ TagManager:
   - LadderDownEnd
   - LadderUpStart
   - LadderUpEnd
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
