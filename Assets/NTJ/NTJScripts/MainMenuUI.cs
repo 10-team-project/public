@@ -13,9 +13,7 @@ public class MainMenuUI : MonoBehaviour
 
     [Header("세이브 정보")]
     public GameObject loadInfoPanel;
-    public Image portraitImage;
     public TextMeshProUGUI dayText;
-    public TextMeshProUGUI hpText, hungerText, thirstText, fatigueText;
 
     private GameData cachedData;
 
@@ -40,10 +38,6 @@ public class MainMenuUI : MonoBehaviour
     private void ShowLoadInfo(GameData data)
     {
         dayText.text = $"합숙 <color=red>{data.day}</color>일차";
-        hpText.text = $"체력: {data.hp:F0}";
-        hungerText.text = $"허기: {data.hunger:F0}";
-        thirstText.text = $"갈증: {data.thirst:F0}";
-        fatigueText.text = $"피로: {data.fatigue:F0}";
 
         // 캐릭터 초상화 ID 추가
         //  portraitImage.sprite = CharacterManager.Instance.GetPortraitData(data.characterID);
