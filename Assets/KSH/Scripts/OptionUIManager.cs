@@ -79,6 +79,14 @@ namespace KSH
                 KeyUI.SetActive(false);
                 SoundUI.SetActive(true);
             });
+            ExitButton.onClick.AddListener(() =>
+            {
+        #if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+        #else
+                Application.Quit();
+        #endif
+            });
         }
     }    
 }
