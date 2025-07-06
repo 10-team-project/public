@@ -33,7 +33,7 @@ public class CameraController : MonoBehaviour
   float forwardFocusDist;
   [SerializeField] [Range(0.1f, 1f)]
   float cameraFocusSpeed;
-  [SerializeField] [Range(5f, 20f)]
+  [SerializeField] [Range(5f, 30f)]
   float cameraFollowSpeed;
   float cameraMoveProgress;
   float depthHeightRatio;
