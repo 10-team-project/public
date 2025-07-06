@@ -49,15 +49,18 @@ namespace SHG
       else {
         this.Construction.transform.position = this.transform.position;
       }
+      if (this.placeHolder != null) {
+        this.Construction.transform.localScale = this.placeHolder.transform.localScale;
+      }
       this.dissolveController = this.Construction.GetComponent<DissolveController>();
     }
 
     public IEnumerator Interact(EquipmentItem item, Action OnEnded = null)
     {
+      this.Construct();
       if (this.placeHolder != null) {
         this.placeHolder.SetActive(false);
       }
-      this.Construct();
       if (this.dissolveController != null) {
         this.dissolveController.DisappearImmediately();
         App.Instance.CameraController.AddFocus(
@@ -72,7 +75,7 @@ namespace SHG
       if (this.blockingCollider != null) {
         this.blockingCollider.enabled = false;
       }
-      yield return (null);
+      OnEnded?.Invoke();
     }
 
     public bool IsInteractable(EquipmentItemData item)

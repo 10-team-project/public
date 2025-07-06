@@ -45,24 +45,38 @@ namespace SHG
     public WindowTab NormalItemTab { get; private set; }
     public ObservableValue<WindowTab> CurrentTab;
     ItemBox floatingBox;
+    VisualElement floatingDescriptionContainer;
     Button normalItemTabButton;
     Button storyItemTabButton;
     Label title;
 
-    public InventoryContainerWindow(ItemBox floatingBox)
+    public InventoryContainerWindow(
+      ItemBox floatingBox,
+      VisualElement floatingDescriptionContainer)
     {
       this.name = "inventory-window-container";
       this.AddToClassList("window-container");
       this.floatingBox = floatingBox;
+      this.floatingDescriptionContainer = floatingDescriptionContainer;
       this.CreateUI();
       this.StoryItemTab.Hide();
       this.StoryItemTab.Content.SetEnabled(false);
-      this.title.text = "Normal Item";
-      this.storyItemTabButton.SetEnabled(true);
+      this.SetButtonEnable(this.storyItemTabButton, true);
       this.CurrentTab = new (this.NormalItemTab);
       this.CurrentTab.Value.Show();
       this.CurrentTab.Value.Content.SetEnabled(true);
-      this.normalItemTabButton.SetEnabled(false);
+      this.SetButtonEnable(this.normalItemTabButton, false);
+    }
+
+    void SetButtonEnable(Button button, bool enable)
+    {
+      button.SetEnabled(enable);
+      if (enable) {
+        button.RemoveFromClassList("inventory-window-tab-button-inactive");
+      }
+      else {
+        button.AddToClassList("inventory-window-tab-button-inactive");
+      }
     }
 
     public void AddDropTargets(IEnumerable<ItemStorageWindow> targets)
@@ -89,38 +103,44 @@ namespace SHG
     void CreateUI()
     {
       this.title = new Label();
-      title.AddToClassList("window-label");
+      this.title.AddToClassList("window-label");
+      this.title.text = "가방";
       this.Add(title);
       var tabButtonContainer = new VisualElement();
       tabButtonContainer.name = "inventory-window-tab-button-container";
       this.storyItemTabButton = new Button();
-      this.storyItemTabButton.text = "Story";
+      this.storyItemTabButton.text = "귀\n중\n품";
       this.storyItemTabButton.AddToClassList("inventory-window-tab-button");
       this.storyItemTabButton.RegisterCallback<ClickEvent>(this.OnClickStoryTab);
       this.normalItemTabButton = new Button();
-      this.normalItemTabButton.text = "Normal";
+      this.normalItemTabButton.text = "아\n이\n템";
       this.normalItemTabButton.AddToClassList("inventory-window-tab-button");
       this.normalItemTabButton.RegisterCallback<ClickEvent>(this.OnClickNormalTab);
-      tabButtonContainer.Add(this.storyItemTabButton);
       tabButtonContainer.Add(this.normalItemTabButton);
+      tabButtonContainer.Add(this.storyItemTabButton);
       this.Add(tabButtonContainer);
 
       this.NormalItemTab = new WindowTab(
-        new InventoryWindow(this.IsNormalItem, this.floatingBox)
+        new InventoryWindow(this.IsNormalItem, this.floatingBox, this.floatingDescriptionContainer)
         );
       this.StoryItemTab = new WindowTab(
-        new InventoryWindow(this.IsStoryItem, this.floatingBox)
+        new InventoryWindow(this.IsStoryItem, this.floatingBox, this.floatingDescriptionContainer)
         );
       var scrollView = new ScrollView(ScrollViewMode.Vertical);
+      scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
       scrollView.AddToClassList("item-container-scroll-view");
       scrollView.Add(this.NormalItemTab.Content);
       scrollView.Add(this.StoryItemTab.Content);
       this.Add(scrollView);
       var closeButton = new Button();
-      closeButton.text = "close";
-      closeButton.RegisterCallback<ClickEvent>(click => this.Hide());
+      closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
       closeButton.AddToClassList("window-close-button"); 
       this.Add(closeButton);
+    }
+
+    void OnClickClose(ClickEvent click)
+    {
+      App.Instance.UIController.CloseInventoryWindow(); 
     }
 
     void OnClickNormalTab(ClickEvent click)
@@ -146,14 +166,12 @@ namespace SHG
     void ChangeTabTo(WindowTab tab)
     {
       if (tab.Equals(this.StoryItemTab)) {
-        this.title.text = "Story Item"; 
-        this.storyItemTabButton.SetEnabled(false);
-        this.normalItemTabButton.SetEnabled(true);
+        this.SetButtonEnable(this.storyItemTabButton, false);
+        this.SetButtonEnable(this.normalItemTabButton, true);
       }
       else {
-        this.title.text = "Normal Item";
-        this.storyItemTabButton.SetEnabled(true);
-        this.normalItemTabButton.SetEnabled(false);
+        this.SetButtonEnable(this.storyItemTabButton, true);
+        this.SetButtonEnable(this.normalItemTabButton, false);
       }
       this.CurrentTab.Value.Hide();
       this.CurrentTab.Value.Content.SetEnabled(false);

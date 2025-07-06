@@ -7,7 +7,7 @@ namespace SHG
 {
   public class ShelterMode :Singleton<ShelterMode>, IGameMode
   {
-    public string SceneName => "BaseTest";
+    public string SceneName => "Classroom";
 
     public bool Equals(IGameMode other)
     {

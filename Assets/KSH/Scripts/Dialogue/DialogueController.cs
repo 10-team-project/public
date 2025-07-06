@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,9 @@ namespace KSH
     private string fulltext;
     private Coroutine typingCoroutine;
 
+    public event Action OnDialogueStart; //대화시작이벤트
+    public event Action OnDialogueEnd; //대화끝이벤트
+
     public override void NextNode(BaseNode b)
     {
         base.NextNode(b);
@@ -36,6 +40,8 @@ namespace KSH
             rightportrait.gameObject.SetActive(false);
             leftnamePanel.SetActive(false);
             rightnamePanel.SetActive(false);
+            
+            OnDialogueEnd?.Invoke(); //대화 끝 호출
             return;
         }
         
@@ -43,6 +49,8 @@ namespace KSH
         
         DialogueNode dNode = b as DialogueNode;
         if(dNode == null) return;
+        
+        OnDialogueStart?.Invoke(); //대화 시작 호출
 
         int nodeforce = dNode.nodeForce; //nodeforce 불러옴
         

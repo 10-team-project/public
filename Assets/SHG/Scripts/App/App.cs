@@ -6,6 +6,7 @@ using UnityEditor;
 using Patterns;
 using KSH;
 using LTH;
+using NTJ;
 
 namespace SHG
 {
@@ -37,6 +38,8 @@ namespace SHG
     public ItemTracker ItemTracker { get; private set; }
     public DropTable DropTable { get; private set; }
     public GameEventHandler GameEventHandler { get; private set; }
+    public PlayerStatManager PlayerStatManager { get; private set; }
+    public GameTimeManager GameTimeManager { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -66,8 +69,12 @@ namespace SHG
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
+      this.PlayerStatManager = PlayerStatManager.CreateInstance();
+      this.GameTimeManager = new GameObject().AddComponent<GameTimeManager>();
+      this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
+      this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
       //this.PopupManager = PopupManager.CreateInstance();
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
@@ -75,7 +82,8 @@ namespace SHG
         this.InputManager,
         this.RecipeRegistry,
         this.UIController,
-        this.PopupManager
+        this.PopupManager,
+        this.PlayerStatManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {
