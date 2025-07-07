@@ -4,15 +4,21 @@
   flex: 1;
   align-items: center;
   justify-content: flex-start;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .item-container-scroll-view>.item-storage-container
 {
-  min-height: 500px;
+  min-height: 430px;
 }
 
 .item-storage-container {
   width: 100%;
+  padding: 28px;
+  padding-top: 20px;
+  margin: 3px;
 }
 
 .item-storage-items-container
@@ -20,35 +26,70 @@
   flex-direction: row;
   flex-wrap: wrap;
   align-items: flex-start;
-  border-color: yellow;
-  border-width: 2px;
 }
 
 .item-storage-item-description-container
 {
-  background-color: white;
+  background-color: rgba(65, 65, 65, 0.78);
   align-items: center;
   position: absolute;
-  min-width: 200px;
-  min-height: 50px;
-  border-color: red;
-  border-width: 2px;
+  min-width: 550px;
+  min-height: 350px;
+  border-radius: 10px;
+  padding: 35px;
+  flex-direction: column;
 }
 
-.item-storage-item-description
+.item-storage-item-description-container>.window-label 
 {
-  font-size: 20px;
-  color: black;
+  border-bottom-color: white;
 }
 
-.item-storage-item-box {
+.item-storage-item-description-title
+{
+  color: white;
+  font-size: 32px;
+  padding-bottom: 5px;
+  align-self: flex-start;
+  width: 100%;
+  border-color: white;
+  border-bottom-width: 3px;
+}
+
+.item-storage-item-description-content
+{
+  color: white;
+  font-size: 24px;
+  align-self: flex-start;
+}
+
+.item-storage-item-box 
+{
   align-self: center;
   align-items: center;
-  padding: 10px;
-  width: 150px;
-  height: 130px;
+  margin: 7px;
+  width: 74px;
+  height: 75px;
   opacity: 1;
   visibility: visible;
+  background-color: #ffffff;
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.item-storage-item-box-lock 
+{
+  padding: 10px;
+  background-color: rgba(56, 56, 56, 0.6);
+}
+
+.item-storage-item-box-lock-icon
+{
+  position: absolute;
+  width: 64px;
+  height: 60px;
+  background-image: url("project://database/Assets/SHG/Sprites/lock_icon.png");
+  -unity-background-scale-mode: scale-to-fit;
 }
 
 .item-box-inactive {
@@ -57,18 +98,20 @@
 
 .item-box-item-image {
   -unity-background-scale-mode: scale-to-fit;
-  width: 140px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
 }
 
 .item-box-item-label {
-  font-size: 20px;
-  color: green;
+  position: absolute;
+  font-size: 25px;
+  color: black;
+  bottom: -5px;
+  -unity-font-style: bold;
+  right: 0px;
 }
 
 .item-box-floating {
-  opacity: 0.5;
+  opacity: 0.8;
   position: absolute;
-  border-color: red;
-  border-width: 2px;
 }

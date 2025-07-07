@@ -9,7 +9,7 @@ namespace SHG
   {
 
     public virtual int MAX_STACK_COUNT => 20;
-    public virtual int MAX_SLOT_COUNT => 20;
+    public virtual int MAX_SLOT_COUNT => 30;
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
@@ -96,7 +96,7 @@ namespace SHG
       else {
         this.Items.Add(item.Data, 1);
       }
-      this.OnObtainItem.Invoke(item.Data);
+      this.OnObtainItem?.Invoke(item.Data);
       this.OnChanged?.Invoke(this);
     }
 
@@ -178,6 +178,26 @@ namespace SHG
       }
       this.OnChanged?.Invoke(this);
       return (item, count);
+    }
+
+    public void RemoveItem(ItemData itemData, int count)
+    {
+      int itemCount = this.GetItemCount(itemData);
+      if (itemCount < count) {
+        #if UNITY_EDITOR
+        throw (new ApplicationException($"RemoveItem")); 
+        #else
+        return ;
+        #endif
+      }
+      this.WillChange?.Invoke(this);
+      if (itemCount - count < 1) {
+        this.Items.Remove(itemData);
+      }
+      else {
+        this.Items[itemData] = itemCount - count;
+      }
+      this.OnChanged?.Invoke(this);
     }
 
     public Item GetItem(ItemData itemData)

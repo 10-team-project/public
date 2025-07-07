@@ -10,6 +10,8 @@ namespace SHG
     public Action<ItemData> OnClickItem;
     List<ItemBox> productBoxes;
     public ItemBox SelectedItem;
+    ScrollView scrollView;
+    VisualElement itemContainer;
 
     public ProductListWindow()
     {
@@ -36,10 +38,22 @@ namespace SHG
 
     void CreateUI()
     {
+      var label = new Label();
+      label.AddToClassList("window-label");
+      label.text = "제작목록";
+      this.Add(label);
+      this.scrollView = new ScrollView(ScrollViewMode.Vertical);
+      this.scrollView.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+      this.scrollView.verticalScrollerVisibility = ScrollerVisibility.Auto;
+      this.scrollView.AddToClassList("item-container-scroll-view");
+      this.itemContainer = new VisualElement();
+      this.itemContainer.name = "product-list-window-item-container";
+      this.scrollView.Add(this.itemContainer);
+      this.Add(this.scrollView);
       for (int i = 0; i < RecipeRegistry.NUMBER_OF_PRODUCTS; i++) {
         var itemBox = this.CreateItemBox();
         this.productBoxes.Add(itemBox);
-        this.Add(itemBox); 
+        this.itemContainer.Add(itemBox); 
       } 
     }
 
@@ -47,6 +61,9 @@ namespace SHG
     {
       ItemBox itemBox = new ItemBox(this);
       itemBox.AddToClassList("product-list-item-box");
+      var label = itemBox.Q<Label>();
+      label.ClearClassList();
+      label.AddToClassList("product-list-item-box-label");
       itemBox.RegisterCallback<ClickEvent>(this.OnClickItemBox);
       return (itemBox);
     }
@@ -68,6 +85,7 @@ namespace SHG
           Item = product, Count = 1
           });
         var recipes = App.Instance.Inventory.GetCraftableRecipes(product, CraftWindow.CurrentProvider);
+        this.productBoxes[index].SetLabel(product.Name);
         if (recipes.Count == 0) {
           this.productBoxes[index].AddToClassList("product-list-item-box-inactive");
         }
