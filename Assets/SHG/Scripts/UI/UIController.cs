@@ -58,6 +58,13 @@ namespace SHG
 
     public void OpenCraftWindow()
     {
+      var mode = App.Instance.CurrentMode;
+      if (mode is ShelterMode shelterMode) {
+        CraftWindow.CurrentProvider = CraftProvider.NPC;
+      }
+      else {
+        CraftWindow.CurrentProvider = CraftProvider.Table;
+      }
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 

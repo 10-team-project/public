@@ -50,7 +50,7 @@ namespace SHG
     void OnObtainItem(ItemData item) 
     {
       if (!this.obtainedItems.Contains(item)) {
-        if (item.Id == "b5778b62-1b8b-4000-aba5-14992b4348ea") {
+        if (item.Id == Inventory.RADIO_ID) {
           this.HasRadioItem = true;
         }
         this.WillChange?.Invoke(this);

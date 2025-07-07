@@ -31,6 +31,7 @@ namespace SHG
     {
       FarmingMode.Instance.CurrentScene = scene;
       App.Instance.ChangeMode(GameMode.Farming, scene.FileName);
+      App.Instance.PlayerStatManager.Fatigue.Resource.Decrease(50f);
       // TODO: Fatigue
     }
 

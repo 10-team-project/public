@@ -70,7 +70,7 @@ namespace SHG
 
     void FillProducts()
     {
-      var products = RecipeRegistry.Instance.GetAllProducts();
+      var products = RecipeRegistry.Instance.GetAllProducts(CraftWindow.CurrentProvider);
       int index = 0;
       foreach (var product in products) {
         if (index >= this.productBoxes.Count - 1) {
