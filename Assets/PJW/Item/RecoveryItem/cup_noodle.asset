@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
+  m_Name: cup_noodle
+  m_EditorClassIdentifier: 
+  uuid: 8c922ba4-03fe-4397-b793-0a94d547a322
+  itemName: "\uCEF5\uB77C\uBA74"
+  image: {fileID: 21300000, guid: 066d5c6102189254eb641db05d3db6a3, type: 3}
+  prefab: {fileID: 0}
+  description: "\uBC30\uACE0\uD514\uC744 70\uB9CC\uD07C \uD68C\uBCF5"
+  recipes: []
+  efficacy:
+  - Stat: 1
+    Amount: 70
