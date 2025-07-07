@@ -21,7 +21,7 @@ namespace SHG
     public IEnumerator OnEnd()
     {
       Debug.Log("FarmingMode OnEnd");
-      //App.Instance.GameTimeManager.gameObject.SetActive(false);
+      App.Instance.GameTimeManager.gameObject.SetActive(false);
       App.Instance.PlayerStatManager.HideUI();
       yield return (null);
     }
@@ -61,7 +61,7 @@ namespace SHG
       App.Instance.CameraController.Player = player.transform;
       App.Instance.CameraController.gameObject.SetActive(true);
       App.Instance.PlayerStatManager.ShowUI();
-      //App.Instance.GameTimeManager.gameObject.SetActive(true);
+      App.Instance.GameTimeManager.gameObject.SetActive(true);
       yield return (null);
     }
 

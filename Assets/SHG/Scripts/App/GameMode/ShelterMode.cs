@@ -28,6 +28,7 @@ namespace SHG
     {
       FarmingMode.Instance.CurrentScene = scene;
       App.Instance.ChangeMode(GameMode.Farming, scene.FileName);
+      // TODO: Fatigue
     }
 
     public IEnumerator OnStart()
@@ -46,7 +47,8 @@ namespace SHG
          npc.transform.position = point.transform.position;
         }
       }
-      //App.Instance.GameTimeManager.gameObject.SetActive(true);
+      App.Instance.GameTimeManager.player = player.transform;
+      App.Instance.GameTimeManager.gameObject.SetActive(true);
       App.Instance.PlayerStatManager.ShowUI();
       App.Instance.CameraController.Player = player.transform;
       App.Instance.CameraController.gameObject.SetActive(true);
