@@ -451,6 +451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 261747343}
 --- !u!114 &261747343
@@ -775,6 +776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 483379739}
 --- !u!114 &483379739
@@ -1037,6 +1039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 1066032414}
 --- !u!114 &1066032414
@@ -1053,18 +1056,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   max: 0
   cur: 0
---- !u!1 &1097560245 stripped
+--- !u!1 &1097560245
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 6444564155309549664, guid: 94b7c188e0171884dbbb616d1a80cfb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1784399321}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!224 &1097560250 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7068798540192919149, guid: 94b7c188e0171884dbbb616d1a80cfb1,
-    type: 3}
-  m_PrefabInstance: {fileID: 1784399321}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1097560246}
+  m_Layer: 0
+  m_Name: 
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1097560246
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1097560245}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1114354474
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,7 +1117,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 368746416}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1230,7 +1252,7 @@ RectTransform:
   m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 831348806}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1304,11 +1326,9 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 110485527}
   - {fileID: 1205012645}
-  - {fileID: 1482514091}
   - {fileID: 1202739094}
-  m_Father: {fileID: 1614312360}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1372,7 +1392,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 949591442}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -1628,9 +1648,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1138496431}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 236, y: -410.3125}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 66, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1202739095
@@ -1703,9 +1723,9 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1138496431}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 236, y: -186.5625}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 60, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1205012646
@@ -1774,10 +1794,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4.72, y: 0.6, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 2123995741}
-  - {fileID: 1560411927}
-  m_Father: {fileID: 336950258}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1825,7 +1843,7 @@ MonoBehaviour:
     m_DisabledTrigger: Disabled
   m_Interactable: 1
   m_TargetGraphic: {fileID: 0}
-  m_FillRect: {fileID: 510670759}
+  m_FillRect: {fileID: 0}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
@@ -1880,7 +1898,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 137843083}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1246266225
 MonoBehaviour:
@@ -1896,6 +1914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 5
   resourceAmount: 20
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 1246266223}
 --- !u!1 &1278520807
@@ -2115,6 +2134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 1552045730}
 --- !u!114 &1552045730
@@ -2481,6 +2501,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 1900032945}
 --- !u!114 &1900032945
@@ -2649,6 +2670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 1
   resource: {fileID: 2097298717}
 --- !u!114 &2097298717
@@ -3005,6 +3027,7 @@ PrefabInstance:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 1097560246}
   - {fileID: 340380217}
   - {fileID: 346404991}
   - {fileID: 1828833699}
@@ -3019,3 +3042,9 @@ SceneRoots:
   - {fileID: 2209949617943907768}
   - {fileID: 5898268511331123369}
   - {fileID: 100565290}
+  - {fileID: 1114354475}
+  - {fileID: 1132230004}
+  - {fileID: 1138496431}
+  - {fileID: 1179487127}
+  - {fileID: 1208597721}
+  - {fileID: 1246266224}

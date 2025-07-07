@@ -32,6 +32,7 @@ namespace NTJ
         public int timeScale = 30; // 현실 1초 = 게임 1분
         private float gameTime;    // 누적된 게임 시간
         private int currentDay = 1;
+        public int CurrentDay => currentDay;
         private float fadeDuration = 2f;
         private bool isSleeping = false;
         private bool sleepRequested = false;
