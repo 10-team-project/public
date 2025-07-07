@@ -1,21 +1,26 @@
+using KSH;
 using NTJ;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class MainMenuUI : MonoBehaviour
 {
     private const string DEFAULT_GAME_SCENE = "NTJTestScene";
     private const string CHARACTER_CHOICE_SCENE = "CharacterChoiceScene";
 
+    [SerializeField] private GameObject optionPanel;
+
     [Header("세이브 정보")]
     public GameObject loadInfoPanel;
     public TextMeshProUGUI dayText;
 
     private GameData cachedData;
+
+    private void Update()
+    {
+        if (OptionUIManager.isPause) return; // 옵션 열려있으면 무시
+    }
 
     public void OnStartGame()
     {
@@ -59,5 +64,15 @@ public class MainMenuUI : MonoBehaviour
     public void OnQuitGame()
     {
         Application.Quit();
+    }
+
+    public void OnOpenOption()
+    {
+        optionPanel.SetActive(true);
+    }
+
+    public void OnCloseOption()
+    {
+        optionPanel.SetActive(false);
     }
 }
