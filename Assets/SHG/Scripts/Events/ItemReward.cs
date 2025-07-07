@@ -10,11 +10,14 @@ namespace SHG
   public class ItemReward : GameEventReward
   {
     public ItemData[] Items => this.rewardItems;
+    public bool IsLost => this.isLost;
     [SerializeField] [Validate("Some reward item is none", nameof(HasNullReward), MessageMode.Error)]
     ItemData[] rewardItems;
     [SerializeField, ReadOnly]
     [Validate("Item reward is empty", nameof(IsEmptyRewards), MessageMode.Warning)]
     Void nullRewardItemCheck;
+    [SerializeField]
+    bool isLost;
 
     protected bool IsEmptyRewards() => (this.rewardItems == null || this.rewardItems.Length == 0);
 
