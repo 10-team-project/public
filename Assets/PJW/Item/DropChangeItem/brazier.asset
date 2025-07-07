@@ -23,4 +23,5 @@ MonoBehaviour:
   onObtainChange: []
   onUseChange: []
   unlockedRecipes:
-  - {fileID: 11400000, guid: 0ea235ea73630bc4580ce8e8348f6c94, type: 2}
+  - {fileID: 11400000, guid: f91187ce1d1d6d648ae4b796c1fc9974, type: 2}
+  - {fileID: 11400000, guid: a306176e4fdd0fc4abcdaeb74dbfe4b4, type: 2}

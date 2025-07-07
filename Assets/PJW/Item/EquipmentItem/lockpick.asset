@@ -19,6 +19,6 @@ MonoBehaviour:
   description: "\uC7A0\uACA8\uC788\uB294 \uBB38\uACFC \uC0C1\uD638\uC791\uC6A9\uD560
     \uC218 \uC788\uB294 \uC544\uC774\uD15C"
   recipes:
-  - {fileID: 11400000, guid: 83d0b9fba731684458218d2a55a2b213, type: 2}
+  - {fileID: 11400000, guid: 71b29d827072dcd488bab53ac2a5ad9c, type: 2}
   - {fileID: 11400000, guid: ddbc44d3a521f9d43a3d4af910c28149, type: 2}
   usePurpose: 1

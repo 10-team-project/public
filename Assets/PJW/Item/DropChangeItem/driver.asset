@@ -23,10 +23,11 @@ MonoBehaviour:
   onObtainChange: []
   onUseChange: []
   unlockedRecipes:
-  - {fileID: 11400000, guid: 83d0b9fba731684458218d2a55a2b213, type: 2}
-  - {fileID: 11400000, guid: adb5bf7702d09d846b32cfc6fdbcfc89, type: 2}
-  - {fileID: 11400000, guid: edf363a722739144fa63412c6c2a5769, type: 2}
-  - {fileID: 11400000, guid: 5a482bb5c9014d241ab11dadc3df356a, type: 2}
-  - {fileID: 11400000, guid: ada6db1f534f5ab47a382a15b609a4c9, type: 2}
-  - {fileID: 11400000, guid: a05b7b4a0507fe145b92a898f6521468, type: 2}
-  - {fileID: 11400000, guid: 7428a80218c771d4b8d8af8ccdc16e46, type: 2}
+  - {fileID: 11400000, guid: 5ba41f7bcd85d36478f3df0950137bf0, type: 2}
+  - {fileID: 11400000, guid: bcb782acd0179a147a001abde19c3eda, type: 2}
+  - {fileID: 11400000, guid: d56065602a877d24c98616d78a4ba2b4, type: 2}
+  - {fileID: 11400000, guid: 1ab7aed4f1b74c243ab2967a5e65ec84, type: 2}
+  - {fileID: 11400000, guid: 94b4aae1f33fa2b4ca538803dc2fab5b, type: 2}
+  - {fileID: 11400000, guid: 9dcc5f3987844574bb5fe9d39b1b2a0b, type: 2}
+  - {fileID: 11400000, guid: 71b29d827072dcd488bab53ac2a5ad9c, type: 2}
+  - {fileID: 11400000, guid: ddbc44d3a521f9d43a3d4af910c28149, type: 2}

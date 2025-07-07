@@ -18,4 +18,4 @@ MonoBehaviour:
   prefab: {fileID: 0}
   description: "\uC774\uBCA4\uD2B8\uC640 \uAD00\uB828\uB41C \uC544\uC774\uD15C"
   recipes:
-  - {fileID: 11400000, guid: ada6db1f534f5ab47a382a15b609a4c9, type: 2}
+  - {fileID: 11400000, guid: 1ab7aed4f1b74c243ab2967a5e65ec84, type: 2}

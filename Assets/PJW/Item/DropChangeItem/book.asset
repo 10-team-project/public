@@ -16,12 +16,12 @@ MonoBehaviour:
   itemName: "\uCC45"
   image: {fileID: 21300000, guid: 6a9f8139371a9bf459bf70f22803fb05, type: 3}
   prefab: {fileID: 0}
-  description: "\uC18C\uBAA8 \uC2DC \uC81C\uC791 \uAC00\uB2A5\uD55C \uC544\uC774\uD15C\uC774
-    \uC99D\uAC00"
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC18C\uBAA8 \uC2DC
+    \uC81C\uC791 \uAC00\uB2A5\uD55C \uC544\uC774\uD15C\uC774 \uC99D\uAC00"
   recipes: []
   onObtainChange: []
   onUseChange: []
   unlockedRecipes:
   - {fileID: 11400000, guid: 6906cee9c83473b488011c0ca4780783, type: 2}
   - {fileID: 11400000, guid: 207b784a0e818844683a69d6963e3a35, type: 2}
-  - {fileID: 11400000, guid: fb9cdcf5e3d0a084ab6742855c8aed56, type: 2}
+  - {fileID: 11400000, guid: 81702c4a514769a4ab14941ea1ef7e94, type: 2}
