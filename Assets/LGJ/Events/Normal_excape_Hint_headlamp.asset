@@ -18,7 +18,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ce2bd66cbf2a3294da69a2a49638a5ec, type: 2}
   startMessages: []
   skipable: 0
-  eventTrigger: {fileID: 11400000, guid: e23657a6d592fec988c6a3330115fd76, type: 2}
+  eventTrigger: {fileID: 11400000, guid: c55fb4e1038fed84187e54b62fb9c8f9, type: 2}
   eventPriority: 2
   effectSound: {fileID: 0}
   traumaEffect: {fileID: 0}
