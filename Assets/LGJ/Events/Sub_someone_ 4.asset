@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36cb458a83e35ab3aaf01fa0b756db28, type: 3}
-  m_Name: Sub_something_3
+  m_Name: Sub_someone_ 4
   m_EditorClassIdentifier: 
   uuid: 82cc0fbd-bcf7-49b7-b0bf-6758c0398f24
-  eventName: 11801
+  eventName: 11501
   eventRewards:
-  - {fileID: 11400000, guid: f125e8bb130eb5d419c89fb9c442a941, type: 2}
+  - {fileID: 11400000, guid: 7c59be2f753fca540a8d38ca95e472b5, type: 2}
+  - {fileID: 11400000, guid: 5601a59a5c418854882b094d2e65fb68, type: 2}
   startMessages: []
   skipable: 0
-  eventTrigger: {fileID: 11400000, guid: 8bd939375e8823347acb12ff652ec7bb, type: 2}
+  eventTrigger: {fileID: 11400000, guid: 127d21e84f1056546b41649c176b4a1f, type: 2}
   eventPriority: 4
   effectSound: {fileID: 0}
   traumaEffect: {fileID: 0}

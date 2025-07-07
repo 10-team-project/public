@@ -9,9 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 95275102d2b4974f2a1104dbb8072fee, type: 3}
-  m_Name: Reward_water
+  m_Script: {fileID: 11500000, guid: e7c63ca9751dd3d1ab49b1a3184a23b3, type: 3}
+  m_Name: Text_null
   m_EditorClassIdentifier: 
-  rewardItems:
-  - {fileID: 11400000, guid: e3531c8a57e15d0469d5e04c770ed385, type: 2}
-  isLost: 1
+  hintMessages: []
