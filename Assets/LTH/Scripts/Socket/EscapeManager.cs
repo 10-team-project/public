@@ -1,16 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Patterns;
 using UnityEngine;
-
-/// <summary>
-/// ***********************************************************************
-/// 게임 시작 시 랜덤으로 탈출 아이템 3개를 지정하고 저장해두는 매니저
-/// List<ItemData> RequiredEscapeItems
-/// void InitializeEscapeItems() ← 시작 시 호출
-/// 정답 아이템을 외부(NPC 대사 등)에 제공할 수도 있음
-/// ************************************************************************
-/// </summary>
+using System;
 
 namespace LTH 
 {
@@ -20,6 +13,9 @@ namespace LTH
         [SerializeField] private List<ItemData> escapeItemPool;
 
         public List<ItemData> RequiredEscapeItems { get; private set; } = new();
+
+        public event Action OnEscapeSuccess; // 탈출 성공 시 호출되는 이벤트
+        public event Action OnEscapeFailure; // 탈출 실패 시 호출되는 이벤트
 
         protected override void Awake()
         {
@@ -47,9 +43,6 @@ namespace LTH
             {
                 RequiredEscapeItems.Add(shuffled[i]);
             }
-
-            Debug.Log("탈출 아이템 설정 완료: " +
-                string.Join(", ", RequiredEscapeItems.ConvertAll(i => i.Name)));
         }
 
         public List<ItemData> GetRequiredEscapeItems()
@@ -57,11 +50,50 @@ namespace LTH
             return new List<ItemData>(RequiredEscapeItems);
         }
 
+        public bool CheckEscapeSuccess(List<ItemData> selectedItems)
+        {
+            if (selectedItems.Count != RequiredEscapeItems.Count) return false;
+
+            var selectedSet = new HashSet<string>(selectedItems.Select(i => i.Id));
+            var requiredSet = new HashSet<string>(RequiredEscapeItems.Select(i => i.Id));
+
+            return selectedSet.SetEquals(requiredSet);
+        }
+
+        public void EscapeSuccess()
+        {
+            OnEscapeSuccess?.Invoke();
+        }
+
+        public void EscapeFailure()
+        {
+            OnEscapeFailure?.Invoke();
+        }
+
+        public bool CheckInventoryForEscapeSuccess(List<ItemData> inventoryItems)
+        {
+            var requiredSet = new HashSet<string>(RequiredEscapeItems.Select(i => i.Id));
+            var inventorySet = new HashSet<string>(inventoryItems.Select(i => i.Id));
+
+            bool success = requiredSet.IsSubsetOf(inventorySet);
+
+            if (success)
+            {
+                EscapeSuccess();
+            }
+            else
+            {
+                EscapeFailure();
+            }
+
+            return success;
+        }
+
         private void Shuffle<T>(List<T> list)
         {
             for (int i = 0; i < list.Count; i++)
             {
-                int rand = Random.Range(i, list.Count);
+                int rand = UnityEngine.Random.Range(i, list.Count);
                 (list[i], list[rand]) = (list[rand], list[i]);
             }
         }
