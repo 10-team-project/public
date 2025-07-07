@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Normal_excape_Hint_microscope
   m_EditorClassIdentifier: 
   uuid: 2ae62037-a858-45e3-9260-3176ee7b6d25
-  eventName: 12301
+  eventName: 12103
   eventRewards:
   - {fileID: 11400000, guid: 78fefbb81c0ae4b4886c9b1595fdff1b, type: 2}
   startMessages: []

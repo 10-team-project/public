@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Sub_note_5
   m_EditorClassIdentifier: 
   chance: 1
-  triggerItem: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
+  triggerItem: {fileID: 11400000, guid: a51db727800949d4aa7eecbf250da1cb, type: 2}
