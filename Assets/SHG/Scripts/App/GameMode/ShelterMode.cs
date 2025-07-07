@@ -8,6 +8,7 @@ namespace SHG
   {
     public string SceneName => "Classroom";
     MapGate gate;
+    bool IsEventTriggerable;
 
     public bool Equals(IGameMode other)
     {
@@ -21,6 +22,7 @@ namespace SHG
     {
       App.Instance.GameTimeManager.gameObject.SetActive(false);
       App.Instance.PlayerStatManager.HideUI();
+      this.UnRegisterEvent();
       yield return (null);
     }
 
@@ -33,6 +35,7 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
+      this.IsEventTriggerable = true;
       GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
       GameObject player = null;
       foreach (var point in spawnPoints) {
@@ -54,6 +57,60 @@ namespace SHG
       App.Instance.CameraController.gameObject.SetActive(true);
       this.gate = GameObject.Find("Gate").GetComponent<MapGate>();
       yield return (null);
+      this.HandleGameEvent();
+    }
+
+    void OnEventStart(GameEvent gameEvent)
+    {
+      if (this.IsEventTriggerable) {
+        Debug.Log(gameEvent.Name);
+        this.IsEventTriggerable = false;
+      }
+    }
+
+    void HandleGameEvent()
+    {
+      var currentEvents = App.Instance.GameEventHandler.EventCandidates;
+      if (currentEvents.Count > 0) {
+        if (currentEvents.Count == 1) {
+          App.Instance.GameEventHandler.TriggerEvent(currentEvents[0]);
+        }
+        else {
+          int priority = int.MaxValue;
+          GameEvent eventToTrigger = null;
+          foreach (var e in App.Instance.GameEventHandler.EventCandidates) {
+            
+            if (e is StoryGameEvent storyGameEvent) {
+              if (eventToTrigger == null || 
+                priority > storyGameEvent.Priority) {
+                priority = storyGameEvent.Priority;
+                eventToTrigger = storyGameEvent;
+              }
+            }
+            else if (e is NormalGameEvent normalGameEvent &&
+              eventToTrigger == null) {
+              eventToTrigger = normalGameEvent;
+            }
+          }
+          if (eventToTrigger != null) {
+            App.Instance.GameEventHandler.TriggerEvent(eventToTrigger);
+          }
+          App.Instance.GameEventHandler.ClearEventCandiates();
+        }
+      }
+      else {
+        App.Instance.GameEventHandler.IsEventTriggerable = true;
+        App.Instance.GameEventHandler.OnNormalEventStart += this.OnEventStart;
+        App.Instance.GameEventHandler.OnStoryEventStart += this.OnEventStart;
+      }
+    }
+
+    void UnRegisterEvent()
+    {
+      App.Instance.GameEventHandler.OnNormalEventStart -= this.OnEventStart;
+      App.Instance.GameEventHandler.OnStoryEventStart -= this.OnEventStart;
+
+      App.Instance.GameEventHandler.IsEventTriggerable = false;
     }
 
     public void SetGateDest(string name)

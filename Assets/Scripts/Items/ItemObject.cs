@@ -11,7 +11,7 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
   Item item;
   PlayerItemController player;
   [SerializeField]
-  Canvas floatingUI;
+  GameObject floatingUI;
 
   public void SetItem(Item item) 
   {
@@ -21,7 +21,7 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
   public void Interact()
   {
     if (this.floatingUI != null) {
-      this.floatingUI.enabled = false;
+      this.floatingUI.gameObject.SetActive(false);
     }
     if (this.player == null) {
       this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();

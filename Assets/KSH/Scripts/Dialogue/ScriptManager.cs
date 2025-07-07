@@ -78,12 +78,14 @@ namespace KSH
     public bool IsTalk = false;
     public void StartScript(int id)
     {
+      this.OnStart?.Invoke();
         curId = id;
         curOrder = -1;
         IsTalk = true;
         NextNode();
     }
     public event Action OnEnd; //
+    public event Action OnStart;
     
     public void NextNode()
     {

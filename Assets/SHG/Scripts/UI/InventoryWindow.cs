@@ -59,7 +59,7 @@ namespace SHG
     {
       foreach (var pair in inventory.Items) {
         var (item, count) = pair;
-        if (!this.filterItem(item) || count < 1) {
+        if ((this.filterItem != null && !this.filterItem(item)) || count < 1) {
           continue;
         }
         if (item.IsStoryItem) {

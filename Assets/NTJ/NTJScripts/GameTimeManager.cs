@@ -39,7 +39,7 @@ namespace NTJ
         int hours;
         [SerializeField, ReadOnly]
         int minutes;
-        private int currentDay = 1;
+        private int currentDay = 0;
         private float fadeDuration = 2f;
         private bool isSleeping = false;
         private bool sleepRequested = false;
@@ -194,7 +194,7 @@ namespace NTJ
             fadePanel.gameObject.SetActive(false);
             dayTextPanel.SetActive(false);
             isSleeping = false;
-            player.transform.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 플레이어가 침대에서 리스폰
+            //player.transform.position = bedSpawnPoint.position; // 플레이어가 침대에서 리스폰
         }
         public void OnTimeScaleChanged(float value)
         {

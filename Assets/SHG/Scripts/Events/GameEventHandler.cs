@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using KSH;
 using NTJ;
+using UnityEngine;
 
 namespace SHG
 {
   using Character = TempCharacter;
   public class GameEventHandler
   {
-    const string EVENT_DIR = "Assets/ScriptableObjects/Events";
+    const string EVENT_DIR = "Assets/LGJ/Events";
     public bool IsEventTriggerable;
     public Action<StoryGameEvent> OnStoryEventStart;
     public Action<NormalGameEvent> OnNormalEventStart;
@@ -24,6 +25,16 @@ namespace SHG
     public void ClearEventCandiates()
     {
       this.EventCandidates.Clear();
+    }
+
+    public void TriggerEvent(GameEvent gameEvent)
+    {
+      if (gameEvent is NormalGameEvent normalEvent) {
+        this.OnNormalEventStart?.Invoke(normalEvent);
+      }
+      else if (gameEvent is StoryGameEvent storyEvent) {
+        this.OnStoryEventStart?.Invoke(storyEvent);
+      }
     }
 
     public bool TryFindStoryEvent(out NormalGameEvent result, Func<GameEvent, bool> query)
@@ -84,6 +95,15 @@ namespace SHG
         {Character.Stat.Hydration, new ()}
       };
       this.LoadAllEvents();
+      this.OnStoryEventStart += this.StartScript;
+      this.OnNormalEventStart += this.StartScript;
+    }
+
+    void StartScript(GameEvent gameEvent)
+    {
+      if (int.TryParse(gameEvent.Name, out int id)) {
+        ScriptManager.Instance.StartScript(id);
+      }
     }
 
     public void RegisterItemTracker(ItemTracker itemTracker)
@@ -146,16 +166,15 @@ namespace SHG
       }
     }
 
-    public void OnDateChanged(int date)
+    void OnDateChanged(int date)
     {
       if (this.TryFindEventByDateTrigger(date, out GameEvent gameEvent)) {
         this.OnFoundEventByTrigger(gameEvent);
         return ;
       } 
-  
     }
 
-    public void OnResourceChanged(
+    void OnResourceChanged(
       Character.Stat stat, 
       float oldValue,
       float newValue)
@@ -200,6 +219,7 @@ namespace SHG
 
     void OnFoundEventByTrigger(GameEvent gameEvent)
     {
+      Debug.Log($"new event triggered {gameEvent.Name}");
       if (this.IsEventTriggerable) {
         if (gameEvent.IsStoryEvent) {
           this.OnStoryEventStart?.Invoke(gameEvent as StoryGameEvent);

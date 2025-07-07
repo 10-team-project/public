@@ -3,6 +3,10 @@
   -unity-font-definition: url("project://database/Assets/Imports/Fonts/Moneygraphy-Rounded.ttf");
 }
 
+Label {
+  -unity-font-definition: url("project://database/Assets/Imports/Fonts/Moneygraphy-Rounded.ttf");
+}
+
 .window-label 
 {
   font-size: 30px;

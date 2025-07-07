@@ -8,7 +8,13 @@ namespace SHG
   public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>
   {
     public const int NUMBER_OF_PRODUCTS = 20;
-    const string RECIPE_DIR = "Assets/SHG/Test/Recipes";
+    static readonly string[] RECIPE_DIRS = new string[5] {
+      "Assets/PJW/Recipe/DropChangeRecipe",
+      "Assets/PJW/Recipe/EquipmentRecipe",
+      "Assets/PJW/Recipe/PlainRecipe",
+      "Assets/PJW/Recipe/RecoveryRecipe",
+      "Assets/PJW/Recipe/StoryRecipe"
+    };
     public static readonly List<ItemRecipe> EMPTY_RECIPES = new (0);
     //TODO: 아이템 레시피 최적화 자료구조
     Dictionary<ItemData, List<ItemRecipe>> recipeTable;
@@ -46,21 +52,24 @@ namespace SHG
 
     void LoadAllRecipes()
     {
-      ItemRecipeData[] recipeData = Utils.LoadAllFrom<ItemRecipeData>(RECIPE_DIR);
-      ItemRecipe[] recipes = new ItemRecipe[recipeData.Length];
-      for (int i = 0; i < recipeData.Length; ++i) {
-        recipes[i] = new ItemRecipe(recipeData[i]);
-      }
-      foreach (var recipe in recipes) {
-        var product = recipe.RecipeData.Product;
-        if (!this.recipeTable.ContainsKey(product)) {
-          Debug.Log($"Recipe Product {product.Name} is not loaded from {RECIPE_DIR}");
-          continue;
+      foreach (var recipeDir in RECIPE_DIRS) {
+          
+        ItemRecipeData[] recipeData = Utils.LoadAllFrom<ItemRecipeData>(recipeDir);
+        ItemRecipe[] recipes = new ItemRecipe[recipeData.Length];
+        for (int i = 0; i < recipeData.Length; ++i) {
+          recipes[i] = new ItemRecipe(recipeData[i]);
         }
-        this.recipeTable[product].Add(recipe);
-        #if UNITY_EDITOR
-        this.recipes.Add(recipe);
-        #endif
+        foreach (var recipe in recipes) {
+          var product = recipe.RecipeData.Product;
+          if (!this.recipeTable.ContainsKey(product)) {
+            Debug.Log($"Recipe Product {product.Name} is not loaded from {recipeDir}");
+            continue;
+          }
+          this.recipeTable[product].Add(recipe);
+#if UNITY_EDITOR
+          this.recipes.Add(recipe);
+#endif
+        }
       }
     }
 
