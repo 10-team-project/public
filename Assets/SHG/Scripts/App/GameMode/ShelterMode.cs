@@ -20,9 +20,9 @@ namespace SHG
 
     public IEnumerator OnEnd()
     {
-      App.Instance.GameEventHandler.ClearEventCandiates();
       App.Instance.GameTimeManager.gameObject.SetActive(false);
       App.Instance.PlayerStatManager.HideUI();
+      App.Instance.GameTimeManager.OnDayChanged -= this.OnDayChanged;
       this.UnRegisterEvent();
       yield return (null);
     }
@@ -52,12 +52,19 @@ namespace SHG
         }
       }
       App.Instance.GameTimeManager.player = player.transform;
+      App.Instance.GameTimeManager.OnDayChanged += this.OnDayChanged;
       App.Instance.GameTimeManager.gameObject.SetActive(true);
       App.Instance.PlayerStatManager.ShowUI();
       App.Instance.CameraController.Player = player.transform;
       App.Instance.CameraController.gameObject.SetActive(true);
       this.gate = GameObject.Find("Gate").GetComponent<MapGate>();
       yield return (null);
+      this.HandleGameEvent();
+    }
+
+    void OnDayChanged(int newDay) 
+    {
+      this.IsEventTriggerable = true; 
       this.HandleGameEvent();
     }
 
@@ -103,6 +110,7 @@ namespace SHG
         App.Instance.GameEventHandler.OnNormalEventStart += this.OnEventStart;
         App.Instance.GameEventHandler.OnStoryEventStart += this.OnEventStart;
       }
+      App.Instance.GameEventHandler.ClearEventCandiates();
     }
 
     void UnRegisterEvent()

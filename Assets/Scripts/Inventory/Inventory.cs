@@ -20,11 +20,6 @@ public class Inventory : ItemStorageBase
   public List<string> ItemNamesForDebuggingInQuickSlot;
 #endif
 
-  public bool HasRadioItem()
-  {
-    return (false);
-  }
-
   public EquipmentItem GetItemFromQuickSlot(EquipmentItemData item)
   {
     int index = this.QuickSlotItems.IndexOf(item);

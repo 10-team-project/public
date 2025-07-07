@@ -16,6 +16,7 @@ namespace SHG
 
     List<GameEvent> storyEvents;
     List<GameEvent> normalEvents;
+    List<GameEvent> endingEvents;
     Dictionary<ItemData, StoryGameEvent> eventsByItemTrigger;
     Dictionary<int, StoryGameEvent> eventsByDateTrigger;
     Dictionary<Character.Stat, List<StoryGameEvent>> eventsByStatTrigger; 
@@ -82,6 +83,7 @@ namespace SHG
 
     public GameEventHandler()
     {
+      this.endingEvents = new ();
       this.storyEvents = new ();
       this.normalEvents = new ();
       this.eventsByName = new ();
@@ -247,7 +249,13 @@ namespace SHG
           this.eventsByStatTrigger[resourceTrigger.Stat].Add(gameEvent);
           break;
         default:
-          throw (new NotImplementedException());
+          if (gameEvent.Trigger == null) {
+            this.endingEvents.Add(gameEvent);
+            break;
+          }
+          else {
+            throw (new NotImplementedException());
+          }
       }
     }
 
