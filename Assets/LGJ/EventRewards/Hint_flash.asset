@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e7c63ca9751dd3d1ab49b1a3184a23b3, type: 3}
-  m_Name: Hint_flash 1
+  m_Name: Hint_flash
   m_EditorClassIdentifier: 
   hintMessages: []
