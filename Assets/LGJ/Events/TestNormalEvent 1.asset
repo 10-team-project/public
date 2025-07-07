@@ -15,7 +15,7 @@ MonoBehaviour:
   uuid: 0b298ab7-2a92-4f7d-bd39-6b9a5e8d78cd
   eventName: 12201
   eventRewards:
-  - {fileID: 11400000, guid: a671612193149e34e98a8eed2dfd04fe, type: 2}
+  - {fileID: 11400000, guid: 50ad0590bb5f20b41ab8ebf98cf08a30, type: 2}
   startMessages: []
   skipable: 0
   repeat: 0

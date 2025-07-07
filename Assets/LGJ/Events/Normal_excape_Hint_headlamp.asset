@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Normal_excape_Hint_headlamp
   m_EditorClassIdentifier: 
   uuid: 2ae62037-a858-45e3-9260-3176ee7b6d25
-  eventName: 12601
+  eventName: 12106
   eventRewards:
   - {fileID: 11400000, guid: ce2bd66cbf2a3294da69a2a49638a5ec, type: 2}
   startMessages: []

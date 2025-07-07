@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TestNormalEvent 3
   m_EditorClassIdentifier: 
   uuid: 0b298ab7-2a92-4f7d-bd39-6b9a5e8d78cd
-  eventName: 12301
+  eventName: 12203
   eventRewards:
   - {fileID: 11400000, guid: 2b1763efeedbd9e4eb5e61e87add10a2, type: 2}
   startMessages: []

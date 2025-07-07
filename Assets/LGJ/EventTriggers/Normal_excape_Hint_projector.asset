@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Normal_excape_Hint_projector
   m_EditorClassIdentifier: 
   chance: 1
-  triggerItem: {fileID: 11400000, guid: 497f24aa342af9642a6cbf218a576d6a, type: 2}
+  triggerItem: {fileID: 11400000, guid: 5d18b71c6baf0f042b77d662ae6957a0, type: 2}
