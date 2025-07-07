@@ -37,13 +37,16 @@ namespace SHG
       this.OnLoaded?.Invoke();
       this.OnLoaded = null;
       this.loadingUI.SetActive(false);
+      App.Instance.UIController.ShowQuickSlot();
     }
 
     public IEnumerator OnStart()
     {
       App.Instance.GameTimeManager.gameObject.SetActive(false);
+      App.Instance.UIController.HideQuickSlot();
       Debug.Log("LoadingState OnStart");
       this.loadingUI.SetActive(true);
+      App.Instance.PlayerStatManager.HideUI();
       if (this.SceneToLoad != null) {
         yield return (new WaitForSeconds(1));
         var loadedScene = App.Instance.SceneManager.GameLoadScene(this.SceneToLoad);

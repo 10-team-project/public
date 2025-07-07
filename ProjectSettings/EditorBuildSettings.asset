@@ -7,20 +7,20 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Scenes/MainMenuScene.unity
-    guid: 691a2233046cebe9da09b7eb3d16c7c8
+    guid: a1491ff8330fbdfc9bdd375fbbce7b8f
   - enabled: 1
     path: Assets/Scenes/CharacterChoiceScene.unity
     guid: ceab34be4a4cb88458f0a9be891dd2ef
   - enabled: 1
     path: Assets/Scenes/Classroom.unity
-    guid: 9583e4e21d4be520495534124dd0f0e6
+    guid: cdddd20d0a55a6f8aa372aad08689f86
   - enabled: 1
     path: Assets/Scenes/LibraryArtScienceCafe.unity
-    guid: bb72efb66a54fc841a9627d009bfe7a3
-  - enabled: 1
-    path: Assets/Scenes/Rooftop.unity
-    guid: a66914a1944131dd7a8b68c77636ddb9
+    guid: 34398d09307cdf47d8eafcc0425c493d
   - enabled: 1
     path: Assets/Scenes/Restaurant.unity
-    guid: f97d006e50e0469d0bc23b2111ebc65d
+    guid: c7294215012b99e9c91085caf4153523
+  - enabled: 1
+    path: Assets/Scenes/Rooftop.unity
+    guid: c48d81979750031a183cb5b8ed02032d
   m_configObjects: {}

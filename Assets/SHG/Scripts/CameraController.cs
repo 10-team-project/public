@@ -42,8 +42,19 @@ public class CameraController : MonoBehaviour
   [SerializeField]
   Transform focusTarget;
   #endif
+  Transform player;
 
-  public Transform Player;
+  public Transform Player 
+  {
+    get => this.player;
+    set {
+      this.player = value;
+      this.cameraLook.position = value.position;
+      this.cameraFollow.position = 
+        value.position + this.followOffset;
+
+    }
+  }
 
   void Awake()
   {
@@ -54,6 +65,11 @@ public class CameraController : MonoBehaviour
     this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
     App.Instance.SetCameraController(this);
     this.gameObject.SetActive(false);
+  }
+
+  void OnDestroy()
+  {
+    App.Instance.SetCameraController(null);
   }
   
   // Start is called before the first frame update

@@ -8,6 +8,7 @@ namespace SHG
   public class FarmingMode : Singleton<FarmingMode>, IGameMode
   {
     public string SceneName => "FieldTest";
+    public GameScene CurrentScene;
 
     public bool Equals(IGameMode other)
     {
@@ -20,6 +21,8 @@ namespace SHG
     public IEnumerator OnEnd()
     {
       Debug.Log("FarmingMode OnEnd");
+      //App.Instance.GameTimeManager.gameObject.SetActive(false);
+      App.Instance.PlayerStatManager.HideUI();
       yield return (null);
     }
 
@@ -35,6 +38,30 @@ namespace SHG
       foreach (var gate in gates) {
         gate.OnMove += this.OnEnterToShelterGate; 
       }
+      GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
+      var player = GameObject.Instantiate(App.Instance.CharacterPrefab);
+      if (spawnPoints.Length == 1) {
+        player.transform.position = spawnPoints[0].transform.position;
+      }
+      else {
+        foreach (var point in spawnPoints) {
+          if (point.name == this.CurrentScene.Name) {
+            Debug.Log(point.name);
+            player.transform.position = point.transform.position;
+            break;
+          } 
+        }
+      }
+      GameObject[] teleportPoints = GameObject.FindGameObjectsWithTag("TeleportPoint");
+      foreach (var point in teleportPoints) {
+        if (point.name != this.CurrentScene.Name) {
+          point.gameObject.SetActive(false);
+        } 
+      }
+      App.Instance.CameraController.Player = player.transform;
+      App.Instance.CameraController.gameObject.SetActive(true);
+      App.Instance.PlayerStatManager.ShowUI();
+      //App.Instance.GameTimeManager.gameObject.SetActive(true);
       yield return (null);
     }
 
@@ -46,9 +73,6 @@ namespace SHG
     public void OnStartFromEditor()
     {
       Debug.Log("FarmingMode OnStartFromEditor");
-      // TODO: 테스트 할 수 있는 위치에 아이템 배치하기
-      //ItemSpawnTest itemSpawnTester = GameObject.Find("ItemSpawn").GetComponent<ItemSpawnTest>();
-      //itemSpawnTester.SpawnItem(3);
     }
   }
 }

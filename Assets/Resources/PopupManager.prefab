@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   popupPrefabs:
-  - {fileID: 8073952597633553858}
+  - {fileID: 4597731159079354368, guid: 872257f2fec4823b8a8e8f8b15768caf, type: 3}
   popupParent: {fileID: 132325475703436963}
 --- !u!1001 &2017863207333406177
 PrefabInstance:
@@ -161,6 +161,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PopupCanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 8009796659599988264, guid: d8125d89675c4d46db6548dbbba2068e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -169,12 +174,6 @@ PrefabInstance:
 --- !u!224 &132325475703436963 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2150185925198058306, guid: d8125d89675c4d46db6548dbbba2068e,
-    type: 3}
-  m_PrefabInstance: {fileID: 2017863207333406177}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8073952597633553858 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7785759456062238755, guid: d8125d89675c4d46db6548dbbba2068e,
     type: 3}
   m_PrefabInstance: {fileID: 2017863207333406177}
   m_PrefabAsset: {fileID: 0}

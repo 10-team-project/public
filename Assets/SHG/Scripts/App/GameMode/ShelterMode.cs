@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using Patterns;
@@ -25,9 +24,10 @@ namespace SHG
       yield return (null);
     }
 
-    public void OnEnterFarmingGate(string sceneName)
+    public void OnEnterFarmingGate(GameScene scene)
     {
-      App.Instance.ChangeMode(GameMode.Farming, sceneName);
+      FarmingMode.Instance.CurrentScene = scene;
+      App.Instance.ChangeMode(GameMode.Farming, scene.FileName);
     }
 
     public IEnumerator OnStart()
@@ -37,15 +37,13 @@ namespace SHG
       foreach (var point in spawnPoints) {
         if (point.name == "PlayerSpawnPoint") {
           player = GameObject.Instantiate(
-            App.Instance.CharacterPrefab, 
-            point.transform.position,
-            point.transform.rotation);
+            App.Instance.CharacterPrefab);
+          player.transform.position = point.transform.position;
         } 
         else if (point.name == "NpcSpawnPoint") {
-          GameObject.Instantiate(
-            App.Instance.NpcPrefab, 
-            point.transform.position,
-            point.transform.rotation);
+          var npc = GameObject.Instantiate(
+            App.Instance.NpcPrefab);
+         npc.transform.position = point.transform.position;
         }
       }
       //App.Instance.GameTimeManager.gameObject.SetActive(true);
