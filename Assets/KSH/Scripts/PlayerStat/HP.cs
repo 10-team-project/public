@@ -28,7 +28,7 @@ namespace KSH
         [SerializeField] private float HpLossFromThirsty;
         [SerializeField] private float HpLossFromFatigue;
         [Header("UI")]
-        [SerializeField] private Slider HpBarSlider;
+        [SerializeField] public Slider HpBarSlider;
 
         private float hungerTimer = 0f;
         private float thirstyTimer = 0f;
