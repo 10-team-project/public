@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9024fb6997b4c1a989b5cba097c6f0d4, type: 3}
-  m_Name: Main_escape_bad
+  m_Script: {fileID: 11500000, guid: 7214b9905845690debdf4b1e08d3e327, type: 3}
+  m_Name: Main_escape
   m_EditorClassIdentifier: 
   chance: 1
-  triggerItem: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
+  triggerDate: 500

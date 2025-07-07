@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uuid: 82cc0fbd-bcf7-49b7-b0bf-6758c0398f24
   eventName: 10701
-  eventRewards:
-  - {fileID: 11400000, guid: 3a6a1697f8d50ac828fd852db741a378, type: 2}
+  eventRewards: []
   startMessages: []
   skipable: 0
   eventTrigger: {fileID: 11400000, guid: d228226933588ce40ac58875eb542921, type: 2}
