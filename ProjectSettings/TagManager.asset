@@ -11,6 +11,7 @@ TagManager:
   - LadderUpStart
   - LadderUpEnd
   - SpawnPoint
+  - NpcCharacter
   layers:
   - Default
   - TransparentFX

@@ -219,7 +219,7 @@ namespace SHG
 
     void OnFoundEventByTrigger(GameEvent gameEvent)
     {
-      Debug.Log($"new event triggered {gameEvent.Name}");
+      Debug.LogWarning($"new event triggered {gameEvent.Name}");
       if (this.IsEventTriggerable) {
         if (gameEvent.IsStoryEvent) {
           this.OnStoryEventStart?.Invoke(gameEvent as StoryGameEvent);

@@ -8,7 +8,7 @@ namespace SHG
   public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>
   {
     public const int NUMBER_OF_PRODUCTS = 20;
-    static readonly string[] RECIPE_DIRS = new string[5] {
+    public static readonly string[] RECIPE_DIRS = new string[5] {
       "Assets/PJW/Recipe/DropChangeRecipe",
       "Assets/PJW/Recipe/EquipmentRecipe",
       "Assets/PJW/Recipe/PlainRecipe",
@@ -76,7 +76,6 @@ namespace SHG
     void LoadAllItems()
     {
 
-      Debug.Log($"item database: {ItemDatabase.idToData.Count}");
       //var enumerator = ItemDatabase.GetEnumerator();
       //while (enumerator.MoveNext()) {
       //  var item = enumerator.Current.Value;
@@ -84,8 +83,7 @@ namespace SHG
       //    this.recipeTable.Add(item, new ());
       //  } 
       //}
-      ItemData[] items = Utils.LoadAllFrom<ItemData>(ItemStorageBase.ITEM_DIR);
-      foreach (var item in items) {
+      foreach (var item in ItemStorageBase.ALL_ITEMS) {
         if (item.IsCraftable) {
           this.recipeTable.Add(item, new ());
         } 

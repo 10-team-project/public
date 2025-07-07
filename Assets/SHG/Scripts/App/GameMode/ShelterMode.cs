@@ -20,6 +20,7 @@ namespace SHG
 
     public IEnumerator OnEnd()
     {
+      App.Instance.GameEventHandler.ClearEventCandiates();
       App.Instance.GameTimeManager.gameObject.SetActive(false);
       App.Instance.PlayerStatManager.HideUI();
       this.UnRegisterEvent();
@@ -95,7 +96,6 @@ namespace SHG
           if (eventToTrigger != null) {
             App.Instance.GameEventHandler.TriggerEvent(eventToTrigger);
           }
-          App.Instance.GameEventHandler.ClearEventCandiates();
         }
       }
       else {

@@ -11,8 +11,7 @@ namespace NTJ
 
         static ItemDatabase()
         {
-            idToData = Resources.LoadAll<ItemData>(ItemStorageBase.ITEM_DIR)
-                .ToDictionary(x => x.Id, x => x); // ID 필드 필요
+          idToData = ItemStorageBase.ALL_ITEMS.ToDictionary(x => x.Id, x => x); // ID 필드 필요
         }
 
         public static ItemData GetItemDataByID(string id)

@@ -10,6 +10,7 @@ namespace SHG
   [RequireComponent(typeof(Animator))]
   public class PlayerItemController : MonoBehaviour, IInputLockHandler
   {
+    const float NPC_LOOK_DISTANCE = 5f;
     public Action<PlayerItemController> OnHit;
     public Action<PlayerItemController> OnHitFinish;
     public Action OnMidLootItem;
@@ -47,6 +48,7 @@ namespace SHG
     Coroutine lootAction;
     Animator animator;
     ItemObject itemToLoot;
+    bool isFocusing;
 
     public void TriggerAnimation(string name)
     {
@@ -65,6 +67,40 @@ namespace SHG
       this.animator = this.GetComponent<Animator>();
       this.mapObjectLayer = (1 << LayerMask.NameToLayer("ItemInteractObject"));
       this.WaitForHitDelay = new WaitForSeconds(this.hitDelay);
+    }
+
+    void OnEnable()
+    {
+      App.Instance.ScriptManager.OnStart += this.OnStartScript;
+      App.Instance.ScriptManager.OnEnd += this.OnEndScript;
+    }
+
+    void OnDisable()
+    {
+      App.Instance.ScriptManager.OnStart -= this.OnStartScript;
+      App.Instance.ScriptManager.OnEnd -= this.OnEndScript;
+    }
+
+    void OnStartScript()
+    {
+      var npc = GameObject.FindWithTag("NpcCharacter");
+      if (npc != null) {
+        if (Vector3.Distance(npc.transform.position, this.transform.position) < NPC_LOOK_DISTANCE) {
+
+          this.LookAt(new Vector3(
+              npc.transform.position.x,
+              npc.transform.position.y + 1.5f,
+              npc.transform.position.z
+              ));
+        }
+      }
+    }
+
+    void OnEndScript()
+    {
+      if (this.isFocusing) {
+        this.LookForward(); 
+      } 
     }
 
     void LookTarget(Transform target)
@@ -103,8 +139,9 @@ namespace SHG
 
     IEnumerator StartLookAt(Transform target = null)
     {
+      this.isFocusing = true;
       if (target != null) {
-        while (this.headAim.weight <= 1f) {
+        while (this.headAim.weight <= 0.9f) {
           this.headAim.weight = Mathf.Lerp(
             this.headAim.weight,
             1f,
@@ -112,16 +149,15 @@ namespace SHG
             );
           this.bodyAim.weight = Mathf.Lerp(
             this.headAim.weight,
-            0.5f,
+            0.7f,
             this.lookAtSpeed * Time.deltaTime
             );
-
           this.headAimTarget.position = target.position;
           yield return (null);
         }
       }
       else {
-        while (this.headAim.weight <= 1f) {
+        while (this.headAim.weight <= 0.9f) {
           this.headAim.weight =  Mathf.Lerp(
             this.headAim.weight,
             1f,
@@ -129,20 +165,21 @@ namespace SHG
             );
           this.bodyAim.weight = Mathf.Lerp(
             this.headAim.weight,
-            0.5f,
+            0.7f,
             this.lookAtSpeed * Time.deltaTime
             );
           yield return (null);
         }
       }
       this.headAim.weight = 1f;
-      this.bodyAim.weight = 0.5f;
+      this.bodyAim.weight = 0.7f;
     }
 
     IEnumerator StartLookFoward()
     {
+      this.isFocusing = false;
       float weight = 0f;
-      while (this.headAim.weight >= 0f) {
+      while (this.headAim.weight >= 0.1f) {
         weight = Mathf.Lerp(
           this.headAim.weight,
           0f,
