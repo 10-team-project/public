@@ -162,10 +162,6 @@ namespace SHG
       label.text = "창고";
       label.AddToClassList("window-label");
       this.Add(label);
-      var closeButton = new Button();
-      closeButton.AddToClassList("window-close-button");
-      closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
-      this.Add(closeButton); 
       this.ItemContainer = new ItemLockerWindow(
         this.floatingBox,
         this.floatingDescriptionContainer

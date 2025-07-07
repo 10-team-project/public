@@ -27,6 +27,20 @@ namespace SHG
       return (false);
     }
 
+    public void ShowQuickSlot()
+    {
+      if (this.MainUI != null) {
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, true);
+      }
+    }
+
+    public void HideQuickSlot()
+    {
+      if (this.MainUI != null) {
+        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, false);
+      }
+    }
+
     public void OnInteractCraft(CraftProvider provider)
     {
       CraftWindow.CurrentProvider = provider;

@@ -19,10 +19,18 @@ namespace SHG
     bool isMoved;
     [SerializeField]
     TextMeshProUGUI gateLabel;
-    [SerializeField, FilePath(filters: "unity")] [Validate("Scene must in build settings", nameof(IsInvalidScene), MessageMode.Error, buildKiller: true)]
+    [SerializeField, FilePath(filters: "unity")] [Validate("Scene must in build settings", nameof(IsInvalidScene), MessageMode.Error)]
     string sceneToMove;
 
-    void Awake()
+    public void SetScene(GameScene scene)
+    {
+      this.sceneToMove = scene.FileName;
+      if (this.gateLabel != null) {
+        this.gateLabel.text = $"{scene.KorName}로 이동합니다";
+      }
+    }
+
+    protected virtual void Awake()
     {
       this.isPresentingUI = false;
       this.interactUI = this.GetComponent<InteractUI>();
@@ -38,21 +46,21 @@ namespace SHG
     void OnEnable()
     {
       this.isMoved = false;
-      this.interactUI.OnInteract += this.OnChangePresting;
+      this.interactUI.OnInteract += this.OnChangePresenting;
     }
 
     void OnDisable()
     {
       this.isPresentingUI = false;
-      this.interactUI.OnInteract -= this.OnChangePresting;
+      this.interactUI.OnInteract -= this.OnChangePresenting;
     }
 
-    void OnChangePresting(bool isPresenting)
+    void OnChangePresenting(bool isPresenting)
     {
       this.isPresentingUI = isPresenting;
     }
 
-    public void Interact()
+    public virtual void Interact()
     {
       if (this.isPresentingUI && !this.isMoved) {
           var popup = PopupManager.Instance.ShowPopup<ConfirmPopup>();

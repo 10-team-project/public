@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using EditorAttributes;
 
 namespace SHG
 {
@@ -116,7 +115,6 @@ namespace SHG
     {
       var points = GameObject.FindGameObjectsWithTag("TeleportPoint");
       var addedNames = new HashSet<string>();
-
       foreach (var point in points) {
         if (addedNames.Contains(point.name)) {
           continue;

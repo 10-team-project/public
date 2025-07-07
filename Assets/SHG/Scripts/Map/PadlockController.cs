@@ -5,10 +5,10 @@ using EditorAttributes;
 
 namespace SHG
 {
-  [RequireComponent (typeof(Rigidbody), typeof(CharacterJoint))]
-  public class PadlockController : MonoBehaviour, IMapObject
+  public class PadlockController : DoorLocker, IMapObject
   {
-    public bool IsLocked { get; private set; }
+    [SerializeField] [Required]
+    Rigidbody rb;
     [SerializeField] [Required]
     GameObject lockedUpperPart;
     [SerializeField] [Required]
@@ -29,16 +29,13 @@ namespace SHG
     int numberOfHitsForUnlock;
     [SerializeField]
     CameraController.FocusDirection focusDirection;
-    [SerializeField] [Range(0f, 2f)]
-    float focusDistance;
-    Rigidbody rb;
     Coroutine lockRoutine;
     PlayerItemController player;
 
     void Awake()
     {
-      this.rb = this.GetComponent<Rigidbody>();
       this.IsLocked = true;
+
     }
 
     [Button ("Hit")]
@@ -71,6 +68,7 @@ namespace SHG
       this.lockedUpperPart.SetActive(false);
       this.unlockedUpperPart.SetActive(true);
       this.IsLocked = false;
+      this.OnUnlock?.Invoke();
     }
 
     [Button ("Toggle lock")]
@@ -142,16 +140,18 @@ namespace SHG
         Debug.LogError($"invalid numberOfHitsForUnlock: {this.numberOfHitsForUnlock}");
       }
       #endif
+      this.player.Spanner.SetActive(true);
       App.Instance.CameraController.AddFocus(
         this.focusPoint != null ? this.focusPoint.transform:
         this.transform,
         this.focusDirection,
-        (camera) => {},
-        this.focusDistance
-        );
+        (camera) => {});
       int count = 1;
       player.OnHit = (player) => {
         this.OnHit(player, count);
+        if (count >= this.numberOfHitsForUnlock) {
+          OnEnded?.Invoke();
+        }
         count += 1;
       };
       for (int i = 0; i < this.numberOfHitsForUnlock; i++) {
@@ -167,6 +167,7 @@ namespace SHG
       if (count >= this.numberOfHitsForUnlock && this.IsLocked) {
         this.ToggleLock();
         player.OnHit = null;
+        player.OnHitFinish = (player) => player.Spanner.SetActive(false) ;
         App.Instance.CameraController.OnCommandEnd();
         App.Instance.CameraController.AddReset();
       }
