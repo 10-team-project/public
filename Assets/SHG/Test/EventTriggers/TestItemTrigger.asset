@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9024fb6997b4c1a989b5cba097c6f0d4, type: 3}
   m_Name: TestItemTrigger
   m_EditorClassIdentifier: 
-  chance: 0.5
-  triggerItem: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
+  chance: 1
+  triggerItem: {fileID: 11400000, guid: 4a16e2d7f3955160b8595e94b29b5afd, type: 2}

@@ -3,16 +3,24 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 using EditorAttributes;
+using LTH;
 
 namespace SHG
 {
   [RequireComponent(typeof(Animator))]
-  public class PlayerItemController : MonoBehaviour
+  public class PlayerItemController : MonoBehaviour, IInputLockHandler
   {
     public Action<PlayerItemController> OnHit;
+    public Action<PlayerItemController> OnHitFinish;
     public Action OnMidLootItem;
     public Action OnEndLootItem;
     public WaitForSeconds WaitForHitDelay;
+    public GameObject Pipe => this.pipe;
+    public GameObject Spanner => this.spanner;
+    [SerializeField] [Required]
+    GameObject pipe;
+    [SerializeField] [Required]
+    GameObject spanner;
     [SerializeField] [Required]
     Transform headAimTarget;
     [SerializeField] [Required]
@@ -31,11 +39,9 @@ namespace SHG
     float mapObjectIntractRadius;
     LayerMask mapObjectLayer;
     [SerializeField] 
-    Vector3 footOffset;
+    Vector3 sphereCastOffset;
     [SerializeField] [Range (0f, 5f)]
     float hitDelay;
-    [SerializeField] [Range(0f, 2f)]
-    float lootTriggerTime;
     Coroutine itemAction;
     Coroutine lookAction;
     Coroutine lootAction;
@@ -155,6 +161,12 @@ namespace SHG
       this.OnHit?.Invoke(this);
     }
 
+    void OnHitEnd()
+    {
+      this.OnHitFinish?.Invoke(this);
+      this.OnHitFinish = null;
+    }
+
     void OnMidPointLoot()
     {
       if (this.itemToLoot != null && this.leftHandTarget != null) {
@@ -174,7 +186,6 @@ namespace SHG
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -196,7 +207,7 @@ namespace SHG
     {
       if (mapObject.IsInteractable(itemData)) {
         EquipmentItem item = App.Instance.Inventory.GetItemFromQuickSlot(itemData);
-        //TODO: lock input
+        App.Instance.InputManager.StartInput(this);
         this.itemAction = this.StartCoroutine(
           mapObject.Interact(item, this.OnItemActionFinished));
       }
@@ -207,30 +218,41 @@ namespace SHG
 
     void OnItemActionFinished()
     {
-      //TODO: release input
       this.itemAction = null;
+      App.Instance.InputManager.EndInput(this);
     }
 
     bool TryFindMapObject(EquipmentItemData item, out IMapObject mapObject)
     {
-      bool isHit = Physics.SphereCast(
-        origin: this.transform.position + this.footOffset,
+
+      RaycastHit[] hitObjects = Physics.SphereCastAll(
+        origin: this.transform.position + this.sphereCastOffset,
         radius: this.mapObjectIntractRadius,
         direction: this.transform.forward,
-        hitInfo: out RaycastHit hitInfo,
         maxDistance: this.mapObjectIntractDist,
         layerMask: this.mapObjectLayer);
       #if UNITY_EDITOR
       Debug.DrawRay(
-        this.transform.position + this.footOffset,
+        this.transform.position + this.sphereCastOffset,
         this.transform.forward * this.mapObjectIntractDist,
         Color.red,
         0.3f
         );
       #endif
+      bool isHit = hitObjects.Length > 0;
       mapObject = null;
       if (isHit) {
-        mapObject = (hitInfo.collider.GetComponent<IMapObject>());
+        float dist = float.MaxValue;
+        foreach (var hit in hitObjects) {
+          if (dist < hit.distance) {
+            continue;
+          } 
+          var found = hit.collider.GetComponent<IMapObject>();
+          if (found != null) {
+            dist = hit.distance;
+            mapObject = found; 
+          }
+        }
       }
       return (mapObject != null);
     }
@@ -243,6 +265,21 @@ namespace SHG
         }
       }
       return (null);
+    }
+
+    public bool IsInputBlocked(InputType inputType)
+    {
+      return (inputType == InputType.Move);
+    }
+
+    public bool OnInputStart()
+    {
+      return (true);
+    }
+
+    public bool OnInputEnd()
+    {
+      return (true);
     }
   }
 }

@@ -1,12 +1,30 @@
 using System.Collections;
 using UnityEngine;
 using Patterns;
+using KSH;
 
 namespace SHG
 {
   using Character = TempCharacter;
   public class CharacterSelectMode : Singleton<CharacterSelectMode>, IGameMode
   {
+    GameObject[] CharacterPrefabs;
+    GameObject[] NpcPrefabs;
+    public GameObject CharacterPrefab { get; private set; }
+    public GameObject NpcPrefab { get; private set; }
+    int selectedCharacter;
+
+    public CharacterSelectMode()
+    {
+      this.CharacterPrefabs = new GameObject[]{
+        Resources.Load<GameObject>("Alice_Player"),
+        Resources.Load<GameObject>("Arisa_Player"),
+      };
+      this.NpcPrefabs = new GameObject[] {
+        Resources.Load<GameObject>("Alice_NPC"),
+        Resources.Load<GameObject>("Arisa_NPC"),
+      };
+    }
 
     public string SceneName => "CharacterChoiceScene";
 
@@ -18,8 +36,12 @@ namespace SHG
       return (false);
     }
 
-    public void OnSelectCharacter(Character newCharacter)
+    public void OnSelectCharacter(int characterIndex)
     {
+      this.selectedCharacter = characterIndex;
+      this.CharacterPrefab = this.CharacterPrefabs[characterIndex];
+      this.NpcPrefab = characterIndex == 0 ?
+        this.NpcPrefabs[1] : this.NpcPrefabs[0];
       //TODO: 캐릭터 데이터 저장, 다음 scene 로드      
       App.Instance.ChangeMode(GameMode.Shelter,
         ShelterMode.Instance.SceneName);

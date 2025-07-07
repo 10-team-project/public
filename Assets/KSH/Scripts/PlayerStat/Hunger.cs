@@ -7,7 +7,7 @@ namespace KSH
     public class Hunger : MonoBehaviour
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
-        [SerializeField] private Slider HungerSlider;
+        [SerializeField] public Slider HungerSlider;
 
         public float HungerCur => resourceDegenerator.Resource.Cur;
         public float HungerMax => resourceDegenerator.Resource.Max;

@@ -13,6 +13,30 @@ namespace LTH
         [SerializeField] private List<ItemSpawnRule> spawnRules;
         [SerializeField] private DropTable dropTable;
 
+        void Awake()
+        {
+          this.dropTable = App.Instance.DropTable;
+          this.CopySettings(); 
+        }
+
+        void CopySettings()
+        {
+          if (this.spawnRules.Count < 1) {
+            return ;
+          }
+          var sample = this.spawnRules[0];
+          foreach (var point in this.transform) {
+            if (point is Transform transform) {
+              this.spawnRules.Add(
+                new ItemSpawnRule {
+                spawnPoint = transform,
+                gradeEntries = sample.gradeEntries
+                });
+              transform.gameObject.SetActive(false);
+            }
+          }
+        }
+
         private void Start()
         {
             SpawnAll();
@@ -30,6 +54,38 @@ namespace LTH
                 ItemObject instance = Item.CreateItemObjectFrom(item);
                 instance.transform.position = rule.spawnPoint.position;
             }
+        }
+
+        private bool CheckSpawnConditions(List<SpawnCondition> conditions)
+        {
+            if (conditions == null || conditions.Count == 0) return true;
+
+            foreach (var cond in conditions)
+            {
+                switch (cond.conditionType)
+                {
+                    case SpawnConditionType.Used:
+                        if (GameProgressManager.Instance.IsItemUsed(cond.itemName))
+                            return false;
+                        break;
+
+                    case SpawnConditionType.Obtained:
+                        if (GameProgressManager.Instance.IsItemObtained(cond.itemName))
+                            return false;
+                        break;
+
+                    case SpawnConditionType.RequireObtained:
+                        if (!GameProgressManager.Instance.IsItemObtained(cond.itemName))
+                            return false;
+                        break;
+
+                    case SpawnConditionType.SingleSpawn:
+                        if (GameProgressManager.Instance.IsItemUsed(cond.itemName))
+                            return false;
+                        break;
+                }
+            }
+            return true;
         }
 
         private ItemProbabilityEntry ChooseGrade(List<ItemProbabilityEntry> grades)
@@ -51,55 +107,25 @@ namespace LTH
                 addedItems = new List<ItemData>();
             }
 
-
             foreach (var entry in grades)
             {
-                // DropTable 조건 필터링
-                bool allBlocked = entry.items.TrueForAll(item =>
-                    removedItems.Contains(item) && !addedItems.Contains(item));
-                if (allBlocked) continue;
-
-                // 1회성 아이템 체크
-                if (entry.onlySpawnOnce &&
-                    GameProgressManager.Instance.IsItemUsed(entry.itemIdentifier))
+                if (IsBlockedByDropTable(entry, removedItems, addedItems))
                     continue;
 
-                // 특정 아이템 사용 시 차단
-                if (entry.blockedIfUsedItem != null)
-                {
-                    foreach (var id in entry.blockedIfUsedItem)
-                    {
-                        if (GameProgressManager.Instance.IsItemUsed(id))
-                            goto ContinueLoop;
-                    }
-                }
+                if (!CheckSpawnConditions(entry.spawnConditions))
+                    continue;
 
-                // 특정 아이템 획득 시 차단
-                if (entry.blockedIfObtainedItem != null)
-                {
-                    foreach (var id in entry.blockedIfObtainedItem)
-                    {
-                        if (GameProgressManager.Instance.IsItemObtained(id))
-                            goto ContinueLoop;
-                    }
-                }
-
-                // 특정 아이템 획득 후에만 등장
-                if (entry.requiredObtainedItem != null)
-                {
-                    foreach (var id in entry.requiredObtainedItem)
-                    {
-                        if (!GameProgressManager.Instance.IsItemObtained(id))
-                            goto ContinueLoop;
-                    }
-                }
                 cumulative += entry.probability;
                 if (rand <= cumulative)
                     return entry;
-
-                ContinueLoop:;
             }
             return null;
+        }
+
+        private bool IsBlockedByDropTable(ItemProbabilityEntry entry, List<ItemData> removed, List<ItemData> added)
+        {
+            // 모든 아이템이 제거됐고, 다시 추가도 안 됐다면 → 막힘
+            return entry.items.TrueForAll(item => removed.Contains(item) && !added.Contains(item));
         }
     }
 }

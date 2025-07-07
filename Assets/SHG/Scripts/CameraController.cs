@@ -16,12 +16,14 @@ public class CameraController : MonoBehaviour
     Right
   }
 
-  [SerializeField, ReadOnly]
-  Transform cameraFollow;
-  [SerializeField, ReadOnly]
-  Transform cameraLook;
+  [SerializeField]
+  Transform cameraFollowObject;
+  [SerializeField]
+  Transform cameraLookObject;
   [SerializeField]
   Vector3 followOffset;
+  Rigidbody cameraFollow;
+  Rigidbody cameraLook;
   Coroutine cameraRoutine;
   Action<CameraController> onCommandEnded;
   CinemachineVirtualCamera virtualCamera; 
@@ -30,7 +32,9 @@ public class CameraController : MonoBehaviour
   [SerializeField] [Range (1f, 10f)]
   float forwardFocusDist;
   [SerializeField] [Range(0.1f, 1f)]
-  float cameraMoveSpeed;
+  float cameraFocusSpeed;
+  [SerializeField] [Range(5f, 30f)]
+  float cameraFollowSpeed;
   float cameraMoveProgress;
   float depthHeightRatio;
   Queue<(IEnumerator, Action<CameraController>)> cameraCommandQueue;
@@ -38,32 +42,50 @@ public class CameraController : MonoBehaviour
   [SerializeField]
   Transform focusTarget;
   #endif
-
   Transform player;
+
+  public Transform Player 
+  {
+    get => this.player;
+    set {
+      this.player = value;
+      this.cameraLook.position = value.position;
+      this.cameraFollow.position = 
+        value.position + this.followOffset;
+
+    }
+  }
 
   void Awake()
   {
     this.cameraCommandQueue = new ();
-    this.cameraFollow = new GameObject("Camera Follow").transform;
-    this.cameraLook = new GameObject("Camera Look").transform;
     this.virtualCamera = this.GetComponent<CinemachineVirtualCamera>();
-    this.virtualCamera.Follow = this.cameraFollow;
-    this.virtualCamera.LookAt = this.cameraLook;
     this.depthHeightRatio = Math.Abs(this.followOffset.y / this.followOffset.z );
+    this.cameraFollow = this.cameraFollowObject.GetComponent<Rigidbody>();
+    this.cameraLook = this.cameraLookObject.GetComponent<Rigidbody>();
+    App.Instance.SetCameraController(this);
+    this.gameObject.SetActive(false);
+  }
+
+  void OnDestroy()
+  {
+    App.Instance.SetCameraController(null);
   }
   
   // Start is called before the first frame update
   void Start()
   {
-    this.player = GameObject.FindWithTag("Player").transform;
+    this.cameraLookObject.position = this.Player.position;
+    this.cameraFollow.position = this.Player.position + this.followOffset;
   }
 
   void LateUpdate()
   {
     if (this.cameraRoutine == null) {
       if (!this.cameraCommandQueue.TryDequeue(out (IEnumerator routine, Action<CameraController> onEnded) command)) {
-        this.cameraLook.position = this.player.position;
-        this.cameraFollow.position = this.player.position + this.followOffset;
+        this.cameraLook.velocity = (this.Player.position - this.cameraLook.position) * this.cameraFollowSpeed;
+        this.cameraFollow.velocity = 
+         (this.Player.position + this.followOffset - this.cameraFollow.position ) * this.cameraFollowSpeed;
       }
       else {
         this.onCommandEnded = command.onEnded;
@@ -103,9 +125,17 @@ public class CameraController : MonoBehaviour
     Action<CameraController> onEnded = null,
     Nullable<float> focusDist = null)
   {
-    this.cameraCommandQueue.Enqueue(
-      (this.MoveCameraRoutine(target, focusDirection, focusDist), 
-       onEnded ?? this.onCommandEnded));
+    if (onEnded != null) {
+
+      this.cameraCommandQueue.Enqueue(
+        (this.MoveCameraRoutine(target, focusDirection, focusDist), 
+         onEnded));
+    }
+    else {
+      this.cameraCommandQueue.Enqueue(
+        (this.MoveCameraRoutine(target, focusDirection, focusDist), 
+         this.OnCommandEnd));
+    }
     return (this);
   }
 
@@ -118,28 +148,31 @@ public class CameraController : MonoBehaviour
 
   Vector3 CalcFollowPosition(Transform target, FocusDirection focusDirection, Nullable<float> dist = null)
   {
-    var depth = dist ?? this.forwardFocusDist;
+    if (dist == null) {
+      dist = focusDirection == FocusDirection.Foward ? this.forwardFocusDist: this.horizontalFocusDist;
+    }
+    float depth = dist.Value;
     switch (focusDirection) {
       case FocusDirection.Foward:
         return (target.position + 
           new Vector3(
             0, 
             Math.Abs(depth * this.depthHeightRatio),
-            -(depth)));
+            -depth));
       case FocusDirection.Left:
         return (
           target.position +
           new Vector3(
             -(depth),
             Math.Abs(depth * this.depthHeightRatio),
-            0));
+            -depth));
       case FocusDirection.Right:
         return (
           target.position + 
           new Vector3(
             depth,
             Math.Abs(depth * this.depthHeightRatio),
-            0));
+            -depth));
       default: 
         return this.cameraFollow.position;
     }
@@ -149,18 +182,20 @@ public class CameraController : MonoBehaviour
   {
     var followPosition = this.CalcFollowPosition(lookTarget, focusDirection, focusDist);
     var targetPosition = lookTarget.position;
+    this.cameraFollow.velocity = Vector3.zero;
+    this.cameraLook.velocity = Vector3.zero;
     while (this.cameraMoveProgress < 1) {
-      this.cameraFollow.position = Vector3.Lerp(
-        this.cameraFollow.position,
+      this.cameraFollowObject.position = Vector3.Lerp(
+        this.cameraFollowObject.position,
         followPosition,
         this.cameraMoveProgress
         );
-      this.cameraLook.position = Vector3.Lerp(
-        this.cameraLook.position,
+      this.cameraLookObject.position = Vector3.Lerp(
+        this.cameraLookObject.position,
         lookTarget != null ? lookTarget.position : targetPosition,
         this.cameraMoveProgress
         );
-      this.cameraMoveProgress += this.cameraMoveSpeed * Time.deltaTime;
+      this.cameraMoveProgress += this.cameraFocusSpeed * Time.deltaTime;
       yield return (null);
     }
     this.onCommandEnded?.Invoke(this);
@@ -168,19 +203,19 @@ public class CameraController : MonoBehaviour
 
   IEnumerator ResetCameraRoutine()
   {
-    Vector3 followDest = this.player.position + this.followOffset;
+    Vector3 followDest = this.Player.position + this.followOffset;
     while (this.cameraMoveProgress < 1f) {
       this.cameraFollow.position = Vector3.Lerp(
         this.cameraFollow.position,
         followDest,
         this.cameraMoveProgress
         );
-      this.cameraLook.position = Vector3.Lerp(
-        this.cameraLook.position,
-        this.player.position,
+      this.cameraLookObject.position = Vector3.Lerp(
+        this.cameraLookObject.position,
+        this.Player.position,
         this.cameraMoveProgress
         );
-      this.cameraMoveProgress += this.cameraMoveSpeed * Time.deltaTime;
+      this.cameraMoveProgress += this.cameraFocusSpeed * Time.deltaTime;
       yield return (null);
     }
     this.onCommandEnded?.Invoke(this);
@@ -193,17 +228,5 @@ public class CameraController : MonoBehaviour
     cam.cameraMoveProgress = 0f;
     cam.cameraRoutine = null;
     cam.cameraMoveProgress = 0f;
-  }
-
-  void OnEnable()
-  {
-    App.Instance.SetCameraController(this);
-  }
-
-  void OnDisable()
-  {
-    if (App.Instance != null) {
-      App.Instance.SetCameraController(null);
-    }
   }
 }

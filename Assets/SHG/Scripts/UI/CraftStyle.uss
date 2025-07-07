@@ -2,36 +2,74 @@
 {
   flex-direction: row;
   justify-content: space-around;
-  width: 45%;
-  height: 70%;
+  width: 900px;
+  height: 650px;
   position: absolute;
-  left: 10%;
-  top: 10%;
-  padding-top: 100px;
-}
-
-#craft-window-container>.window-label
-{
-  position: absolute;
-  left: 40%;
-  top: 5px;
+  left: 15%;
+  top: 15%;
+  padding: 20px;
+  background-color: #e9e9e9;
+  border-radius: 3px;
+  border-color: #6b6b6b;
+  border-width: 5px;
 }
 
 #product-list-window-container
 {
+  width: 240px;
+  height: 100%;
+  background-color: #d9d9d9;
+  border-radius: 3px;
+}
+
+#product-list-window-item-container 
+{
+  width: 100%;
+  height: 100%;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 280px;
-  max-width: 280px;
-  height: 100%;
-  padding: 10px;
+}
+
+#product-list-window-container>.item-container-scroll-view
+{
+  width: 90%;
+  height: 80%;
+  margin-right: 20px;
+}
+
+#product-list-window-container>.window-label
+{
+  font-size: 40px;
+  width: 80%;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-bottom: 5px;
+  border-bottom-color: black;
+  border-bottom-width: 3px;
 }
 
 .product-list-item-box
 {
-  width: 120px;
-  height: 120px;
+  width: 75px;
+  height: 75px;
   opacity: 1;
+  border-radius: 3px;
+  background-color: #ffffff;
+}
+
+.product-list-item-box-label
+{
+  position: absolute;
+  bottom : 0px;
+  width: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+  max-width: 75px;
+  color: #33b727;
+  font-size: 14px;
+  -unity-text-align: middle-center;
+  -unity-font-style: bold;
+  text-overflow: ellipsis;
 }
 
 .product-list-item-box-inactive
@@ -39,23 +77,36 @@
   opacity: 0.5;
 }
 
+.product-list-item-box-inactive>.product-list-item-box-label
+{
+  color: #ed3232;
+}
+
 .product-list-item-box-selected
 {
-  border-color: brown;
-  border-width: 2px;
+  border-color: #f4670b;
+  border-width: 4px;
 }
 
 #recipes-window
 {
   flex: 2;
   flex-shrink: 1;
+  flex-direction: column;
+  align-items: center;
+  background-color: #d9d9d9;
+  border-radius: 3px;
+  margin-left: 30px;
 }
 
 .recipe-view-container
 {
-  width: 300px;
-  max-width: 300px;
+  flex: 1;
   height: 100%;
+  width: 100%;
+  padding-top: 76px;
+  padding-bottom: 40px;
+  justify-content: space-around;
 }
 
 .recipe-view-product-box-container
@@ -64,21 +115,41 @@
   align-items: center;
 }
 
-.recipe-view-product-box
+.recipe-view-product-box-inactive 
 {
+  opacity: 0.5;
+}
+
+.recipe-view-material-box-inactive .recipe-view-item-box-label
+{
+  color: #ed3232
+}
+
+.recipe-view-product-box-inactive .recipe-view-item-box-label
+{
+  color: #ed3232
 }
 
 .recipe-view-material-list
 {
-  margin-top: 50px;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
+  width: 100%;
 }
 
 .recipe-view-material-box-inactive
 {
   opacity: 0.5;
+}
+
+.recipe-view-item-box-label
+{
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  -unity-text-align: middle-center;
+  -unity-font-style: bold;
 }
 
 .recipe-view-description
@@ -91,17 +162,19 @@
 
 .recipe-view-craft-button-container
 {
-  margin-left: 20px;
-  margin-right: 20px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 .recipe-view-craft-button
 {
-  align-self: flex-end;
   color: black;
-  width: 200px;
-  height: 80px;
-  font-size: 20px;
+  padding: 16px;
+  padding-left: 22px;
+  padding-right: 22px;
+  border-radius: 20px;
+  font-size: 30px;
 }
 
 .recipe-view-craft-button-disabled

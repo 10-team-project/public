@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
 using UnityEngine;
 using UnityEngine.UI;
 using KSH;
+using SHG;
 using System;
 
 namespace KSH
@@ -12,6 +14,7 @@ namespace KSH
     {
         [SerializeField] private Button talkButton;
         [SerializeField] private Button eventButton;
+        [SerializeField] private Button craftButton;
         [SerializeField] private GameObject mainDialogue;
         [SerializeField] private GameObject NPC;
         [SerializeField] private GameObject eventBubbleIcon;
@@ -22,6 +25,21 @@ namespace KSH
         private bool isreach = false;
         private bool previousisreach = false;
         private bool isEvent = false;
+
+        int[] scriptIdsWithoutRadio = {
+          12201,
+          12202,
+          12203
+        };
+        int[] scriptIdsWitRadio = {
+          12101,
+          12102,
+          12103,
+          12104,
+          12105,
+          12106,
+        };
+        System.Random scriptRandom = new ();
         
         public event Action<bool> OnInteract; // bool 이벤트
 
@@ -29,7 +47,7 @@ namespace KSH
         {
             talkButton.onClick.AddListener(() =>
             {
-                ScriptManager.Instance.StartScript(12203);
+                ScriptManager.Instance.StartScript(this.GetRandomScriptId());
                 mainDialogue.SetActive(false);
             });
             eventButton.onClick.AddListener(() =>
@@ -39,6 +57,8 @@ namespace KSH
                 isEvent = false;
                 UpdateEvent();
             });
+            craftButton.onClick.AddListener(() => 
+              App.Instance.UIController.OpenCraftWindow());
             
             OnInteract += Interact; // 이벤트에 연결
             
@@ -53,6 +73,18 @@ namespace KSH
         private void Update()
         {
             Detect();
+        }
+
+        int GetRandomScriptId()
+        {
+          if (App.Instance.Inventory.HasRadioItem()) {
+            int index = this.scriptRandom.Next(0, this.scriptIdsWitRadio.Length); 
+            return (this.scriptIdsWitRadio[index]);
+          }
+          else {
+            int index = this.scriptRandom.Next(0, this.scriptIdsWithoutRadio.Length); 
+            return (this.scriptIdsWithoutRadio[index]);
+          }
         }
         
         public void Detect()

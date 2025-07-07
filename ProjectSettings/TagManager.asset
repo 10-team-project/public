@@ -10,6 +10,7 @@ TagManager:
   - LadderDownEnd
   - LadderUpStart
   - LadderUpEnd
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
@@ -38,10 +39,10 @@ TagManager:
   - Body
   - Parts
   - MapInteractObject
+  - Camera
   - 
   - 
-  - 
-  - 
+  - Noise
   - 
   m_SortingLayers:
   - name: Default

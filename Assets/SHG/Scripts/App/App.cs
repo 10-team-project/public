@@ -6,6 +6,7 @@ using UnityEditor;
 using Patterns;
 using KSH;
 using LTH;
+using NTJ;
 
 namespace SHG
 {
@@ -37,6 +38,11 @@ namespace SHG
     public ItemTracker ItemTracker { get; private set; }
     public DropTable DropTable { get; private set; }
     public GameEventHandler GameEventHandler { get; private set; }
+    public PlayerStatManager PlayerStatManager { get; private set; }
+    public GameTimeManager GameTimeManager { get; private set; }
+    public ScriptManager ScriptManager { get; private set; }
+    public GameObject CharacterPrefab => CharacterSelectMode.Instance.CharacterPrefab;
+    public GameObject NpcPrefab => CharacterSelectMode.Instance.NpcPrefab;
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -66,16 +72,22 @@ namespace SHG
       this.InputManager = InputManager.CreateInstance();
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
+      this.PlayerStatManager = Instantiate(Resources.Load<GameObject>("PlayerStatManager")).GetComponent<PlayerStatManager>();
+      this.GameTimeManager = new GameObject().AddComponent<GameTimeManager>();
+      DontDestroyOnLoad(this.GameTimeManager);
+      this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
-      //this.PopupManager = PopupManager.CreateInstance();
+      this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
+      this.ScriptManager = ScriptManager.Instance;
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
         this.SceneManager,
         this.InputManager,
         this.RecipeRegistry,
         this.UIController,
-        this.PopupManager
+        this.PopupManager,
+        this.PlayerStatManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {

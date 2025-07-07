@@ -14,6 +14,7 @@ namespace LTH
         [SerializeField] GameObject placeHolder;
         [SerializeField] Transform spawnPoint;
         [SerializeField] Collider blockingCollider;
+        [SerializeField] bool isLeft;
 
         private GameObject construction;
         private DissolveController dissolveController;
@@ -41,6 +42,10 @@ namespace LTH
             construction = Instantiate(PointData.Prefab);
             construction.transform.SetParent(transform);
 
+            if (this.placeHolder != null) {
+              construction.transform.rotation = this.placeHolder.transform.rotation;
+            }
+
             if (spawnPoint != null)
             {
                 construction.transform.position = spawnPoint.position;
@@ -52,8 +57,15 @@ namespace LTH
                 construction.transform.position = transform.position;
                 construction.transform.Rotate(0f, -90f, 0f);
             }
-
             dissolveController = construction.GetComponent<DissolveController>();
+            foreach (var child in construction.transform) {
+              if (child is Transform transform) {
+                LadderTrigger trigger = transform.GetComponent<LadderTrigger>();
+                if (trigger != null) {
+                  trigger.isLeftLadder = this.isLeft;
+                }
+              }
+            }
         }
 
         public void Interact() // IInteractable Test¿ë
@@ -74,21 +86,21 @@ namespace LTH
         {
             if (placeHolder != null) placeHolder.SetActive(false);
 
+            App.Instance.CameraController.AddFocus(
+              transform,
+              CameraController.FocusDirection.Foward);
+            yield return (new WaitForSeconds(0.5f));
             Construct();
 
             if (dissolveController != null)
             {
                 dissolveController.DisappearImmediately();
-                App.Instance.CameraController.AddFocus(
-                  transform,
-                  CameraController.FocusDirection.Foward,
-                  onEnded: cam => { });
 
                 yield return dissolveController.StartAppear();
             }
-
-            App.Instance.CameraController.OnCommandEnd();
-            App.Instance.CameraController.AddReset();
+            else if (!construction.activeSelf){
+              construction.SetActive(true);
+            }
 
             if (blockingCollider != null) blockingCollider.enabled = false;
 
@@ -98,6 +110,7 @@ namespace LTH
 
         public bool IsInteractable(EquipmentItemData item)
         {
+          return (true);
             if (PointData == null) return false;
 
             return item.Purpose == EquipmentItemPurpose.Construct &&
