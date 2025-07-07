@@ -18,6 +18,6 @@ MonoBehaviour:
   startMessages: []
   skipable: 0
   eventTrigger: {fileID: 11400000, guid: 9263b242cc2383c4b82b5ed47ac0029d, type: 2}
-  eventPriority: 3
+  eventPriority: 4
   effectSound: {fileID: 0}
   traumaEffect: {fileID: 0}

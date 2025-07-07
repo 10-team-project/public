@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36cb458a83e35ab3aaf01fa0b756db28, type: 3}
-  m_Name: Normal_excape_Hint_smartphone
+  m_Name: Sub_something_ 2
   m_EditorClassIdentifier: 
-  uuid: 2ae62037-a858-45e3-9260-3176ee7b6d25
-  eventName: 12201
+  uuid: 82cc0fbd-bcf7-49b7-b0bf-6758c0398f24
+  eventName: 11201
   eventRewards:
-  - {fileID: 11400000, guid: 5aef7aa321a94c74b9fb39a3d2d2d6b4, type: 2}
+  - {fileID: 11400000, guid: d44b5cd35411da349b2649b7e771aac4, type: 2}
   startMessages: []
   skipable: 0
-  eventTrigger: {fileID: 11400000, guid: a74d6fd9058f66d4da226aa7c4ef392e, type: 2}
-  eventPriority: 2
+  eventTrigger: {fileID: 11400000, guid: 97194ad760ec6a74a96e27a859cad7bb, type: 2}
+  eventPriority: 4
   effectSound: {fileID: 0}
   traumaEffect: {fileID: 0}
