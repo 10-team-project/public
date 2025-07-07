@@ -26,7 +26,7 @@ namespace NTJ
 
         void Update()
         {
-            if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
+            if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && interactUI.activeSelf)
             {
                 timeManager.RequestManualSleep(); // 수면 요청
                 interactUI.SetActive(false);     // UI 비활성화
