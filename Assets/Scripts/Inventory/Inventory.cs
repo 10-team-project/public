@@ -50,6 +50,37 @@ public class Inventory : ItemStorageBase
     return (this.QuickSlotItems.ConvertAll(item => item.Id));
   }
 
+  public void RegisterEventRewards(GameEventHandler eventHandler)
+  {
+    eventHandler.OnNormalEventStart += this.OnEventStart;
+    eventHandler.OnStoryEventStart += this.OnEventStart;
+  }
+
+  void OnEventStart(GameEvent gameEvent)
+  {
+    for (int i = 0; i < gameEvent.Rewards.Length; i++) {
+      if (gameEvent.Rewards[i] != null && gameEvent.Rewards[i] is ItemReward itemReward) {
+        if (itemReward.IsLost) {
+          this.LoseItems(itemReward.Items);
+        }       
+        else {
+          foreach (var item in itemReward.Items) {
+            this.AddItem(Item.CreateItemFrom(item)); 
+          }
+        }
+      } 
+    }
+  }
+
+  void LoseItems(ItemData[] items)
+  {
+    foreach (var item in items) {
+      if (this.GetItemCount(item) > 1) {
+        this.GetItem(item);
+      } 
+    }
+  }
+
   public void LoadQuickSlotItems(List<string> itemIds)
   {
     for (int i = 0; i < itemIds.Count; i++) {

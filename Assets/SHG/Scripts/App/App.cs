@@ -79,6 +79,7 @@ namespace SHG
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
       this.GameEventHandler.RegisterGameTimeTracker(this.GameTimeManager);
+      this.Inventory.RegisterEventRewards(this.GameEventHandler);
       this.ScriptManager = ScriptManager.Instance;
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
