@@ -445,6 +445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e0139b46385bb990b76d2e64ea1ddc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  steelPipe: {fileID: 0}
   headAimTarget: {fileID: 0}
   headAim: {fileID: 0}
   bodyAim: {fileID: 0}
@@ -453,7 +454,7 @@ MonoBehaviour:
   lookAtSpeed: 1
   mapObjectIntractDist: 3
   mapObjectIntractRadius: 1
-  footOffset: {x: 0, y: -0.3, z: 0}
+  sphereCastOffset: {x: 0, y: 0, z: 0}
   hitDelay: 0
 --- !u!95 &186235112
 Animator:
