@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using EditorAttributes;
 using SHG;
+using KSH;
 
 public class ItemObject : MonoBehaviour, IInteractable, IPickupable
 {
@@ -9,6 +10,8 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
   [SerializeField]
   Item item;
   PlayerItemController player;
+  [SerializeField]
+  Canvas floatingUI;
 
   public void SetItem(Item item) 
   {
@@ -17,6 +20,9 @@ public class ItemObject : MonoBehaviour, IInteractable, IPickupable
 
   public void Interact()
   {
+    if (this.floatingUI != null) {
+      this.floatingUI.enabled = false;
+    }
     if (this.player == null) {
       this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();
     }
