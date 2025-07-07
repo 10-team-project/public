@@ -8,13 +8,20 @@ namespace SHG
   public class ItemStorageBase: IObservableObject<ItemStorageBase>
   {
 
+    public static readonly string[] ITEM_DIRS = new string[] {
+      "Assets/PJW/Item/DropChangeItem",
+      "Assets/PJW/Item/EquipmentItem",
+      "Assets/PJW/Item/PlainItem",
+      "Assets/PJW/Item/RecoveryItem",
+      "Assets/PJW/Item/StoryItem"
+    };
     public virtual int MAX_STACK_COUNT => 20;
     public virtual int MAX_SLOT_COUNT => 30;
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
-    public const string ITEM_DIR = "Assets/SHG/Test/Items";
     public Action<ItemData> OnObtainItem;
+    public static List<ItemData> ALL_ITEMS { get; private set; }
 
   #if UNITY_EDITOR
     [SerializeField]
@@ -36,6 +43,15 @@ namespace SHG
     public void LoadFromItemSaveDataList(List<ItemSaveData> data)
     {
        
+    }
+
+    static ItemStorageBase()
+    {
+      ALL_ITEMS = new ();
+      foreach (var dir in ItemStorageBase.ITEM_DIRS) {
+        ItemData[] items = Utils.LoadAllFrom<ItemData>(dir);
+        ALL_ITEMS.AddRange(items);
+      }
     }
 
     protected ItemStorageBase()

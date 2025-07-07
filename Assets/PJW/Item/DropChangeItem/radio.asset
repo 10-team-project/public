@@ -16,10 +16,10 @@ MonoBehaviour:
   itemName: "\uB77C\uB514\uC624"
   image: {fileID: 21300000, guid: 74bbcf583fd99eb40b482b6e780fc0f8, type: 3}
   prefab: {fileID: 0}
-  description: "\uC81C\uC791 \uC2DC \uC911\uC694\uD55C \uC815\uBCF4\uB97C \uD68D\uB4DD\uD560
-    \uC218 \uC788\uC74C"
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC81C\uC791 \uC2DC
+    \uC911\uC694\uD55C \uC815\uBCF4\uB97C \uD68D\uB4DD\uD560 \uC218 \uC788\uC74C"
   recipes:
-  - {fileID: 11400000, guid: fb9cdcf5e3d0a084ab6742855c8aed56, type: 2}
+  - {fileID: 11400000, guid: 81702c4a514769a4ab14941ea1ef7e94, type: 2}
   onObtainChange:
   - TableChange: 0
     Item: {fileID: 11400000, guid: 56d41e9acba3f624592829dc8901d79a, type: 2}

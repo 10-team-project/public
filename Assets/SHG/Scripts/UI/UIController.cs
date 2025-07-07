@@ -15,6 +15,15 @@ namespace SHG
       this.MainUI = ui;
     }
 
+    public void Start()
+    {
+      App.Instance.GameTimeManager.OnSleep += () => {
+        if (this.MainUI != null) {
+          this.MainUI.CloseAllWindows();
+        }
+      };
+    }
+
     public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
     {
       if (this.MainUI != null) {

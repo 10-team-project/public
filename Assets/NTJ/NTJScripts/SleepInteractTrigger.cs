@@ -1,4 +1,5 @@
 using UnityEngine;
+using SHG;
 
 namespace NTJ
 {
@@ -7,6 +8,21 @@ namespace NTJ
         public GameTimeManager timeManager;
         public GameObject interactUI; // 상호 작용키로 잠자기 안내 UI
         private bool isPlayerInRange = false;
+
+        void Awake()
+        {
+          timeManager = App.Instance.GameTimeManager;
+        }
+
+        void OnEnable()
+        {
+          App.Instance.GameTimeManager.bedSpawnPoint = this.transform;
+        }
+
+        void OnDisable()
+        {
+          App.Instance.GameTimeManager.bedSpawnPoint = null;
+        }
 
         void Update()
         {

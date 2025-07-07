@@ -228,62 +228,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &30304337
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 30304340}
-  - component: {fileID: 30304338}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &30304338
+--- !u!114 &30304338 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+    type: 3}
+  m_PrefabInstance: {fileID: 1764821735807992186}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 30304337}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55ad0ec381969e14b8f19f9dfeb48ad2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeText: {fileID: 1387441097}
-  dayText: {fileID: 1042822582}
-  fadePanel: {fileID: 2048358099}
-  dayTextPanel: {fileID: 81910035}
-  dayTextDisplay: {fileID: 1745881395}
-  topUITextGroup: {fileID: 622959507}
-  timeScaleSlider: {fileID: 1838332098}
-  timeScaleText: {fileID: 1287560313}
-  playerAnimator: {fileID: 0}
-  bedSpawnPoint: {fileID: 818626672}
-  player: {fileID: 1541952831}
-  timeScale: 30
---- !u!4 &30304340
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 30304337}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 413, y: 243.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &81910035
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceDegenerator: {fileID: 1568738991}
+  ThirstySlider: {fileID: 0}
 --- !u!1 &478447117
 GameObject:
   m_ObjectHideFlags: 0
@@ -527,6 +484,7 @@ MonoBehaviour:
   HpLossFromHunger: 0
   HpLossFromThirsty: 0
   HpLossFromFatigue: 0
+  HpBarSlider: {fileID: 0}
 --- !u!1 &622959505
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,6 +614,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceDegenerator: {fileID: 1568738991}
+  FatigueSlider: {fileID: 0}
 --- !u!1 &818626668
 GameObject:
   m_ObjectHideFlags: 0
@@ -2223,6 +2182,7 @@ MonoBehaviour:
   hunger: {fileID: 2042360062}
   thirsty: {fileID: 464408925}
   fatigue: {fileID: 692897456}
+  UI: {fileID: 0}
 --- !u!65 &1541952835
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2794,6 +2754,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceDegenerator: {fileID: 1568738991}
+  HungerSlider: {fileID: 0}
 --- !u!1 &2048358097
 GameObject:
   m_ObjectHideFlags: 0
@@ -2869,6 +2830,129 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2048358097}
   m_CullTransparentMesh: 1
+--- !u!1001 &1764821735807992186
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 413
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 243.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323677449749625784, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2828911516994347894, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: m_Name
+      value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: player
+      value: 
+      objectReference: {fileID: 1541952831}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: dayText
+      value: 
+      objectReference: {fileID: 1042822582}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: timeText
+      value: 
+      objectReference: {fileID: 1387441097}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: fadePanel
+      value: 
+      objectReference: {fileID: 2048358099}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: timeScale
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: dayTextPanel
+      value: 
+      objectReference: {fileID: 81910035}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: bedSpawnPoint
+      value: 
+      objectReference: {fileID: 818626672}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: timeScaleText
+      value: 
+      objectReference: {fileID: 1287560313}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: dayTextDisplay
+      value: 
+      objectReference: {fileID: 1745881395}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: topUITextGroup
+      value: 
+      objectReference: {fileID: 622959507}
+    - target: {fileID: 8151138418731702898, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba,
+        type: 3}
+      propertyPath: timeScaleSlider
+      value: 
+      objectReference: {fileID: 1838332098}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d8d16465ad2fd4cc0a1c8cee9b9d98ba, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2876,7 +2960,7 @@ SceneRoots:
   - {fileID: 1165577206}
   - {fileID: 478447121}
   - {fileID: 1383992125}
-  - {fileID: 30304340}
+  - {fileID: 1764821735807992186}
   - {fileID: 17124994}
   - {fileID: 1541952831}
   - {fileID: 818626672}

@@ -17,6 +17,5 @@ MonoBehaviour:
   materials:
   - {fileID: 11400000, guid: 1c4ab6cff72bdf7419cef28fbe6fb067, type: 2}
   - {fileID: 11400000, guid: 1c4ab6cff72bdf7419cef28fbe6fb067, type: 2}
-  - {fileID: 11400000, guid: 1c4ab6cff72bdf7419cef28fbe6fb067, type: 2}
   locked: 0
   recipeProvider: 2
