@@ -13,5 +13,4 @@ MonoBehaviour:
   m_Name: TestHintReward
   m_EditorClassIdentifier: 
   hintMessages:
-  - test hit 1
-  - test hit 2
+  - converstationA-1

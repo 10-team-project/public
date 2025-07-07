@@ -17,5 +17,5 @@ namespace KSH
         {
             return SceneManager.LoadSceneAsync(sceneName); //sceneName 씬으로 이동
         }
-    }   
+    }  
 }
