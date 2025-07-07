@@ -24,8 +24,6 @@ public class MapSelect : MonoBehaviour
     [Header("Exit Button")]
     [SerializeField] private Button[] Exit;
 
-    private bool isPause = false;
-
     private void Start()
     {
         HideAllPanels();
@@ -53,7 +51,6 @@ public class MapSelect : MonoBehaviour
             {
                 HideAllPanels();
                 Time.timeScale = 1f;
-                isPause = false;
             });
         }
     }
@@ -68,7 +65,6 @@ public class MapSelect : MonoBehaviour
             {
                 Where1.SetActive(true);
                 Time.timeScale = 0f;
-                isPause = true;
             },
 
             "",
@@ -80,7 +76,6 @@ public class MapSelect : MonoBehaviour
     {
         currentPanel.SetActive(false);
         Time.timeScale = 1f;
-        isPause = false;
     }
 
     private void SwitchPanel(GameObject CurPanel, GameObject BeforePanel) //화살표 표시 누르면 창 바뀌는 기능

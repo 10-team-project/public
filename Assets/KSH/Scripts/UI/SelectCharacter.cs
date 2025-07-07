@@ -59,7 +59,7 @@ namespace KSH
           PlayerPrefs.SetInt("PlayerSelect", (int)CharacterType); // 클릭하면 해당 UI의 캐릭터 타입을 저장
           mode.OnSelectCharacter((int)CharacterType);
           return ;
-            StartCoroutine(LoadScene());
+            //StartCoroutine(LoadScene());
         }
 
         IEnumerator LoadScene()

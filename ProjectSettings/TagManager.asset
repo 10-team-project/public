@@ -42,7 +42,7 @@ TagManager:
   - Camera
   - 
   - 
-  - 
+  - Noise
   - 
   m_SortingLayers:
   - name: Default
