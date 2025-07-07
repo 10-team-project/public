@@ -7,7 +7,11 @@ namespace LTH
 {
     /// <summary>
     /// ItemTracker에서 아이템 획득/사용 정보를 GameProgressManager에 자동 반영시킴
+    /// App.cs => Awake()
+    /// this.ItemTracker = new ItemTracker(this.Inventory);
+    /// ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker); => 추가하면 됨
     /// </summary>
+ 
     public class ItemTrackerConnector : MonoBehaviour
     {
        
