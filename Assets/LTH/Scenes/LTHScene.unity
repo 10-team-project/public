@@ -713,7 +713,8 @@ MonoBehaviour:
       onlySpawnOnce: 1
       itemIdentifier: BookTest1
       blockedIfUsedItem: []
-      blockedIfObtainedItem: []
+      blockedIfObtainedItem:
+      - brokenRadio
       requiredObtainedItem: []
   - spawnPoint: {fileID: 444154452}
     gradeEntries:
@@ -2213,53 +2214,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1047777848
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1047777850}
-  - component: {fileID: 1047777849}
-  m_Layer: 0
-  m_Name: SocketTest
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1047777849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047777848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 94daa4efe319ac644adf7761911373f9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testItem1: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
-  testItem2: {fileID: 11400000, guid: 64d3c3e93b6b24c6db239f3ead48a8b8, type: 2}
-  testItem3: {fileID: 11400000, guid: 4a16e2d7f3955160b8595e94b29b5afd, type: 2}
---- !u!4 &1047777850
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1047777848}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.1611075, y: -11.84457, z: 6.239363}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1092306225
 GameObject:
   m_ObjectHideFlags: 0
@@ -5413,7 +5367,6 @@ SceneRoots:
   - {fileID: 553272011}
   - {fileID: 6601716468847768148}
   - {fileID: 4534214595327022633}
-  - {fileID: 1047777850}
   - {fileID: 2145586096}
   - {fileID: 600069033}
   - {fileID: 302489617}
