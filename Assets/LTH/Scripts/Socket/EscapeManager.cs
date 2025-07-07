@@ -17,6 +17,8 @@ namespace LTH
         public event Action OnEscapeSuccess; // 탈출 성공 시 호출되는 이벤트
         public event Action OnEscapeFailure; // 탈출 실패 시 호출되는 이벤트
 
+        public bool IsEscapeReady { get; private set; } = false;
+
         protected override void Awake()
         {
             base.Awake();
@@ -45,11 +47,17 @@ namespace LTH
             }
         }
 
+        /// <summary>
+        /// 탈출 조건에 필요한 아이템 목록을 반환
+        /// </summary>
         public List<ItemData> GetRequiredEscapeItems()
         {
             return new List<ItemData>(RequiredEscapeItems);
         }
 
+        /// <summary>
+        /// 수동 선택 아이템과 비교하여 탈출 성공 여부 판단
+        /// </summary>
         public bool CheckEscapeSuccess(List<ItemData> selectedItems)
         {
             if (selectedItems.Count != RequiredEscapeItems.Count) return false;
@@ -62,14 +70,19 @@ namespace LTH
 
         public void EscapeSuccess()
         {
+            IsEscapeReady = true;
             OnEscapeSuccess?.Invoke();
         }
 
         public void EscapeFailure()
         {
+            IsEscapeReady = false;
             OnEscapeFailure?.Invoke();
         }
 
+        /// <summary>
+        /// 인벤토리 내 아이템이 탈출 조건을 만족하는지 판단 (이벤트는 호출하지 않음)
+        /// </summary>
         public bool CheckInventoryForEscapeSuccess(List<ItemData> inventoryItems)
         {
             var requiredSet = new HashSet<string>(RequiredEscapeItems.Select(i => i.Id));

@@ -16,21 +16,25 @@ namespace LTH
         private readonly ItemTracker itemTracker;
         private readonly Inventory inventory;
 
+        public bool IsEscapeReady { get; private set; }
         public EscapeConnector(ItemTracker tracker, Inventory inventory)
         {
             this.itemTracker = tracker;
             this.inventory = inventory;
 
+            // 아이템을 새로 획득할 때마다 조건 검사
             this.itemTracker.ConsumeNewObtainedItems(CheckEscapeCondition);
         }
 
+        /// <summary>
+        /// 탈출 조건을 평가합니다.
+        /// </summary>
         private void CheckEscapeCondition(List<ItemData> _)
         {
-            List<ItemData> inventoryItems = GetAllInventoryItems();
+            List<ItemData> currentItems = GetAllInventoryItems();
+            IsEscapeReady = EscapeManager.Instance.CheckInventoryForEscapeSuccess(currentItems);
 
-            bool success = EscapeManager.Instance.CheckInventoryForEscapeSuccess(inventoryItems);
-
-            if (success)
+            if (IsEscapeReady)
             {
                 EscapeManager.Instance.EscapeSuccess();
                 TriggerEscapeSuccess();
@@ -42,31 +46,33 @@ namespace LTH
             }
         }
 
+        /// <summary>
+        /// 인벤토리 내 모든 아이템을 수량 포함해서 리스트로 반환
+        /// </summary>
         private List<ItemData> GetAllInventoryItems()
         {
-            List<ItemData> inventoryItems = new();
+            var result = new List<ItemData>();
 
-            foreach (var pair in inventory.Items)
+            foreach (var (item, count) in inventory.Items)
             {
-                for (int i = 0; i < pair.Value; i++)
+                for (int i = 0; i < count; i++)
                 {
-                    inventoryItems.Add(pair.Key);
+                    result.Add(item);
                 }
             }
-            return inventoryItems;
+            return result;
         }
 
 
+        // 아이템이 충족하는 순간 연출 (탈출 시에 연출이 아님)
         private void TriggerEscapeSuccess()
         {
-            Debug.Log("게임 클리어! 탈출 성공");
-            // TODO: 게임 클리어 이벤트(대사), 해피엔딩 UI 출력 등 탈출 후 처리 로직 작성
+            Debug.Log("탈출 조건이 충족되었습니다.");
         }
 
         private void TriggerEscapeFailure()
         {
             Debug.Log("탈출 조건이 아직 충족되지 않았습니다.");
-            // TODO: 게임 오버 이벤트(대사), 배드엔딩 UI 등 게임 오버 후 처리 로직 작성
         }
     }
 }
