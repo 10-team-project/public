@@ -16,7 +16,7 @@ public class Ending : MonoBehaviour
     [SerializeField] private TMP_Text[] Happytext;
     [SerializeField] private string[] originalTexts;
     [SerializeField] private FadeInOut fadeInOut;
-    [SerializeField] private bool isHappy;
+    static public bool IS_HAPPY;
     
     private void Start()
     {
@@ -29,7 +29,7 @@ public class Ending : MonoBehaviour
     [Button("Ending")]
     private void EndingTest()
     {
-        if (isHappy)
+        if (IS_HAPPY)
         {
             End(HappyEnding, Happytext, Happycamera);
         }

@@ -160,7 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 300
+  decayTime: 610
   resourceAmount: 20
   timedecrease: 10
   decaying: 1
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 180
+  decayTime: 370
   resourceAmount: 20
   timedecrease: 10
   decaying: 1

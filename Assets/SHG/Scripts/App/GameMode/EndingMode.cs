@@ -6,7 +6,7 @@ namespace SHG
 {
   public class EndingMode : Singleton<EndingMode>, IGameMode
   {
-    public string SceneName => "";
+    public string SceneName => "Ending";
 
     public bool Equals(IGameMode other)
     {
@@ -25,6 +25,7 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
+      App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.BadEndingSound);
       Debug.Log("OnStart EndingMode");
       // TODO: 게임 클리어 또는 게임 오버에 맞는 화면 보여주기   
       //       bgm 재생

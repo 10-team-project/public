@@ -70,6 +70,7 @@ namespace SHG
       this.IsEditor = false;
       IsGamemodeControlEnabled = true;
       this.SceneManager = TestSceneManager.CreateInstance();
+      this.GameTimeManager = Instantiate(Resources.Load<GameObject>("GameTimeManager")).GetComponent<GameTimeManager>();
       this.Inventory = new Inventory();
       this.ItemStorage = new ItemLocker();
       this.ItemTracker = new ItemTracker(this.Inventory);
@@ -79,7 +80,6 @@ namespace SHG
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
       this.PlayerStatManager = Instantiate(Resources.Load<GameObject>("PlayerStatManager")).GetComponent<PlayerStatManager>();
-      this.GameTimeManager = Instantiate(Resources.Load<GameObject>("GameTimeManager")).GetComponent<GameTimeManager>();
       this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
@@ -114,6 +114,7 @@ namespace SHG
       foreach (var manager in this.managers) {
         manager.transform.parent = this.transform;
       }
+      this.AddPlayerStatEvent(this.PlayerStatManager);
       #if UNITY_EDITOR
       this.IsEditor = true;
       IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
@@ -121,6 +122,16 @@ namespace SHG
       if (IsGamemodeControlEnabled) {
         this.ChangeMode(this.startMode);
       }
+    }
+
+    void AddPlayerStatEvent(PlayerStatManager playerStatManager)
+    {
+      playerStatManager.HP.Resource.OnResourceChanged += (resource, oldValue, newValue) => {
+        if (oldValue > 0 && newValue <= 0) {
+          Ending.IS_HAPPY = false;
+          this.ChangeMode(GameMode.Ending, "Ending");
+        }
+      };   
     }
 
     void LoadItems()

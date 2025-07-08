@@ -28,6 +28,7 @@ public class AudioManager : SingletonBehaviour<AudioManager>
     [SerializeField] public AudioClip FarmingBgm;
     [SerializeField] public AudioClip TraumaBgm;
     [SerializeField] public AudioClip RooftopSound;
+    [SerializeField] public AudioClip BadEndingSound;
 
     private const string MASTER_KEY = "MasterVolume";
     private const string BGM_KEY = "BGMVolume";
