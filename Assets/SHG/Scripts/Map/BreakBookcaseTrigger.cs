@@ -6,6 +6,7 @@ namespace SHG
   [RequireComponent(typeof(Collider))]
   public class BreakBookcaseTrigger : MonoBehaviour, IMapObject
   {
+    const string PIPE_ID = "a58c5edf-798e-4d72-ab12-b4bab3c360fb";
     [SerializeField]
     BreakBookcaseController[] bookcases;
     [SerializeField]
@@ -25,7 +26,10 @@ namespace SHG
       if (this.player == null) {
         this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();
       }
-      return (this.player != null);
+      if (this.player == null) {
+        return (false);
+      }
+      return (item.Id == PIPE_ID);
     }
 
     public IEnumerator Interact(EquipmentItem item, System.Action OnEnded)

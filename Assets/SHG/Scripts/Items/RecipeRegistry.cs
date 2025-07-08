@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Patterns;
+using System;
 
 namespace SHG
 {
-  public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>
+  public class RecipeRegistry : SingletonBehaviour<RecipeRegistry>, IObservableObject<RecipeRegistry>
   {
-    public const int NUMBER_OF_PRODUCTS = 20;
+    public const int NUMBER_OF_PRODUCTS = 40;
     public static readonly string[] RECIPE_DIRS = new string[5] {
       "Assets/PJW/Recipe/DropChangeRecipe",
       "Assets/PJW/Recipe/EquipmentRecipe",
@@ -20,8 +21,11 @@ namespace SHG
     Dictionary<ItemData, List<ItemRecipe>> recipeTable;
     #if UNITY_EDITOR
     List<ItemRecipe> recipes = new ();
-    #endif
-    
+
+    public Action<RecipeRegistry> WillChange { get; set; }
+    public Action<RecipeRegistry> OnChanged { get; set;}
+#endif
+
     public IEnumerable<ItemData> GetAllProducts(CraftProvider provider)
     {
       return (this.AvailableRecipes[(int)provider - 1].Keys);
@@ -44,8 +48,10 @@ namespace SHG
 
     void OnUseItem(ItemData item)
     {
+      bool isChanged = false;
       if (item is DropChangeItemData dropChangeItem) {
         foreach (var recipe in dropChangeItem.UnlockedRecipesWhenUse) {
+          isChanged = true;
           if (recipe.Provider == CraftProvider.All) {
             this.AddRecipe(0, recipe);
             this.AddRecipe(1, recipe);
@@ -55,16 +61,22 @@ namespace SHG
           }
         }
       }
+      if (isChanged) {
+        this.OnChanged?.Invoke(this);
+      }
     }
 
-    void AddRecipe(int providerIndex, ItemRecipeData recipe)
+    void AddRecipe(int providerIndex, ItemRecipeData recipeData)
     {
-      if (this.AvailableRecipes[providerIndex].TryGetValue(recipe.Product, out List<ItemRecipe> list)) {
-        list.Add(new ItemRecipe(recipe));
+      Debug.Log($"AddRecipe: {recipeData.Product.name}");
+      if (this.AvailableRecipes[providerIndex].TryGetValue(recipeData.Product, out List<ItemRecipe> list)) {
+        if (list.FindIndex(recipe => recipe.RecipeData == recipeData) == -1) {
+          list.Add(new ItemRecipe(recipeData));
+        }
       }
       else {
-        this.AvailableRecipes[providerIndex][recipe.Product] = new List<ItemRecipe>() {
-          new ItemRecipe(recipe)
+        this.AvailableRecipes[providerIndex][recipeData.Product] = new List<ItemRecipe>() {
+          new ItemRecipe(recipeData)
         };
       }
     }

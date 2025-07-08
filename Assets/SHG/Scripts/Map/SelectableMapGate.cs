@@ -58,6 +58,10 @@ namespace SHG
     void OnClickMapButton(GameScene scene)
     {
       var mode = App.Instance.CurrentMode as ShelterMode; 
+      if (scene.Name == "Rooftop" && 
+        !App.Instance.ItemTracker.HasRadioItem) {
+        return ;
+      }
       mode.OnEnterFarmingGate(scene);
     }
 

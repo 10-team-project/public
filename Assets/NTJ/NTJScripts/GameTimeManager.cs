@@ -57,13 +57,13 @@ namespace NTJ
                 {
                     SetDay(data.day);
                     LoadFromData(data);
-                    player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
+                    //player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
                 }
             }
             else
             {
                 SetDay(1);
-                player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
+                //player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
             }
 
             gameTime = 9 * 3600f;

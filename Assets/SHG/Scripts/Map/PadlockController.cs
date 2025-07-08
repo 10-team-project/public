@@ -7,6 +7,7 @@ namespace SHG
 {
   public class PadlockController : DoorLocker, IMapObject
   {
+    const string SPANNER_ID = "d017101b-dcf0-4226-ad2b-0612b660ac14";
     [SerializeField] [Required]
     Rigidbody rb;
     [SerializeField] [Required]
@@ -129,7 +130,7 @@ namespace SHG
       if (this.player == null) {
         return (false);
       }
-      return true;
+      return (item.Id == SPANNER_ID);
     }
 
     public IEnumerator Interact(EquipmentItem item, Action OnEnded)

@@ -20,4 +20,5 @@ MonoBehaviour:
   eventTrigger: {fileID: 11400000, guid: a7ff575104bfdab4e86a870ba08fb284, type: 2}
   eventPriority: 3
   effectSound: {fileID: 0}
-  traumaEffect: {fileID: 0}
+  traumaEffect: {fileID: 617732333279327766, guid: d14b432c23f8cc444bc596cb38028424,
+    type: 3}

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using Patterns;
+using LTH;
 
 namespace SHG
 {
@@ -29,10 +30,12 @@ namespace SHG
 
     public void OnEnterFarmingGate(GameScene scene)
     {
+      if (App.Instance.PlayerStatManager.Fatigue.FatigueCur < 50f) {
+        return ;
+      }
       FarmingMode.Instance.CurrentScene = scene;
       App.Instance.ChangeMode(GameMode.Farming, scene.FileName);
       App.Instance.PlayerStatManager.Fatigue.Resource.Decrease(50f);
-      // TODO: Fatigue
     }
 
     public IEnumerator OnStart()
@@ -60,38 +63,57 @@ namespace SHG
       App.Instance.CameraController.gameObject.SetActive(true);
       this.gate = GameObject.Find("Gate").GetComponent<MapGate>();
       yield return (null);
-      this.HandleGameEvent();
+      var gameEvent = this.HandleGameEvent();
+      if (gameEvent != null &&
+        gameEvent is StoryGameEvent storyGameEvent &&
+        storyGameEvent.Trauma != null) {
+        this.IsEventTriggerable = false;
+        var trauma = GameObject.Instantiate(storyGameEvent.Trauma);
+        yield return (trauma.GetComponent<SceneTraumaTransition>().PlayTraumaTransition());
+      }
     }
 
     void OnDayChanged(int newDay) 
     {
       this.IsEventTriggerable = true; 
-      this.HandleGameEvent();
+      var gameEvent = this.HandleGameEvent();
+      this.TriggerTraumaIfExist(gameEvent);
+    }
+
+    void TriggerTraumaIfExist(GameEvent gameEvent)
+    {
+      if (gameEvent != null &&
+        gameEvent is StoryGameEvent storyGameEvent &&
+        storyGameEvent.Trauma != null) {
+        this.IsEventTriggerable = false;
+        var trauma = GameObject.Instantiate(storyGameEvent.Trauma);
+        trauma.GetComponent<SceneTraumaTransition>().PlayTraumaTransition();
+      }
     }
 
     void OnEventStart(GameEvent gameEvent)
     {
       if (this.IsEventTriggerable) {
-        Debug.Log(gameEvent.Name);
-        this.IsEventTriggerable = false;
+        this.TriggerTraumaIfExist(gameEvent);
       }
     }
 
-    void HandleGameEvent()
+    GameEvent HandleGameEvent()
     {
       var currentEvents = App.Instance.GameEventHandler.EventCandidates;
+      GameEvent eventToTrigger = null;
       if (currentEvents.Count > 0) {
         if (currentEvents.Count == 1) {
           App.Instance.GameEventHandler.TriggerEvent(currentEvents[0]);
         }
         else {
           int priority = int.MaxValue;
-          GameEvent eventToTrigger = null;
           foreach (var e in App.Instance.GameEventHandler.EventCandidates) {
             
             if (e is StoryGameEvent storyGameEvent) {
               if (eventToTrigger == null || 
-                priority > storyGameEvent.Priority) {
+                priority > storyGameEvent.Priority ||
+                storyGameEvent.Trauma != null) {
                 priority = storyGameEvent.Priority;
                 eventToTrigger = storyGameEvent;
               }
@@ -102,6 +124,7 @@ namespace SHG
             }
           }
           if (eventToTrigger != null) {
+            this.IsEventTriggerable = false;
             App.Instance.GameEventHandler.TriggerEvent(eventToTrigger);
           }
         }
@@ -112,6 +135,7 @@ namespace SHG
         App.Instance.GameEventHandler.OnStoryEventStart += this.OnEventStart;
       }
       App.Instance.GameEventHandler.ClearEventCandiates();
+      return (eventToTrigger);
     }
 
     void UnRegisterEvent()
