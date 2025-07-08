@@ -4,6 +4,21 @@ using UnityEngine;
 
 namespace LTH
 {
+    public enum SpawnConditionType
+    {
+        Used,              // 해당 아이템을 사용했으면 등장 금지
+        Obtained,          // 해당 아이템을 얻었으면 등장 금지
+        RequireObtained,   // 해당 아이템을 얻었을 때만 등장
+        SingleSpawn        // 한 번만 등장
+    }
+
+    [Serializable]
+    public class SpawnCondition
+    {
+        public SpawnConditionType conditionType;
+        public string itemName;
+    }
+
     [Serializable]
     public class ItemProbabilityEntry
     {
@@ -14,15 +29,6 @@ namespace LTH
 
         public List<ItemData> items;
 
-        // 해당 아이템은 한 번만 등장
-        public bool onlySpawnOnce;
-        public string itemIdentifier;
-
-        // 다음 아이템이 사용된 경우 스폰되지 않음
-        public List<string> blockedIfUsedItem;
-        // 다음 아이템을 획득한 경우 스폰되지 않음
-        public List<string> blockedIfObtainedItem;
-        // 다음 아이템을 획득한 경우에만 스폰됨
-        public List<string> requiredObtainedItem;
+        public List<SpawnCondition> spawnConditions = new();
     }
 }

@@ -33,13 +33,8 @@ namespace NTJ
         public int timeScale = 30; // 현실 1초 = 게임 1분
         [SerializeField, ReadOnly]
         private float gameTime;    // 누적된 게임 시간
-        [SerializeField, ReadOnly]
-        int day;
-        [SerializeField, ReadOnly]
-        int hours;
-        [SerializeField, ReadOnly]
-        int minutes;
-        private int currentDay = 0;
+        private int currentDay = 1;
+        public int CurrentDay => currentDay;
         private float fadeDuration = 2f;
         private bool isSleeping = false;
         private bool sleepRequested = false;
@@ -171,9 +166,9 @@ namespace NTJ
 
             // 체력 회복
             var stat = PlayerStatManager.Instance;
-            var maxHP = stat.HP.MaxHP;
-            float healAmount = isManual ? maxHP * 0.7f : maxHP * 0.3f;
-            stat.HP.CurrentHP = Mathf.Min(stat.HP.CurrentHP + healAmount, maxHP);
+            float fatigueMax = stat.Fatigue.FatigueMax;
+            float fatigueRecover = isManual ? fatigueMax * 0.7f : fatigueMax * 0.3f;
+            stat.Fatigue.Sleep(fatigueRecover);
 
 
             // 자동 저장

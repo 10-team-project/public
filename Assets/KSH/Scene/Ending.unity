@@ -1588,7 +1588,7 @@ MonoBehaviour:
     \uB3CC\uC544\uAC00 \uC8FC\uC2DC\uAE38 \uBC14\uB78D\uB2C8\uB2E4."
   - "\uC774\uC0C1 \uACBD\uC77C\uACE0\uB4F1\uD559\uAD50 \uBC29\uC1A1\uBD80\uC600\uC2B5\uB2C8\uB2E4."
   fadeInOut: {fileID: 1049259111}
-  isHappy: 1
+  isHappy: 0
 --- !u!4 &1440538269
 Transform:
   m_ObjectHideFlags: 0
@@ -2472,7 +2472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.96000004}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.96500003}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
