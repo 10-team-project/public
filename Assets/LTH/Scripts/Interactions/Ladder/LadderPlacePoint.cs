@@ -10,12 +10,10 @@ namespace LTH
     [RequireComponent(typeof(Collider))]
     public class LadderPlacePoint : MonoBehaviour, IMapObject, IInteractable
     {
-        const string LADDER_ID = "1cdacd14-a99b-4e16-90a2-b14efa470430";
         [SerializeField] public LadderPlacePointData PointData;
         [SerializeField] GameObject placeHolder;
         [SerializeField] Transform spawnPoint;
         [SerializeField] Collider blockingCollider;
-        [SerializeField] bool isLeft;
 
         private GameObject construction;
         private DissolveController dissolveController;
@@ -43,10 +41,6 @@ namespace LTH
             construction = Instantiate(PointData.Prefab);
             construction.transform.SetParent(transform);
 
-            if (this.placeHolder != null) {
-              construction.transform.rotation = this.placeHolder.transform.rotation;
-            }
-
             if (spawnPoint != null)
             {
                 construction.transform.position = spawnPoint.position;
@@ -58,15 +52,8 @@ namespace LTH
                 construction.transform.position = transform.position;
                 construction.transform.Rotate(0f, -90f, 0f);
             }
+
             dissolveController = construction.GetComponent<DissolveController>();
-            foreach (var child in construction.transform) {
-              if (child is Transform transform) {
-                LadderTrigger trigger = transform.GetComponent<LadderTrigger>();
-                if (trigger != null) {
-                  trigger.isLeftLadder = this.isLeft;
-                }
-              }
-            }
         }
 
         public void Interact() // IInteractable Test¿ë
@@ -87,12 +74,12 @@ namespace LTH
         {
             if (placeHolder != null) placeHolder.SetActive(false);
 
-            App.Instance.CameraController.AddFocus(
-              transform,
-              CameraController.FocusDirection.Foward);
-            yield return (new WaitForSeconds(0.5f));
             Construct();
 
+            App.Instance.CameraController.AddFocus(
+              transform,
+              CameraController.FocusDirection.Foward,
+              onEnded: cam => { });
             if (dissolveController != null)
             {
                 dissolveController.DisappearImmediately();
@@ -103,6 +90,9 @@ namespace LTH
               construction.SetActive(true);
             }
 
+            App.Instance.CameraController.OnCommandEnd();
+            App.Instance.CameraController.AddReset();
+
             if (blockingCollider != null) blockingCollider.enabled = false;
 
             yield return null;
@@ -111,7 +101,11 @@ namespace LTH
 
         public bool IsInteractable(EquipmentItemData item)
         {
-            return (item.Id == LADDER_ID);
+          return (true);
+            if (PointData == null) return false;
+
+            return item.Purpose == EquipmentItemPurpose.Construct &&
+                   Array.IndexOf(PointData.RequiredItems, item) != -1;
         }
 
         void Awake()

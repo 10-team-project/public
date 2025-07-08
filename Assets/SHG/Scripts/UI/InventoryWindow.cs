@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
-using LTH;
 
 namespace SHG
 {
@@ -11,37 +10,34 @@ namespace SHG
     const MouseButton DRAG_BUTTON = ItemStorageWindow.MouseButton.Left;
     const MouseButton USE_BUTTON = ItemStorageWindow.MouseButton.Right;
     Func<ItemData, bool> filterItem;
+    Label label;
     protected override Vector2 DescriptionOffset => DESCRIPTION_OFFSET;
-    readonly Vector2 DESCRIPTION_OFFSET = new Vector2(50f, 100f);
-    const int DEFAULT_BOX_COUNT = 20;
+    readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0f, 150f);
 
-    public InventoryWindow(
-      Func<ItemData, bool> filterItem,
-      ItemBox floatingItemBox,
-      VisualElement floatingDescriptionContainer
-      ): base (floatingItemBox, App.Instance.Inventory)
+    public InventoryWindow(Func<ItemData, bool> filterItem, ItemBox floatingItemBox): base (floatingItemBox, App.Instance.Inventory)
     {
       this.filterItem = filterItem;
-      this.itemDescriptionContainer = floatingDescriptionContainer;
-      this.itemDescriptionTitle = floatingDescriptionContainer.Q(
-        className: "item-storage-item-description-title"
-        ) as Label;
-      this.itemDescriptionContent = floatingDescriptionContainer.Q(
-        className: "item-storage-item-description-content"
-        ) as Label;
     }
 
     protected override void CreateUI()
     {
+      this.label = new Label();
+      this.label.AddToClassList("window-label");
+      this.Add(this.label);
+      this.itemDescriptionContainer = new VisualElement();
+      this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
+      this.itemDescription = new Label();
+      this.itemDescription.AddToClassList("item-storage-item-description");
+      this.itemDescriptionContainer.Add(this.itemDescription);
+      this.Add(this.itemDescriptionContainer);
+      Utils.HideVisualElement(this.itemDescriptionContainer);
     }
 
     //TODO: 각 아이템 UI를 objectpool에 보관
     ItemBox CreateItembox(ItemAndCount itemAndCount)
     {
       ItemBox itemBox = new ItemBox(this);
-      if (itemAndCount != ItemAndCount.None) {
-        itemBox.SetData(itemAndCount);
-      }
+      itemBox.SetData(itemAndCount);
       itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
       itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
       itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
@@ -59,7 +55,7 @@ namespace SHG
     {
       foreach (var pair in inventory.Items) {
         var (item, count) = pair;
-        if ((this.filterItem != null && !this.filterItem(item)) || count < 1) {
+        if (!this.filterItem(item) || count < 1) {
           continue;
         }
         if (item.IsStoryItem) {
@@ -87,15 +83,6 @@ namespace SHG
           }
         }
       } 
-      int boxCount = this.itemsContainer.childCount;
-      int maxSlotCount = inventory.MAX_SLOT_COUNT;
-      for (int i = boxCount; i < DEFAULT_BOX_COUNT; i++) {
-        var box = this.CreateItembox(ItemAndCount.None);
-        if (i > maxSlotCount - 1) {
-          box.SetLocked();
-        }
-        this.itemsContainer.Add(box); 
-      }
     }
 
     // TODO: return to Obejctpool
@@ -145,18 +132,8 @@ namespace SHG
 
     protected override void DropItemOutSide(ItemAndCount itemAndCount)
     {
-      var popup = App.Instance.PopupManager.ShowPopup<ConfirmPopup>();
-      if (popup != null) {
-        var message = itemAndCount.Count > 1 ?
-          $"{itemAndCount.Item.Name} {itemAndCount.Count}개를 버리시겠습니까?":
-          $"{itemAndCount.Item.Name}를 버리시겠습니까?";
-        popup.Show(
-          message: message, 
-          confirmText: "예",
-          confirm: () => App.Instance.Inventory.RemoveItem(itemAndCount.Item, itemAndCount.Count),
-          cancelText: "아니요"
-          );
-      }
+      //FIXME: drop item count?
+      App.Instance.Inventory.GetItem(itemAndCount.Item);
     }
 
     protected override bool IsAbleToDropOutSide(ItemData item)

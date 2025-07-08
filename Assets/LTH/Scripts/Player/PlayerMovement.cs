@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
 
     private LadderClimber ladderClimber;
 
-    private Animator animator; // 애니메이션
+    private Animator animator; // 애니메이션(테스트용 삭제 예정)
 
     [HideInInspector] public bool IsOnLadder => isOnLadder;
 
@@ -31,8 +31,6 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
     private bool isZFixed = true;
 
     private Vector3 currentLadderDirection;
-
-    [SerializeField] private float yCorrectionAfterLadderUpEnd;
 
     private bool IsGrounded()
     {
@@ -48,7 +46,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         _rigid.constraints = RigidbodyConstraints.FreezePositionZ | RigidbodyConstraints.FreezeRotation;
         fixedZ = transform.position.z;
 
-        animator = GetComponent<Animator>(); // 애니메이션
+        animator = GetComponent<Animator>(); // 애니메이션(테스트용 삭제 예정)
         ladderClimber = new LadderClimber(_rigid, climbSpeed, EndClimb, EndClimbFromTop);
     }
 
@@ -107,7 +105,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
             Move();
         }
 
-        UpdateAnimation();  // 애니메이션
+        UpdateAnimation();  // 애니메이션(테스트용 삭제 예정)
     }
 
     private void PlayerInput()
@@ -197,7 +195,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         isInputTemporarilyBlocked = true;
         inputLockTimer = 1.75f;
 
-        // 애니메이션
+        // 애니메이션(테스트용 삭제 예정)
         animator.SetBool("Ladder", true);
 
         if (type == LadderTriggerType.EnterBottom)
@@ -208,7 +206,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
 
     public void EndClimbFromTop()
     {
-        // 애니메이션
+        // 애니메이션(테스트용 삭제 예정)
         animator.SetTrigger("LadderUpEnd");
         animator.SetBool("Ladder", false);
 
@@ -216,19 +214,11 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         inputLockTimer = 1.72f;
 
         ExitLadder(transform.forward * 0);
-
-        // 사다리 애니메이션 끝난 후 Y축 보정 (공중 붕뜸 방지)
-        if (Mathf.Abs(yCorrectionAfterLadderUpEnd) > 0.001f)
-        {
-            Vector3 pos = transform.position;
-            pos.y += yCorrectionAfterLadderUpEnd;
-            transform.position = pos;
-        }
     }
 
     public void EndClimb()
     {
-        // 애니메이션
+        // 애니메이션(테스트용 삭제 예정)
         animator.SetTrigger("LadderDownEnd");
         animator.SetBool("Ladder", false);
 
@@ -261,7 +251,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
         isAtLadderTop = value;
     }
 
-    private void UpdateAnimation()  // 애니메이션
+    private void UpdateAnimation()  // 애니메이션(테스트용 삭제 예정)
     {
         if (animator == null) return;
 
@@ -276,7 +266,7 @@ public class PlayerMovement : MonoBehaviour, IInputLockHandler
             {
                 animator.SetBool("LadderUpPlay", false);
                 animator.SetBool("LadderDownPlay", false);
-            }
+            }   
             return;
         }
 

@@ -1,5 +1,4 @@
 using UnityEngine;
-using SHG;
 
 namespace NTJ
 {
@@ -9,24 +8,9 @@ namespace NTJ
         public GameObject interactUI; // 상호 작용키로 잠자기 안내 UI
         private bool isPlayerInRange = false;
 
-        void Awake()
-        {
-          timeManager = App.Instance.GameTimeManager;
-        }
-
-        void OnEnable()
-        {
-          App.Instance.GameTimeManager.bedSpawnPoint = this.transform;
-        }
-
-        void OnDisable()
-        {
-          App.Instance.GameTimeManager.bedSpawnPoint = null;
-        }
-
         void Update()
         {
-            if (isPlayerInRange && Input.GetKeyDown(KeyCode.F) && interactUI.activeSelf)
+            if (isPlayerInRange && Input.GetKeyDown(KeyCode.F))
             {
                 timeManager.RequestManualSleep(); // 수면 요청
                 interactUI.SetActive(false);     // UI 비활성화

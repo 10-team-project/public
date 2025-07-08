@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using EditorAttributes;
+using LTH;
 
 namespace SHG
 {
@@ -12,7 +13,7 @@ namespace SHG
     public GameEventTrigger Trigger => this.eventTrigger;
     public int Priority => this.eventPriority;
     public AudioClip Sound => this.effectSound;
-    public GameObject Trauma => this.traumaEffect;
+    public SceneTraumaTransition Trauma => this.traumaEffect;
     [SerializeField]
     [Validate("Event trigger is none", nameof(IsNullTrigger), MessageMode.Error)]
     GameEventTrigger eventTrigger;
@@ -22,7 +23,7 @@ namespace SHG
     [SerializeField, AssetPreview(64f, 64f)]
     AudioClip effectSound;
     [SerializeField, AssetPreview] 
-    GameObject traumaEffect;
+    SceneTraumaTransition traumaEffect;
 
     protected bool IsNullTrigger() => (this.Trigger == null);
 

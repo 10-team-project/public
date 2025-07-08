@@ -8,20 +8,11 @@ namespace SHG
 {
   public class UIController : SingletonBehaviour<UIController>, IInputLockHandler
   {
-    public WindowUI MainUI { get; private set; }
+    public MainUIPlaceHolder MainUI { get; private set; }
 
-    public void SetMainUI(WindowUI ui)
+    public void SetMainUI(MainUIPlaceHolder ui)
     {
       this.MainUI = ui;
-    }
-
-    public void Start()
-    {
-      App.Instance.GameTimeManager.OnSleep += () => {
-        if (this.MainUI != null) {
-          this.MainUI.CloseAllWindows();
-        }
-      };
     }
 
     public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
@@ -36,39 +27,13 @@ namespace SHG
       return (false);
     }
 
-    public void ShowQuickSlot()
-    {
-      if (this.MainUI != null) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, true);
-      }
-    }
-
-    public void HideQuickSlot()
-    {
-      if (this.MainUI != null) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, false);
-      }
-    }
-
     public void OnInteractCraft(CraftProvider provider)
     {
       CraftWindow.CurrentProvider = provider;
-      this.OpenCraftWindow();
-    }
-
-    public void OpenCraftWindow()
-    {
-      var mode = App.Instance.CurrentMode;
-      if (mode is ShelterMode shelterMode) {
-        CraftWindow.CurrentProvider = CraftProvider.NPC;
-      }
-      else {
-        CraftWindow.CurrentProvider = CraftProvider.Table;
-      }
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.Craft, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Craft, true); 
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -82,9 +47,9 @@ namespace SHG
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.ItemLocker, true);
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true);
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, false);
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.ItemLocker, true);
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true);
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
         App.Instance.InputManager.StartInput(this);
       }
       #if UNITY_EDITOR
@@ -100,7 +65,7 @@ namespace SHG
         if (Input.GetKeyDown(Settings.InputSettings.CloseWindowKey) &&
           !App.Instance.InputManager.IsBlocked(InputType.UI)) {
           this.MainUI.CloseAllWindows();
-          this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, true);
+          this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
           App.Instance.InputManager.EndInput(this);
         }
         else if (
@@ -113,34 +78,17 @@ namespace SHG
 
     void ToggleInventoryWindow()
     {
-      if (this.MainUI.IsWindowOpened(WindowUI.WindowType.Inventory)) {
+      if (this.MainUI.IsWindowOpened(MainUIPlaceHolder.WindowType.Inventory)) {
 
-        this.CloseInventoryWindow();
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, false); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, true);
+        App.Instance.InputManager.EndInput(this);
       }
       else {
-        this.OpenInventoryWindow();
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.Inventory, true); 
+        this.MainUI.SetWindowVisible(MainUIPlaceHolder.WindowType.QuickSlot, false);
+        App.Instance.InputManager.StartInput(this);
       }
-    }
-
-    void OpenInventoryWindow()
-    {
-      this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 
-      App.Instance.InputManager.StartInput(this);
-    }
-
-    public void CloseInventoryWindow()
-    {
-      this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, false); 
-      if (this.MainUI.IsWindowOpened(
-          WindowUI.WindowType.Craft)) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.Craft, false);
-      }
-      if (this.MainUI.IsWindowOpened(
-          WindowUI.WindowType.ItemLocker
-          )) {
-        this.MainUI.SetWindowVisible(WindowUI.WindowType.ItemLocker, false);
-      }
-      App.Instance.InputManager.EndInput(this);
     }
 
     void OnDisable()

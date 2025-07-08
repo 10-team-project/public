@@ -23,19 +23,15 @@ namespace SHG
     {
       this.ItemData = itemData;
       this.itemImage.style.backgroundImage = new StyleBackground(this.ItemData.Item.Image);
-      this.itemLabel.text = this.ItemData.Count.ToString();
+      if (this.ItemData.Count < 2) {
+        this.itemLabel.text = this.ItemData.Item.Name;
+      }
+      else {
+        this.itemLabel.text = String.Format($"{this.ItemData.Item.Name} ({this.ItemData.Count})");
+      }
     }
 
-    public void SetLocked()
-    {
-      this.Clear();
-      this.AddToClassList("item-storage-item-box-lock"); 
-      var icon = new VisualElement();
-      this.Add(icon);
-      icon.AddToClassList("item-storage-item-box-lock-icon");
-    }
-
-    public void SetLabel(string text)
+    public void SetLabelText(string text)
     {
       this.itemLabel.text = text; 
     }

@@ -41,13 +41,13 @@ namespace SHG
     [Button ("Test date change")]
     void TestDateChange(int date)
     {
-      //App.Instance.GameEventHandler.OnDateChanged(date);
+      App.Instance.GameEventHandler.OnDateChanged(date);
     }
 
     [Button ("Test resource change")]
     void TestResouceChange(float oldValue, float newValue, TempCharacter.Stat stat)
     {
-      //App.Instance.GameEventHandler.OnResourceChanged(stat, oldValue, newValue);
+      App.Instance.GameEventHandler.OnResourceChanged(stat, oldValue, newValue);
     }
 
     [Button ("Print events")]

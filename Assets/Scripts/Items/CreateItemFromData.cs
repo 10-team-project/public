@@ -5,13 +5,6 @@ using SHG;
 public partial class Item
 {
 
-  static GameObject LOOT_PREFAB;
-
-  static Item()
-  {
-    LOOT_PREFAB = Resources.Load<GameObject>("ItemLootPrefab"); 
-  }
-
   static readonly int ITEM_LAYER = LayerMask.NameToLayer("Item");
 
   public static Item CreateItemFrom(ItemData itemData)
@@ -42,9 +35,18 @@ public partial class Item
 
   public static ItemObject CreateItemObjectFrom(Item item)
   {
-    var gameObject = GameObject.Instantiate(LOOT_PREFAB);
+    var gameObject = GameObject.Instantiate(item.Data.Prefab);
     gameObject.name = item.Data.Name;
-    var itemObject = gameObject.GetComponent<ItemObject>();
+    gameObject.layer = ITEM_LAYER;
+    //FIXME: 테스트 끝나면 직접 설정하기
+    #if UNITY_EDITOR
+    if (gameObject.GetComponent<Collider>() == null) {
+      var sphereCollider = gameObject.AddComponent<SphereCollider>();
+      sphereCollider.radius = 1f;
+      sphereCollider.isTrigger = true;
+    }
+    #endif
+    var itemObject = gameObject.AddComponent<ItemObject>();
     itemObject.OnPickedUp += App.Instance.Inventory.AddItem;
     itemObject.SetItem(item);
     return (itemObject);
@@ -52,8 +54,10 @@ public partial class Item
 
   public static ItemObject CreateItemObjectFrom(ItemData itemData)
   {
+    if (itemData.Prefab == null) {
+      throw (new ArgumentException($"{itemData.Name} has no Prefab"));
+    }
     var item = Item.CreateItemFrom(itemData);
-    Debug.Log(item);
     return (Item.CreateItemObjectFrom(item));
   }
 

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using System.Linq;
 using KSH;
 
 namespace KSH
@@ -72,30 +71,19 @@ namespace KSH
     private static List<InextNode> nextNodes = new List<InextNode>();
     public static void AddNextNode(InextNode n) => nextNodes.Add(n); //노드 오브젝트 추가
     public static void RemoveNextNode(InextNode n) => nextNodes.Remove(n); //제거
-
-    public static void NotifyNextNode(BaseNode b)
-    {
-        nextNodes.RemoveAll(n => n == null); //null값 삭제
-        foreach (var v in nextNodes.ToList())
-        {
-            if(v is MonoBehaviour mb && mb ==null) continue; //MonoBehavior이고 null값이 널이면
-            v.NextNode(b);
-        }
-    }
+    public static void NotifyNextNode(BaseNode b) => nextNodes.ForEach(n => n.NextNode(b)); //Next노드 호출
 
     int curId;
     int curOrder;
     public bool IsTalk = false;
     public void StartScript(int id)
     {
-      this.OnStart?.Invoke();
         curId = id;
         curOrder = -1;
         IsTalk = true;
         NextNode();
     }
     public event Action OnEnd; //
-    public event Action OnStart;
     
     public void NextNode()
     {

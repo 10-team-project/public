@@ -43,8 +43,6 @@ namespace SHG
       //      메인 메뉴 BGM 재생
       //      세이브 목록 불러오기
 
-      App.Instance.UIController.HideQuickSlot();
-      App.Instance.PlayerStatManager.HideUI();
       if (App.Instance.IsEditor && App.Instance.IsGamemodeControl &&
         SceneManager.GetActiveScene().name != "MainMenuScene") {
         var loadScene = App.Instance.SceneManager.GameLoadScene(this.SceneName);
@@ -54,8 +52,7 @@ namespace SHG
       }
 
       //FIXME: Change to main menu script
-      Button button = GameObject.Find("StartButton").GetComponent<Button>();
-      button.onClick.RemoveAllListeners();
+      Button button = GameObject.Find("GameStartButton").GetComponent<Button>();
       button.onClick.AddListener(this.OnClickSelectCharacter);
       yield return (null);
     }

@@ -6,11 +6,10 @@ namespace KSH
     public class Fatigue : MonoBehaviour
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
-        [SerializeField] public Slider FatigueSlider;
+        [SerializeField] private Slider FatigueSlider;
 
         public float FatigueCur => resourceDegenerator.Resource.Cur;
         public float FatigueMax => resourceDegenerator.Resource.Max;
-        public Resource Resource => resourceDegenerator.Resource;
 
         private void Start()
         {

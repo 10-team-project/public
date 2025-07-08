@@ -9,10 +9,5 @@ namespace LTH
     {
         public Transform spawnPoint;
         public List<ItemProbabilityEntry> gradeEntries;
-
-        public bool IsValid() // null 체크 및 유효성 검사
-        {
-            return spawnPoint != null && gradeEntries != null && gradeEntries.Count > 0;
-        }
     }
 }
