@@ -620,7 +620,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &698259483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1588,7 +1588,6 @@ MonoBehaviour:
     \uB3CC\uC544\uAC00 \uC8FC\uC2DC\uAE38 \uBC14\uB78D\uB2C8\uB2E4."
   - "\uC774\uC0C1 \uACBD\uC77C\uACE0\uB4F1\uD559\uAD50 \uBC29\uC1A1\uBD80\uC600\uC2B5\uB2C8\uB2E4."
   fadeInOut: {fileID: 1049259111}
-  isHappy: 0
 --- !u!4 &1440538269
 Transform:
   m_ObjectHideFlags: 0
@@ -1757,7 +1756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &1635569037
 AudioListener:
   m_ObjectHideFlags: 0

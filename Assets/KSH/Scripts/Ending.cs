@@ -5,6 +5,7 @@ using UnityEngine;
 using TMPro;
 using System.Text;
 using EditorAttributes;
+using SHG;
 
 public class Ending : MonoBehaviour
 {
@@ -16,14 +17,18 @@ public class Ending : MonoBehaviour
     [SerializeField] private TMP_Text[] Happytext;
     [SerializeField] private string[] originalTexts;
     [SerializeField] private FadeInOut fadeInOut;
-    static public bool IS_HAPPY;
+    static public bool IS_HAPPY = false;
     
     private void Start()
     {
-        Badcamera.gameObject.SetActive(false);
+      App.Instance.AudioManager.PlayBGM(
+        App.Instance.AudioManager.BadEndingSound
+        );
+        //Badcamera.gameObject.SetActive(false);
         Happycamera.gameObject.SetActive(false);
-        BadEnding.SetActive(false);
+        //BadEnding.SetActive(false);
         HappyEnding.SetActive(false);
+        End(BadEnding, Badtext, Badcamera);
     }
 
     [Button("Ending")]
