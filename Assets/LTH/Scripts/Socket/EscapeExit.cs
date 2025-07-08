@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using KSH;
 using LTH;
 using UnityEngine;
 
@@ -11,11 +12,9 @@ namespace LTH
         {
             if (!EscapeManager.Instance.IsEscapeReady)
             {
-                Debug.Log("아직 탈출 조건이 충족되지 않았습니다.");
                 TriggerEscapeFailure();
                 return;
             }
-            Debug.Log("탈출 상호작용 시작됨");
             StartEscapeSequence();
         }
 
@@ -23,12 +22,20 @@ namespace LTH
         private void StartEscapeSequence()
         {
             Debug.Log("탈출 연출 시작됨");
+
+            // 해피엔딩 대사 시작
+            ScriptManager.Instance.StartScript(10601);
+
             // TODO: 게임 클리어 이벤트(대사), 해피엔딩 UI 출력 등 탈출 후 처리 로직 작성
         }
 
         private void TriggerEscapeFailure()
         {
             Debug.Log("탈출 실패 연출 시작");
+
+            // 배드엔딩 대사 시작
+            ScriptManager.Instance.StartScript(10501);
+
             // TODO: 게임 오버 이벤트(대사), 배드엔딩 UI 등 게임 오버 후 처리 로직 작성
         }
     }
