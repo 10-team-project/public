@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Patterns;
+using SHG;
 using UnityEngine;
-using System;
 
 namespace LTH 
 {
@@ -26,6 +27,8 @@ namespace LTH
 
         private void Start()
         {
+            if (App.Instance == null) return;
+         
             InitializeEscapeItems();
         }
 
@@ -36,7 +39,7 @@ namespace LTH
         {
             RequiredEscapeItems.Clear();
 
-            if (escapeItemPool.Count < 3) return;
+            if (escapeItemPool == null || escapeItemPool.Count < 3) return;
 
             List<ItemData> shuffled = new List<ItemData>(escapeItemPool);
             Shuffle(shuffled);
