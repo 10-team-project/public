@@ -36,8 +36,10 @@ namespace KSH
             if(resource == null) return;
             int curDay = GameTimeManager.Instance.CurrentDay;
             
-            float decreaseTime = Mathf.Max(decayTime - timedecrease * curDay, 0f);
-            timer += Time.deltaTime;
+            float seconds = decayTime * 60f;
+            float decreaseTime = Mathf.Max(seconds - timedecrease * curDay, 1f);
+            float deltaGameTime = Time.deltaTime * GameTimeManager.Instance.timeScale;
+            timer += deltaGameTime;
             if (timer >= decreaseTime && decaying) // 만약 시간이 설정된 시간보다 크거나 같고 true이면
             {
                 timer = 0f; //다시 초기화
