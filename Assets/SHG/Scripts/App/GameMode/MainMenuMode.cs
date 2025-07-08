@@ -33,6 +33,7 @@ namespace SHG
 
     public void OnClickSelectCharacter()
     {
+      SaveManager.ClearSave();
       App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
     }
 

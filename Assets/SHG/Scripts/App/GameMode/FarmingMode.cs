@@ -28,9 +28,13 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
-      App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.FarmingBgm);
+      if (this.CurrentScene.Name == "Rooftop") {
+        App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.RooftopSound);
+      }
+      else {
+        App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.FarmingBgm);
+      }
       App.Instance.GameTimeManager.gameObject.SetActive(false);
-      Debug.Log("FarmingMode OnStart");
 
       var gates = GameObject.FindObjectsOfType<MapGate>();
       foreach (var gate in gates) {

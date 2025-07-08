@@ -40,7 +40,6 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
-      App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.ClassroomBgm);
       this.IsEventTriggerable = true;
       GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
       GameObject player = null;
@@ -65,12 +64,11 @@ namespace SHG
       this.gate = GameObject.Find("Gate").GetComponent<MapGate>();
       yield return (null);
       var gameEvent = this.HandleGameEvent();
-      if (gameEvent != null &&
-        gameEvent is StoryGameEvent storyGameEvent &&
-        storyGameEvent.Trauma != null) {
-        this.IsEventTriggerable = false;
-        var trauma = GameObject.Instantiate(storyGameEvent.Trauma);
-        yield return (trauma.GetComponent<SceneTraumaTransition>().PlayTraumaTransition());
+      if (gameEvent != null) {
+        this.TriggerTraumaIfExist(gameEvent);
+      }
+      else {
+        App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.ClassroomBgm);
       }
     }
 
