@@ -1,33 +1,22 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using EditorAttributes;
 
 namespace SHG
 {
-  public abstract class DoorLocker: MonoBehaviour
-  {
-    public Action OnUnlock { get; set; }
-    public bool IsLocked { get; protected set; }
-  }
-
   public class DoorController : MonoBehaviour, IInteractable
   {
     public bool IsClosed { get; private set; }
-    public bool IsLocked => this.isLocked;
     [SerializeField] [Required]
     Transform doorHinge;
-    [SerializeField]
-    DoorLocker locker;
     [SerializeField] 
-    Vector3 openedAngle;
+    float openedAngle;
     [SerializeField] 
-    Vector3 closedAngle;
+    float closedAngle;
     [SerializeField] [Range (1f, 30f)]
     float rotateSpeed;
     [SerializeField]
     bool isClosed;
-    bool isLocked;
     Coroutine rotateRoutine;
     Quaternion opendedRotation;
     Quaternion closedRotation;
@@ -35,54 +24,24 @@ namespace SHG
 
     void Awake()
     {
-      this.opendedRotation = Quaternion.Euler(
-        this.openedAngle.x,
-        this.openedAngle.y,
-        this.openedAngle.z);
-      this.closedRotation = Quaternion.Euler(
-        this.closedAngle.x,
-        this.closedAngle.y, 
-        this.closedAngle.z);
+      this.opendedRotation = Quaternion.Euler(0, this.openedAngle, 0);
+      this.closedRotation = Quaternion.Euler(0, this.closedAngle, 0);
       this.IsClosed = this.isClosed;
-      if (this.locker != null) {
-        this.isLocked = this.locker.IsLocked;
-      } 
-      else {
-        this.isLocked = false;
-      }
       if (this.IsClosed) {
-        this.doorHinge.localRotation = this.closedRotation;
+        this.doorHinge.rotation = this.closedRotation;
       }
       else {
-        this.doorHinge.localRotation = this.opendedRotation;
-      }
-    }
-
-    void Start()
-    {
-      if (this.locker != null) {
-        this.locker.OnUnlock += this.OnUnlock;
-      }
-    }
-
-    public void OnUnlock()
-    {
-      this.isLocked = false; 
-      if (this.IsClosed) {
-        this.Open();
+        this.doorHinge.rotation = this.opendedRotation;
       }
     }
 
     [Button ("Open")]
     void Open()
     {
-      if (this.isLocked) {
-        return ;
-      }
       if (this.rotateRoutine != null) {
         this.StopCoroutine(this.rotateRoutine);
         this.rotateRoutine = null;
-        this.doorHinge.localRotation = this.destRotation;
+        this.doorHinge.rotation = this.destRotation;
       }
       this.destRotation = this.opendedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
@@ -95,7 +54,7 @@ namespace SHG
       if (this.rotateRoutine != null) {
         this.StopCoroutine(this.rotateRoutine);
         this.rotateRoutine = null;
-        this.doorHinge.localRotation = this.destRotation;
+        this.doorHinge.rotation = this.destRotation;
       }
       this.destRotation = this.closedRotation;
       this.rotateRoutine = this.StartCoroutine(this.CreateRotateRoutine());
@@ -105,17 +64,17 @@ namespace SHG
     IEnumerator CreateRotateRoutine()
     {
       while (Quaternion.Angle(
-          this.doorHinge.localRotation ,
+          this.doorHinge.rotation,
           this.destRotation 
           ) > float.Epsilon) {
-        this.doorHinge.localRotation = Quaternion.Lerp(
-          this.doorHinge.localRotation ,
+        this.doorHinge.rotation = Quaternion.Lerp(
+          this.doorHinge.rotation,
           this.destRotation,
           this.rotateSpeed * Time.deltaTime
           );
         yield return (null);
       } 
-      this.doorHinge.localRotation = this.destRotation;
+      this.doorHinge.rotation = this.destRotation;
     }
 
     public void Interact()

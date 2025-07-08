@@ -12,7 +12,6 @@ namespace KSH
         [SerializeField] private Hunger hunger;
         [SerializeField] private Thirsty thirsty;
         [SerializeField] private Fatigue fatigue;
-        [SerializeField] private Canvas UI;
     
         public HP HP => hp;
         public Hunger Hunger => hunger;
@@ -23,16 +22,6 @@ namespace KSH
         {
             base.Awake();
             DontDestroyOnLoad(gameObject);
-        }
-
-        public void ShowUI()
-        {
-          this.UI.enabled = true;
-        }
-
-        public void HideUI()
-        {
-          this.UI.enabled = false;
         }
     }   
 }

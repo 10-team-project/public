@@ -17,8 +17,6 @@ namespace SHG
 
   public class GameModeManager: SingletonBehaviour<GameModeManager>
   {
-    const string SCENE_DIR = "Assets/ScriptableObjects/Scenes";
-    public Dictionary<string, GameScene> Scenes { get; private set; }
     public bool IsSwitching { get; set; }
     public IGameMode CurrentMode 
     { 
@@ -35,11 +33,6 @@ namespace SHG
     protected override void Awake()
     {
       base.Awake();
-      this.Scenes = new ();
-      GameScene[] allScenes = Utils.LoadAllFrom<GameScene>(SCENE_DIR);
-      foreach (var scene in allScenes) {
-        this.Scenes[scene.Name] = scene;
-      }
       this.IsSwitching = false;
       this.WaitForSwitchable = new WaitUntil(() => !this.IsSwitching);
       this.IsSwitching = false;

@@ -2,21 +2,19 @@ using System;
 using System.Collections.Generic;
 using KSH;
 using NTJ;
-using UnityEngine;
 
 namespace SHG
 {
   using Character = TempCharacter;
   public class GameEventHandler
   {
-    const string EVENT_DIR = "Assets/LGJ/Events";
+    const string EVENT_DIR = "Assets/SHG/Test/Events";
     public bool IsEventTriggerable;
     public Action<StoryGameEvent> OnStoryEventStart;
     public Action<NormalGameEvent> OnNormalEventStart;
 
     List<GameEvent> storyEvents;
     List<GameEvent> normalEvents;
-    List<GameEvent> endingEvents;
     Dictionary<ItemData, StoryGameEvent> eventsByItemTrigger;
     Dictionary<int, StoryGameEvent> eventsByDateTrigger;
     Dictionary<Character.Stat, List<StoryGameEvent>> eventsByStatTrigger; 
@@ -26,16 +24,6 @@ namespace SHG
     public void ClearEventCandiates()
     {
       this.EventCandidates.Clear();
-    }
-
-    public void TriggerEvent(GameEvent gameEvent)
-    {
-      if (gameEvent is NormalGameEvent normalEvent) {
-        this.OnNormalEventStart?.Invoke(normalEvent);
-      }
-      else if (gameEvent is StoryGameEvent storyEvent) {
-        this.OnStoryEventStart?.Invoke(storyEvent);
-      }
     }
 
     public bool TryFindStoryEvent(out NormalGameEvent result, Func<GameEvent, bool> query)
@@ -83,7 +71,6 @@ namespace SHG
 
     public GameEventHandler()
     {
-      this.endingEvents = new ();
       this.storyEvents = new ();
       this.normalEvents = new ();
       this.eventsByName = new ();
@@ -97,15 +84,6 @@ namespace SHG
         {Character.Stat.Hydration, new ()}
       };
       this.LoadAllEvents();
-      this.OnStoryEventStart += this.StartScript;
-      this.OnNormalEventStart += this.StartScript;
-    }
-
-    void StartScript(GameEvent gameEvent)
-    {
-      if (int.TryParse(gameEvent.Name, out int id)) {
-        ScriptManager.Instance.StartScript(id);
-      }
     }
 
     public void RegisterItemTracker(ItemTracker itemTracker)
@@ -114,26 +92,7 @@ namespace SHG
     }
 
     public void RegisterStatTracker(PlayerStatManager playerStat) {
-      playerStat.HP.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
-        TempCharacter.Stat.Hp,
-        oldValue, 
-        newValue
-        );
-      playerStat.Fatigue.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
-        TempCharacter.Stat.Fatigue,
-        oldValue, 
-        newValue
-        );
-      playerStat.Thirsty.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
-        TempCharacter.Stat.Hydration,
-        oldValue,
-        newValue
-        );
-      playerStat.Hunger.Resource.OnResourceChanged += (_, oldValue, newValue) => this.OnResourceChanged(
-        TempCharacter.Stat.Hunger,
-        oldValue,
-        newValue
-        );
+      
     }
 
     public void RegisterGameTimeTracker(GameTimeManager gameTimeManager) {
@@ -168,15 +127,16 @@ namespace SHG
       }
     }
 
-    void OnDateChanged(int date)
+    public void OnDateChanged(int date)
     {
       if (this.TryFindEventByDateTrigger(date, out GameEvent gameEvent)) {
         this.OnFoundEventByTrigger(gameEvent);
         return ;
       } 
+  
     }
 
-    void OnResourceChanged(
+    public void OnResourceChanged(
       Character.Stat stat, 
       float oldValue,
       float newValue)
@@ -221,7 +181,6 @@ namespace SHG
 
     void OnFoundEventByTrigger(GameEvent gameEvent)
     {
-      Debug.LogWarning($"new event triggered {gameEvent.Name}");
       if (this.IsEventTriggerable) {
         if (gameEvent.IsStoryEvent) {
           this.OnStoryEventStart?.Invoke(gameEvent as StoryGameEvent);
@@ -249,13 +208,7 @@ namespace SHG
           this.eventsByStatTrigger[resourceTrigger.Stat].Add(gameEvent);
           break;
         default:
-          if (gameEvent.Trigger == null) {
-            this.endingEvents.Add(gameEvent);
-            break;
-          }
-          else {
-            throw (new NotImplementedException());
-          }
+          throw (new NotImplementedException());
       }
     }
 

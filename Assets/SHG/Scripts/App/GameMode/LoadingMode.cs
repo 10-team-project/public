@@ -11,9 +11,14 @@ namespace SHG
     public string SceneToLoad;
     public Action OnLoaded;
     public string SceneName => throw new NotImplementedException();
+    GameObject loadingUI;
 
     public LoadingMode()
     {
+      this.loadingUI = GameObject.Instantiate(Resources.Load<GameObject>("LoadingUI"));
+
+      this.loadingUI.transform.SetParent(App.Instance.transform);
+      this.loadingUI.SetActive(false);
     }
 
     public bool Equals(IGameMode other)
@@ -31,25 +36,19 @@ namespace SHG
       yield return (null);
       this.OnLoaded?.Invoke();
       this.OnLoaded = null;
-      App.Instance.UIController.ShowQuickSlot();
+      this.loadingUI.SetActive(false);
     }
 
     public IEnumerator OnStart()
     {
-      App.Instance.GameTimeManager.gameObject.SetActive(false);
-      App.Instance.UIController.HideQuickSlot();
       Debug.Log("LoadingState OnStart");
-      App.Instance.PlayerStatManager.HideUI();
+      this.loadingUI.SetActive(true);
       if (this.SceneToLoad != null) {
-        yield return (App.Instance.SceneManager.GameLoadScene("Loading"));
-        var loading = GameObject.Find("LoadingCanvas").GetComponent<Loading>();
-        yield return (loading.LoadScene(this.SceneToLoad));
-        
-        //yield return (new WaitForSeconds(1));
-        //var loadedScene = App.Instance.SceneManager.GameLoadScene(this.SceneToLoad);
-        //while (!loadedScene.isDone) {
-        //  yield return null;
-        //}
+        yield return (new WaitForSeconds(1));
+        var loadedScene = App.Instance.SceneManager.GameLoadScene(this.SceneToLoad);
+        while (!loadedScene.isDone) {
+          yield return null;
+        }
         yield return (this.OnEnd());
       }
       else {

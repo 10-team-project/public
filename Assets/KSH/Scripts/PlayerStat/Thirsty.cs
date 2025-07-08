@@ -7,11 +7,10 @@ namespace KSH
     public class Thirsty : MonoBehaviour
     {
         [SerializeField] private ResourceDegenerator resourceDegenerator;
-        [SerializeField] public Slider ThirstySlider;
+        [SerializeField] private Slider ThirstySlider;
 
         public float ThirstyCur => resourceDegenerator.Resource.Cur;
         public float ThirstyMax => resourceDegenerator.Resource.Max;
-        public Resource Resource => resourceDegenerator.Resource;
 
         private void Start()
         {

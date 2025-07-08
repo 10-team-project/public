@@ -13,12 +13,8 @@ namespace KSH
         [Range(0, 140)] [SerializeField] private float cur; //현재 자원 양
         
         public event Action<Resource, float, float> OnResourceChanged; //콜백
-
-        public float Max
-        {
-            get => max;
-            set => max = value;
-        }
+        
+        public float Max => max;
         public float Cur
         {
             get => cur;

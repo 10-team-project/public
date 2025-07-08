@@ -5,11 +5,10 @@ using EditorAttributes;
 
 namespace SHG
 {
-  public class PadlockController : DoorLocker, IMapObject
+  [RequireComponent (typeof(Rigidbody), typeof(CharacterJoint))]
+  public class PadlockController : MonoBehaviour, IMapObject
   {
-    const string SPANNER_ID = "d017101b-dcf0-4226-ad2b-0612b660ac14";
-    [SerializeField] [Required]
-    Rigidbody rb;
+    public bool IsLocked { get; private set; }
     [SerializeField] [Required]
     GameObject lockedUpperPart;
     [SerializeField] [Required]
@@ -30,13 +29,16 @@ namespace SHG
     int numberOfHitsForUnlock;
     [SerializeField]
     CameraController.FocusDirection focusDirection;
+    [SerializeField] [Range(0f, 2f)]
+    float focusDistance;
+    Rigidbody rb;
     Coroutine lockRoutine;
     PlayerItemController player;
 
     void Awake()
     {
+      this.rb = this.GetComponent<Rigidbody>();
       this.IsLocked = true;
-
     }
 
     [Button ("Hit")]
@@ -69,7 +71,6 @@ namespace SHG
       this.lockedUpperPart.SetActive(false);
       this.unlockedUpperPart.SetActive(true);
       this.IsLocked = false;
-      this.OnUnlock?.Invoke();
     }
 
     [Button ("Toggle lock")]
@@ -130,7 +131,7 @@ namespace SHG
       if (this.player == null) {
         return (false);
       }
-      return (item.Id == SPANNER_ID);
+      return true;
     }
 
     public IEnumerator Interact(EquipmentItem item, Action OnEnded)
@@ -141,22 +142,20 @@ namespace SHG
         Debug.LogError($"invalid numberOfHitsForUnlock: {this.numberOfHitsForUnlock}");
       }
       #endif
-      this.player.Spanner.SetActive(true);
       App.Instance.CameraController.AddFocus(
         this.focusPoint != null ? this.focusPoint.transform:
         this.transform,
         this.focusDirection,
-        (camera) => {});
+        (camera) => {},
+        this.focusDistance
+        );
       int count = 1;
       player.OnHit = (player) => {
         this.OnHit(player, count);
-        if (count >= this.numberOfHitsForUnlock) {
-          OnEnded?.Invoke();
-        }
         count += 1;
       };
       for (int i = 0; i < this.numberOfHitsForUnlock; i++) {
-        this.player.TriggerAnimation("OneHandAttack");
+        this.player.TriggerAnimation("Hit");
         yield return (this.player.WaitForHitDelay);
       }
       yield return null;
@@ -168,7 +167,6 @@ namespace SHG
       if (count >= this.numberOfHitsForUnlock && this.IsLocked) {
         this.ToggleLock();
         player.OnHit = null;
-        player.OnHitFinish = (player) => player.Spanner.SetActive(false) ;
         App.Instance.CameraController.OnCommandEnd();
         App.Instance.CameraController.AddReset();
       }

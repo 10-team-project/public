@@ -81,7 +81,7 @@ namespace KSH
                 {
                     continue;
                 }
-                string path = data["CharEmotion"]?.ToString();
+                string path = data["Portrait"]?.ToString();
                 Sprite sprite = Resources.Load<Sprite>(path);
                 if (sprite != null)
                 {

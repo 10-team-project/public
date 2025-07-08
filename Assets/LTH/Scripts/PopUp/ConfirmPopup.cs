@@ -29,20 +29,19 @@ namespace LTH
         public void Show(string message, string confirmText, Action confirm, string cancelText = null, Action cancel = null)
         {
             messageText.text = message;
-            //confirmButtonText.text = confirmText;
+            confirmButtonText.text = confirmText;
             onConfirm = confirm;
 
             confirmButton.onClick.RemoveAllListeners();
             confirmButton.onClick.AddListener(() =>
             {
-            Debug.Log("confirm");
                 onConfirm?.Invoke();
                 Close();
             });
 
             if (!string.IsNullOrEmpty(cancelText))
             {
-                //cancelButtonText.text = cancelText;
+                cancelButtonText.text = cancelText;
                 onCancel = cancel;
                 cancelButton.gameObject.SetActive(true);
 

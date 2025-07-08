@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using KSH;
-using NTJ;
 
 namespace KSH
 {
@@ -12,7 +11,6 @@ namespace KSH
         [Header("Resource Decay")]
         [SerializeField] private float decayTime; // 줄어들 시간(몇초마다 줄어들지)
         [SerializeField] private float resourceAmount; //줄어들 자원 양
-        [SerializeField] private float timedecrease; //날짜당 줄어들 시간
         [SerializeField] private bool decaying = true;
         
         [Header("Resource")]
@@ -27,21 +25,18 @@ namespace KSH
 
         private void Update()
         {
-            ResourceTick();
+            ResourceTick(resourceAmount, decayTime);
         }
         
-        public void ResourceTick()
+        public void ResourceTick(float amount, float decreaseTime)
         {
-            if(GameTimeManager.Instance == null) return;
-            if(resource == null) return;
-            int curDay = GameTimeManager.Instance.CurrentDay;
-            
-            float decreaseTime = Mathf.Max(decayTime - timedecrease * curDay, 0f);
+            amount = resourceAmount;
+            decreaseTime = decayTime;
             timer += Time.deltaTime;
             if (timer >= decreaseTime && decaying) // 만약 시간이 설정된 시간보다 크거나 같고 true이면
             {
                 timer = 0f; //다시 초기화
-                resource.Decrease(resourceAmount); //감소
+                resource.Decrease(amount); //감소
             }
         }
     }

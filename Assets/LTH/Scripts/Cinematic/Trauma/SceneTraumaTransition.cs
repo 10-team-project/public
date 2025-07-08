@@ -61,9 +61,12 @@ namespace LTH
             }
         }
 
-        public void TriggerTrauma()
+       private void Update()
         {
-          StartCoroutine(PlayTraumaTransition());
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                StartCoroutine(PlayTraumaTransition());
+            }
         }
 
         public IEnumerator PlayTraumaTransition()

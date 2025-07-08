@@ -8,20 +8,13 @@ namespace SHG
   public class ItemStorageBase: IObservableObject<ItemStorageBase>
   {
 
-    public static readonly string[] ITEM_DIRS = new string[] {
-      "Assets/PJW/Item/DropChangeItem",
-      "Assets/PJW/Item/EquipmentItem",
-      "Assets/PJW/Item/PlainItem",
-      "Assets/PJW/Item/RecoveryItem",
-      "Assets/PJW/Item/StoryItem"
-    };
     public virtual int MAX_STACK_COUNT => 20;
-    public virtual int MAX_SLOT_COUNT => 30;
+    public virtual int MAX_SLOT_COUNT => 20;
     public Dictionary<ItemData, int> Items { get; protected set; }
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
+    public const string ITEM_DIR = "Assets/SHG/Test/Items";
     public Action<ItemData> OnObtainItem;
-    public static List<ItemData> ALL_ITEMS { get; private set; }
 
   #if UNITY_EDITOR
     [SerializeField]
@@ -43,15 +36,6 @@ namespace SHG
     public void LoadFromItemSaveDataList(List<ItemSaveData> data)
     {
        
-    }
-
-    static ItemStorageBase()
-    {
-      ALL_ITEMS = new ();
-      foreach (var dir in ItemStorageBase.ITEM_DIRS) {
-        ItemData[] items = Utils.LoadAllFrom<ItemData>(dir);
-        ALL_ITEMS.AddRange(items);
-      }
     }
 
     protected ItemStorageBase()
@@ -112,7 +96,7 @@ namespace SHG
       else {
         this.Items.Add(item.Data, 1);
       }
-      this.OnObtainItem?.Invoke(item.Data);
+      this.OnObtainItem.Invoke(item.Data);
       this.OnChanged?.Invoke(this);
     }
 
@@ -194,26 +178,6 @@ namespace SHG
       }
       this.OnChanged?.Invoke(this);
       return (item, count);
-    }
-
-    public void RemoveItem(ItemData itemData, int count)
-    {
-      int itemCount = this.GetItemCount(itemData);
-      if (itemCount < count) {
-        #if UNITY_EDITOR
-        throw (new ApplicationException($"RemoveItem")); 
-        #else
-        return ;
-        #endif
-      }
-      this.WillChange?.Invoke(this);
-      if (itemCount - count < 1) {
-        this.Items.Remove(itemData);
-      }
-      else {
-        this.Items[itemData] = itemCount - count;
-      }
-      this.OnChanged?.Invoke(this);
     }
 
     public Item GetItem(ItemData itemData)

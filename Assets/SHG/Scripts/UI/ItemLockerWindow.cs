@@ -8,16 +8,9 @@ namespace SHG
   {
     protected override Vector2 DescriptionOffset => this.DESCRIPTION_OFFSET;
     readonly Vector2 DESCRIPTION_OFFSET = new Vector2(0, 150f);
-    public ItemLockerWindow(ItemBox floatingItemBox, VisualElement floatingDescriptionContainer) : base(floatingItemBox, App.Instance.ItemStorage)
+    public ItemLockerWindow(ItemBox floatingItemBox) : base(floatingItemBox, App.Instance.ItemStorage)
     {
       this.name = "item-locker-window";
-      this.itemDescriptionContainer = floatingDescriptionContainer;
-      this.itemDescriptionTitle = floatingDescriptionContainer.Q(
-        className: "item-storage-item-description-title"
-        ) as Label;
-      this.itemDescriptionContent = floatingDescriptionContainer.Q(
-        className: "item-storage-item-description-content"
-        ) as Label;
     }
 
     protected override void ClearItems()
@@ -29,9 +22,9 @@ namespace SHG
     {
       this.itemDescriptionContainer = new VisualElement();
       this.itemDescriptionContainer.AddToClassList("item-storage-item-description-container");
-      this.itemDescriptionTitle = new Label();
-      this.itemDescriptionTitle.AddToClassList("item-storage-item-description");
-      this.itemDescriptionContainer.Add(this.itemDescriptionTitle);
+      this.itemDescription = new Label();
+      this.itemDescription.AddToClassList("item-storage-item-description");
+      this.itemDescriptionContainer.Add(this.itemDescription);
       this.Add(this.itemDescriptionContainer);
       Utils.HideVisualElement(this.itemDescriptionContainer);
     }
@@ -85,20 +78,12 @@ namespace SHG
           }
         }
       } 
-      int boxCount = this.itemsContainer.childCount;
-      int maxSlotCount = inventory.MAX_SLOT_COUNT;
-      for (int i = boxCount; i < maxSlotCount; i++) {
-        var box = this.CreateItembox(ItemAndCount.None);
-        this.itemsContainer.Add(box); 
-      }
     }
     //TODO: 각 아이템 UI를 objectpool에 보관
     ItemBox CreateItembox(ItemAndCount itemAndCount)
     {
       ItemBox itemBox = new ItemBox(this);
-      if (itemAndCount != ItemAndCount.None) {
-        itemBox.SetData(itemAndCount);
-      }
+      itemBox.SetData(itemAndCount);
       itemBox.RegisterCallback<PointerDownEvent>(this.OnPointerDown);         
       itemBox.RegisterCallback<PointerUpEvent>(this.OnPointerUp);
       itemBox.RegisterCallback<PointerMoveEvent>(this.OnPointerMove);
@@ -131,12 +116,10 @@ namespace SHG
     public bool IsVisiable { get; private set; }
     public ItemLockerWindow ItemContainer { get; private set; }
     ItemBox floatingBox;
-    VisualElement floatingDescriptionContainer;
 
-    public ItemLockerContainerWindow(ItemBox floatingBox, VisualElement floatingDescriptionContainer)
+    public ItemLockerContainerWindow(ItemBox floatingBox)
     {
       this.floatingBox = floatingBox;
-      this.floatingDescriptionContainer = floatingDescriptionContainer;
       this.name = "item-locker-window-container";
       this.AddToClassList("window-container");
       this.CreateUI();
@@ -159,12 +142,16 @@ namespace SHG
     void CreateUI()
     {
       var label = new Label();
-      label.text = "창고";
+      label.text = "Item Storage";
       label.AddToClassList("window-label");
       this.Add(label);
+      var closeButton = new Button();
+      closeButton.text = "close";
+      closeButton.AddToClassList("window-close-button");
+      closeButton.RegisterCallback<ClickEvent>(this.OnClickClose);
+      this.Add(closeButton); 
       this.ItemContainer = new ItemLockerWindow(
-        this.floatingBox,
-        this.floatingDescriptionContainer
+        this.floatingBox
         );
       this.ItemContainer.name = "item-locker-item-container";
       this.Add(this.ItemContainer);

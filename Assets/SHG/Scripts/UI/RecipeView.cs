@@ -11,6 +11,7 @@ namespace SHG
     ItemRecipe recipe;
     ItemBox productBox;
     VisualElement materialList;
+    Label description;
     Button craftButton;
 
     public bool IsVisiable { get; private set; }
@@ -26,40 +27,34 @@ namespace SHG
       this.recipe = recipe;
       this.ClearPresentingData();
       this.productBox.SetData(new ItemAndCount { Item = recipe.RecipeData.Product, Count = 1 });
-      this.productBox.SetLabel(recipe.RecipeData.Product.Name);
       this.PresentRecipe(recipe);
     }
 
     void PresentRecipe(ItemRecipe recipe)
     {
-      bool isCraftable = App.Instance.PlayerStatManager.Fatigue.FatigueCur > 5f;
+      bool isCraftable = true;
       foreach (var itemAndCount in recipe.RequiredItems) {
         ItemBox itemBox = new ItemBox(this);
         var currentItemCount = App.Instance.Inventory.GetItemCount(itemAndCount.Item);
         itemBox.SetData(itemAndCount);
-        itemBox.SetLabel($"{itemAndCount.Item.Name} {currentItemCount}/{itemAndCount.Count}");
-        var label = itemBox.Q<Label>();
-        label.ClearClassList();
-        label.AddToClassList("recipe-view-item-box-label");
         if (currentItemCount < itemAndCount.Count) {
           isCraftable = false;
-          itemBox.AddToClassList("recipe-view-material-box-inactive");
+          itemBox.AddToClassList("recipe-window-material-box-inactive");
         }
         else {
-          itemBox.RemoveFromClassList("recipe-view-material-box-inactive");
+          itemBox.RemoveFromClassList("recipe-window-material-box-inactive");
         }
-        itemBox.SetLabel($"{itemAndCount.Item.Name} {currentItemCount}/{itemAndCount.Count}");
+        itemBox.SetLabelText($"{itemAndCount.Item.Name} {currentItemCount}/{itemAndCount.Count}");
         this.materialList.Add(itemBox);
       }
+      this.description.text = recipe.RecipeData.Product.Description;
       if (isCraftable) {
         this.craftButton.SetEnabled(true);
         this.craftButton.RemoveFromClassList("recipe-view-craft-button-disabled");
-        this.productBox.RemoveFromClassList("recipe-view-product-box-inactive");
       }
       else {
         this.craftButton.SetEnabled(false);
         this.craftButton.AddToClassList("recipe-view-craft-button-disabled");
-        this.productBox.AddToClassList("recipe-view-product-box-inactive");
       }
     }
 
@@ -74,19 +69,19 @@ namespace SHG
       var productBoxContainer = new VisualElement();
       productBoxContainer.AddToClassList("recipe-view-product-box-container");
       this.productBox = new ItemBox(this);   
-      var label = this.productBox.Q<Label>();
-      label.ClearClassList();
-      label.AddToClassList("recipe-view-item-box-label");
       this.productBox.AddToClassList("recipe-view-product-box");
       productBoxContainer.Add(this.productBox);
       this.Add(productBoxContainer);
       this.materialList = new VisualElement();
       this.materialList.AddToClassList("recipe-view-material-list");
       this.Add(this.materialList);
+      this.description = new Label();
+      this.description.AddToClassList("recipe-view-description");
+      this.Add(this.description);
       var buttonContainer = new VisualElement();
       buttonContainer.AddToClassList("recipe-view-craft-button-container");
       this.craftButton = new Button();
-      this.craftButton.text = "제작";
+      this.craftButton.text = "Craft";
       this.craftButton.RegisterCallback<ClickEvent>(this.OnClickCraftButton);
       this.craftButton.AddToClassList("recipe-view-craft-button");
       buttonContainer.Add(this.craftButton);

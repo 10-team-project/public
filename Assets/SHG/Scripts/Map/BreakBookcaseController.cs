@@ -5,7 +5,7 @@ using EditorAttributes;
 
 namespace SHG
 {
-  public class BreakBookcaseController : MonoBehaviour
+  public class BreakBookcaseController : MonoBehaviour, IMapObject
   {
     [SerializeField] [Required]
     Transform brokenPiecesContainer;
@@ -31,6 +31,7 @@ namespace SHG
     [SerializeField] [ReadOnly]
     Transform[] doors;
     HashSet<int> fellAwayedParts;
+    PlayerItemController player;
 
     void Awake()
     {
@@ -56,7 +57,7 @@ namespace SHG
     }
 
     [Button ("Break")]
-    public void Break()
+    void Break()
     {
       #if UNITY_EDITOR
       if (this.IsFinshed()) {
@@ -81,7 +82,7 @@ namespace SHG
       }
     }
 
-    public bool IsFinshed()
+    bool IsFinshed()
     {
       return (this.fellAwayedParts.Count >= this.brokenPieces.Length + this.doors.Length);
     }
@@ -99,5 +100,37 @@ namespace SHG
       }
     }
 
+    public bool IsInteractable(EquipmentItemData item)
+    {
+      if (this.player == null) {
+        this.player = GameObject.FindWithTag("Player")?.GetComponent<PlayerItemController>();
+      }
+      return (this.player != null);
+    }
+
+    public IEnumerator Interact(EquipmentItem item, System.Action OnEnded)
+    {
+      App.Instance.CameraController.AddFocus(
+        this.transform,
+        CameraController.FocusDirection.Foward,
+        (camera) => {},
+        0.5f
+        );
+      this.player.OnHit = this.OnHit;
+      while (!this.IsFinshed()) {
+        this.player.TriggerAnimation("Hit"); 
+        yield return (this.player.WaitForHitDelay);
+      }
+      OnEnded?.Invoke();
+    }
+
+    void OnHit(PlayerItemController player)
+    { 
+      this.Break();
+      if (this.IsFinshed()) {
+        App.Instance.CameraController.OnCommandEnd(); 
+        App.Instance.CameraController.AddReset();
+      }
+    }
   }
 }
