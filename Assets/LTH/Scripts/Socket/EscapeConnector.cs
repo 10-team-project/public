@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace LTH
 {
-    public class EscapeConnector : MonoBehaviour
+    public class EscapeConnector 
     {
         private readonly ItemTracker itemTracker;
         private readonly Inventory inventory;
