@@ -6,6 +6,7 @@ namespace SHG
 {
     public class LockpickPoint : DoorLocker, IMapObject
     {
+      const string LOCKPICK_ID = "8b68501d-c1b4-4a92-aaeb-923f0a98976c";
       [SerializeField]
       ItemData lockpickItem;
       [SerializeField]
@@ -27,7 +28,7 @@ namespace SHG
         if (this.player == null) {
           return (false);
         }
-        return (true);
+        return (item.Id == LOCKPICK_ID);
       }
     }
 }

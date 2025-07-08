@@ -53,6 +53,7 @@ namespace LTH
 
                 ItemObject instance = Item.CreateItemObjectFrom(item);
                 instance.transform.position = rule.spawnPoint.position;
+                //Debug.Log(instance);
             }
         }
 

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a9cdb8d5d09f8e69ac435b4f545c8bf, type: 3}
+  m_Name: pipe
+  m_EditorClassIdentifier: 
+  uuid: a58c5edf-798e-4d72-ab12-b4bab3c360fb
+  itemName: "\uC1E0 \uBABD\uB465\uC774"
+  image: {fileID: 21300000, guid: ed6036fafe5144849bc915b8f46eb7c5, type: 3}
+  prefab: {fileID: 2482256368105383341, guid: 6e694c24716dfa74ab41e4942e6e45e7, type: 3}
+  description: "\uCC45\uC7A5\uACFC \uC0C1\uD638\uC791\uC6A9\uD560 \uC218 \uC788\uB294
+    \uC544\uC774\uD15C"
+  recipes:
+  - {fileID: 11400000, guid: 3a21056dcd881fb4da48f000e90f3ef7, type: 2}
+  - {fileID: 11400000, guid: 41da3b806dda1cc4d870784478940dee, type: 2}
+  usePurpose: 1

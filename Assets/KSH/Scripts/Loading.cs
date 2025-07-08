@@ -10,28 +10,28 @@ public class Loading : MonoBehaviour
     [SerializeField] private Slider loadingBar;
     public static string nextScene;
 
-    private IEnumerator Start()
-    {
-        if (string.IsNullOrEmpty(nextScene))
-        {
-            yield break;
-        }
-        
-        if (loadingBar == null) yield break;
-        loadingBar.value = 0f;
-        StartCoroutine(LoadScene());
-    }
+//    private IEnumerator Start()
+//    {
+//        if (string.IsNullOrEmpty(nextScene))
+//        {
+//            yield break;
+//        }
+//        
+//        if (loadingBar == null) yield break;
+//        loadingBar.value = 0f;
+//        StartCoroutine(LoadScene());
+//    }
+//
+//    public static void LoadScene(string sceneName)
+//    {
+//        nextScene = sceneName;
+//        SceneManager.LoadScene("Loading");
+//    }
 
-    public static void LoadScene(string sceneName)
-    {
-        nextScene = sceneName;
-        SceneManager.LoadScene("Loading");
-    }
-
-    IEnumerator LoadScene()
+    public IEnumerator LoadScene(string sceneName)
     {
         if (loadingBar == null) yield break;
-        AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
+        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName);
         op.allowSceneActivation = false;
 
         while (!op.isDone)

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a9cdb8d5d09f8e69ac435b4f545c8bf, type: 3}
+  m_Name: lockpick
+  m_EditorClassIdentifier: 
+  uuid: 8b68501d-c1b4-4a92-aaeb-923f0a98976c
+  itemName: "\uB77D\uD53D"
+  image: {fileID: 21300000, guid: a9076214a5f24214baf59e433e644ca6, type: 3}
+  prefab: {fileID: 1952515198744976, guid: 7f0ac61f2e78f14438a74d2cd1715f87, type: 3}
+  description: "\uC7A0\uACA8\uC788\uB294 \uBB38\uACFC \uC0C1\uD638\uC791\uC6A9\uD560
+    \uC218 \uC788\uB294 \uC544\uC774\uD15C"
+  recipes:
+  - {fileID: 11400000, guid: 71b29d827072dcd488bab53ac2a5ad9c, type: 2}
+  - {fileID: 11400000, guid: ddbc44d3a521f9d43a3d4af910c28149, type: 2}
+  usePurpose: 1

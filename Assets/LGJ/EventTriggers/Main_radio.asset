@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Main_radio
   m_EditorClassIdentifier: 
   chance: 1
-  triggerItem: {fileID: 11400000, guid: e06c1a07c1c388b9e967e61c9b9f2c8f, type: 2}
+  triggerItem: {fileID: 11400000, guid: 5d18b71c6baf0f042b77d662ae6957a0, type: 2}

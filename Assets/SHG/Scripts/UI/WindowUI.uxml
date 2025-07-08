@@ -1,7 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/SHG/Scripts/UI/MainUIPlaceHolder.uss?fileID=7433441132597879392&amp;guid=7a9be6cca1d30d3acb61a758bd7b7b53&amp;type=3#MainUIPlaceHolder" />
-    <Style src="project://database/Assets/SHG/Scripts/UI/InventoryWindow.uss?fileID=7433441132597879392&amp;guid=a01f0ec446f9e54e295096f794f0f3cf&amp;type=3#InventoryWindow" />
-    <Style src="project://database/Assets/SHG/Scripts/UI/QuickSlotWindow.uss?fileID=7433441132597879392&amp;guid=fca7ca43f3296031e840eb21ad434e5e&amp;type=3#QuickSlotWindow" />
-    <Style src="project://database/Assets/SHG/Scripts/UI/ItemStorage.uss?fileID=7433441132597879392&amp;guid=ab34b9a62bb954785b7c1790b09cc6dd&amp;type=3#ItemStorage" />
-    <Style src="project://database/Assets/SHG/Scripts/UI/CraftWindow.uss?fileID=7433441132597879392&amp;guid=7bc2047f1e304eb4db1db900f354a473&amp;type=3#CraftWindow" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/WindowUI.uss?fileID=7433441132597879392&amp;guid=7a9be6cca1d30d3acb61a758bd7b7b53&amp;type=3#WindowUI" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/InventoryStyle.uss?fileID=7433441132597879392&amp;guid=a01f0ec446f9e54e295096f794f0f3cf&amp;type=3#InventoryStyle" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/QuickSlotStyle.uss?fileID=7433441132597879392&amp;guid=fca7ca43f3296031e840eb21ad434e5e&amp;type=3#QuickSlotStyle" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/ItemStorageStyle.uss?fileID=7433441132597879392&amp;guid=ab34b9a62bb954785b7c1790b09cc6dd&amp;type=3#ItemStorageStyle" />
+    <Style src="project://database/Assets/SHG/Scripts/UI/CraftStyle.uss?fileID=7433441132597879392&amp;guid=7bc2047f1e304eb4db1db900f354a473&amp;type=3#CraftStyle" />
 </ui:UXML>

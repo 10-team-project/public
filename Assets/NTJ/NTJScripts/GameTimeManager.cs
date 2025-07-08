@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using EditorAttributes;
 
 namespace NTJ
 {
@@ -30,20 +31,20 @@ namespace NTJ
 
         [Header("Time Settings")]
         public int timeScale = 30; // 현실 1초 = 게임 1분
+        [SerializeField, ReadOnly]
         private float gameTime;    // 누적된 게임 시간
-        private int currentDay = 1;
+        private int currentDay = 0;
         public int CurrentDay => currentDay;
         private float fadeDuration = 2f;
         private bool isSleeping = false;
         private bool sleepRequested = false;
 
         public event Action<int> OnDayChanged;
+        public event Action OnSleep;
 
         void Start()
         {
-//#if UNITY_EDITOR
-//            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
-//#endif
+            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
             if (SaveManager.HasSavedData())
             {
                 GameData data = SaveManager.LoadData();
@@ -51,13 +52,13 @@ namespace NTJ
                 {
                     SetDay(data.day);
                     LoadFromData(data);
-                    player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
+                    //player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 침대 위치에서 시작
                 }
             }
             else
             {
                 SetDay(1);
-                player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
+                //player.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f;
             }
 
             gameTime = 9 * 3600f;
@@ -79,7 +80,6 @@ namespace NTJ
 
             int hours = (int)(gameTime / 3600) % 24;
             int minutes = (int)(gameTime / 60) % 60;
-
             timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
 
             if (hours >= 24 || hours < 9)
@@ -186,8 +186,7 @@ namespace NTJ
             fadePanel.gameObject.SetActive(false);
             dayTextPanel.SetActive(false);
             isSleeping = false;
-
-            player.transform.position = bedSpawnPoint.position + bedSpawnPoint.forward * 1.5f; // 플레이어가 침대에서 리스폰
+            //player.transform.position = bedSpawnPoint.position; // 플레이어가 침대에서 리스폰
         }
         public void OnTimeScaleChanged(float value)
         {

@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: LostReward_woodBlock
   m_EditorClassIdentifier: 
   rewardItems:
-  - {fileID: 11400000, guid: a47a8a7cd8c39dfeeb44e3cd4475c0fb, type: 2}
+  - {fileID: 11400000, guid: 5af6e6bb55583b644b1cae66d87a4e8e, type: 2}
+  isLost: 1

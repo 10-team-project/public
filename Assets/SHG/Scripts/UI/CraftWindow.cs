@@ -14,6 +14,7 @@ namespace SHG
 
     public CraftWindow(ItemBox floatingBox)
     {
+      CurrentProvider = CraftProvider.NPC;
       this.name = "craft-window-container";
       this.AddToClassList("window-container");
       this.CreateUI();

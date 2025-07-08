@@ -15,6 +15,15 @@ namespace SHG
       this.MainUI = ui;
     }
 
+    public void Start()
+    {
+      App.Instance.GameTimeManager.OnSleep += () => {
+        if (this.MainUI != null) {
+          this.MainUI.CloseAllWindows();
+        }
+      };
+    }
+
     public bool TryGetQuickSlotItem(int slotNumber, out EquipmentItemData item)
     {
       if (this.MainUI != null) {
@@ -49,6 +58,13 @@ namespace SHG
 
     public void OpenCraftWindow()
     {
+      var mode = App.Instance.CurrentMode;
+      if (mode is ShelterMode shelterMode) {
+        CraftWindow.CurrentProvider = CraftProvider.NPC;
+      }
+      else {
+        CraftWindow.CurrentProvider = CraftProvider.Table;
+      }
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
         this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 

@@ -10,6 +10,7 @@ namespace LTH
     [RequireComponent(typeof(Collider))]
     public class LadderPlacePoint : MonoBehaviour, IMapObject, IInteractable
     {
+        const string LADDER_ID = "1cdacd14-a99b-4e16-90a2-b14efa470430";
         [SerializeField] public LadderPlacePointData PointData;
         [SerializeField] GameObject placeHolder;
         [SerializeField] Transform spawnPoint;
@@ -110,11 +111,7 @@ namespace LTH
 
         public bool IsInteractable(EquipmentItemData item)
         {
-          return (true);
-            if (PointData == null) return false;
-
-            return item.Purpose == EquipmentItemPurpose.Construct &&
-                   Array.IndexOf(PointData.RequiredItems, item) != -1;
+            return (item.Id == LADDER_ID);
         }
 
         void Awake()

@@ -22,17 +22,9 @@ namespace SHG
     [SerializeField] [Required]
     GameObject spanner;
     [SerializeField] [Required]
-    Transform headAimTarget;
-    [SerializeField] [Required]
-    MultiAimConstraint headAim;
-    [SerializeField] [Required]
-    MultiAimConstraint bodyAim;
-    [SerializeField] [Required]
     Transform leftHandTarget;
     [SerializeField] [Required]
     Transform rightHandTarget;
-    [SerializeField] [Range(1f, 3f)]
-    float lookAtSpeed;
     [SerializeField] [Range(0.5f, 5f)]
     float mapObjectIntractDist;
     [SerializeField] [Range(0.5f, 2f)]
@@ -43,7 +35,6 @@ namespace SHG
     [SerializeField] [Range (0f, 5f)]
     float hitDelay;
     Coroutine itemAction;
-    Coroutine lookAction;
     Coroutine lootAction;
     Animator animator;
     ItemObject itemToLoot;
@@ -65,95 +56,6 @@ namespace SHG
       this.animator = this.GetComponent<Animator>();
       this.mapObjectLayer = (1 << LayerMask.NameToLayer("ItemInteractObject"));
       this.WaitForHitDelay = new WaitForSeconds(this.hitDelay);
-    }
-
-    void LookTarget(Transform target)
-    {
-      if (this.lookAction != null) {
-        this.ClearLookAction();
-      }
-      this.headAimTarget.position = target.position;
-      this.lookAction = this.StartCoroutine(this.StartLookAt(target));
-    }
-
-    [Button ("Look at")]
-    void LookAt(Vector3 position)
-    {
-      if (this.lookAction != null) {
-        this.ClearLookAction();
-      }
-      this.headAimTarget.position = position;
-      this.lookAction = this.StartCoroutine(this.StartLookAt());
-    }
-
-    [Button ("Look foward")]
-    void LookForward()
-    {
-      if (this.lookAction != null) {
-        this.ClearLookAction();
-      }
-      this.lookAction = this.StartCoroutine(this.StartLookFoward());
-    }
-
-    void ClearLookAction()
-    {
-      this.StopCoroutine(this.lookAction);
-      this.lookAction = null;
-    }
-
-    IEnumerator StartLookAt(Transform target = null)
-    {
-      if (target != null) {
-        while (this.headAim.weight <= 1f) {
-          this.headAim.weight = Mathf.Lerp(
-            this.headAim.weight,
-            1f,
-            this.lookAtSpeed * Time.deltaTime
-            );
-          this.bodyAim.weight = Mathf.Lerp(
-            this.headAim.weight,
-            0.5f,
-            this.lookAtSpeed * Time.deltaTime
-            );
-
-          this.headAimTarget.position = target.position;
-          yield return (null);
-        }
-      }
-      else {
-        while (this.headAim.weight <= 1f) {
-          this.headAim.weight =  Mathf.Lerp(
-            this.headAim.weight,
-            1f,
-            this.lookAtSpeed * Time.deltaTime
-            );
-          this.bodyAim.weight = Mathf.Lerp(
-            this.headAim.weight,
-            0.5f,
-            this.lookAtSpeed * Time.deltaTime
-            );
-          yield return (null);
-        }
-      }
-      this.headAim.weight = 1f;
-      this.bodyAim.weight = 0.5f;
-    }
-
-    IEnumerator StartLookFoward()
-    {
-      float weight = 0f;
-      while (this.headAim.weight >= 0f) {
-        weight = Mathf.Lerp(
-          this.headAim.weight,
-          0f,
-          this.lookAtSpeed * Time.deltaTime
-          );
-        this.headAim.weight = weight;
-        this.bodyAim.weight = weight;
-        yield return (null);
-      }
-      this.headAim.weight = 0f;
-      this.bodyAim.weight = 0f;
     }
 
     void OnHitTrigger()

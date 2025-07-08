@@ -77,7 +77,7 @@ namespace KSH
 
         int GetRandomScriptId()
         {
-          if (App.Instance.Inventory.HasRadioItem()) {
+          if (App.Instance.ItemTracker.HasRadioItem) {
             int index = this.scriptRandom.Next(0, this.scriptIdsWitRadio.Length); 
             return (this.scriptIdsWitRadio[index]);
           }

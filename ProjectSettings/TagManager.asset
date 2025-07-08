@@ -11,6 +11,8 @@ TagManager:
   - LadderUpStart
   - LadderUpEnd
   - SpawnPoint
+  - NpcCharacter
+  - Trauma
   layers:
   - Default
   - TransparentFX

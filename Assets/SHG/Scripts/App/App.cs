@@ -73,12 +73,14 @@ namespace SHG
       this.RecipeRegistry = RecipeRegistry.CreateInstance();
       this.UIController = UIController.CreateInstance();
       this.PlayerStatManager = Instantiate(Resources.Load<GameObject>("PlayerStatManager")).GetComponent<PlayerStatManager>();
-      this.GameTimeManager = new GameObject().AddComponent<GameTimeManager>();
-      DontDestroyOnLoad(this.GameTimeManager);
+      this.GameTimeManager = Instantiate(Resources.Load<GameObject>("GameTimeManager")).GetComponent<GameTimeManager>();
       this.GameTimeManager.gameObject.SetActive(false);
       this.GameEventHandler = new GameEventHandler();
       this.GameEventHandler.RegisterItemTracker(this.ItemTracker);
       this.GameEventHandler.RegisterStatTracker(this.PlayerStatManager);
+      this.GameEventHandler.RegisterGameTimeTracker(this.GameTimeManager);
+      this.Inventory.RegisterEventRewards(this.GameEventHandler);
+      this.RecipeRegistry.RegisterItemUse(this.Inventory);
       this.ScriptManager = ScriptManager.Instance;
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
       this.managers = new Component[] {
@@ -87,7 +89,8 @@ namespace SHG
         this.RecipeRegistry,
         this.UIController,
         this.PopupManager,
-        this.PlayerStatManager
+        this.PlayerStatManager,
+        this.GameTimeManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {

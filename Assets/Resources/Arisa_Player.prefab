@@ -552,7 +552,7 @@ GameObject:
   - component: {fileID: 8786703507035229380}
   - component: {fileID: 9219238599331076453}
   - component: {fileID: 6499482265910712368}
-  - component: {fileID: 135002026385146204}
+  - component: {fileID: 7184734032943062667}
   m_Layer: 3
   m_Name: Arisa_Player
   m_TagString: Player
@@ -570,7 +570,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2470162222215355304}
@@ -726,7 +726,7 @@ MonoBehaviour:
   - m_Rig: {fileID: 473980532914199293}
     m_Active: 1
   m_Effectors: []
---- !u!114 &135002026385146204
+--- !u!114 &7184734032943062667
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -735,15 +735,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2387056002583172481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 351b67a40e74338cb9f8532fd24976e7, type: 3}
+  m_Script: {fileID: 11500000, guid: e1826df97631fb98d9e60b0a4cf0277f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemToAdd: {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6, type: 2}
-  itemToGet: {fileID: 0}
-  itemToMoveQuickSlot: {fileID: 11400000, guid: 865b6b7386d3e685b9e23bbf2abd7ec6,
-    type: 2}
-  itemToGetFromQuickSlot: {fileID: 0}
-  inventorySlot: 
 --- !u!1 &2430775147553457521
 GameObject:
   m_ObjectHideFlags: 0
@@ -2010,10 +2004,10 @@ MonoBehaviour:
   m_Data:
     m_ConstrainedObject: {fileID: 5666757758035709109}
     m_SourceObjects:
-      m_Length: 0
+      m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
-        weight: 0
+        transform: {fileID: 5372795937491949875}
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -2036,8 +2030,8 @@ MonoBehaviour:
         transform: {fileID: 0}
         weight: 0
     m_Offset: {x: 0, y: 0, z: 0}
-    m_MinLimit: -40
-    m_MaxLimit: 40
+    m_MinLimit: -60
+    m_MaxLimit: 60
     m_AimAxis: 4
     m_UpAxis: 2
     m_WorldUpType: 0
@@ -2634,14 +2628,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3c430f382484144e925c097c2d33cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Weight: 1
+  m_Weight: 0
   m_Data:
     m_ConstrainedObject: {fileID: 2290472123523496678}
     m_SourceObjects:
-      m_Length: 0
+      m_Length: 1
       m_Item0:
-        transform: {fileID: 0}
-        weight: 0
+        transform: {fileID: 5372795937491949875}
+        weight: 1
       m_Item1:
         transform: {fileID: 0}
         weight: 0
@@ -3117,7 +3111,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5857122143273999636}
@@ -3531,7 +3525,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.3, y: 2.3, z: 2.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3772947420181360632}

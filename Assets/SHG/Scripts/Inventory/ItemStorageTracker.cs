@@ -12,7 +12,7 @@ namespace SHG
     public List<ItemData> NewObtainedItems { get; private set; }
     [SerializeField] 
     public List<ItemData> NewUsedItems { get; private set; }
-
+    public bool HasRadioItem { get; private set; }
     public Action<ItemTracker> WillChange { get; set; }
     public Action<ItemTracker> OnChanged { get; set; }
 
@@ -50,6 +50,9 @@ namespace SHG
     void OnObtainItem(ItemData item) 
     {
       if (!this.obtainedItems.Contains(item)) {
+        if (item.Id == Inventory.RADIO_ID) {
+          this.HasRadioItem = true;
+        }
         this.WillChange?.Invoke(this);
         this.NewObtainedItems.Add(item); 
         this.obtainedItems.Add(item);

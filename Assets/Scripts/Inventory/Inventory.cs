@@ -8,6 +8,8 @@ using NTJ;
 
 public class Inventory : ItemStorageBase
 {
+  public const string BAG_ID = "8793a64f-c4e3-41a4-b242-21cd4d7f4f49";
+  public const string RADIO_ID = "b5778b62-1b8b-4000-aba5-14992b4348ea";
   public const int QUICKSLOT_COUNT = 4;
   public List<ItemData> QuickSlotItems { get; private set;}
   public Action<ItemData> OnUseItem;
@@ -19,11 +21,6 @@ public class Inventory : ItemStorageBase
   [SerializeField]
   public List<string> ItemNamesForDebuggingInQuickSlot;
 #endif
-
-  public bool HasRadioItem()
-  {
-    return (false);
-  }
 
   public EquipmentItem GetItemFromQuickSlot(EquipmentItemData item)
   {
@@ -53,6 +50,37 @@ public class Inventory : ItemStorageBase
   public List<string> GetQuickSlotItemIDs()
   {
     return (this.QuickSlotItems.ConvertAll(item => item.Id));
+  }
+
+  public void RegisterEventRewards(GameEventHandler eventHandler)
+  {
+    eventHandler.OnNormalEventStart += this.OnEventStart;
+    eventHandler.OnStoryEventStart += this.OnEventStart;
+  }
+
+  void OnEventStart(GameEvent gameEvent)
+  {
+    for (int i = 0; i < gameEvent.Rewards.Length; i++) {
+      if (gameEvent.Rewards[i] != null && gameEvent.Rewards[i] is ItemReward itemReward) {
+        if (itemReward.IsLost) {
+          this.LoseItems(itemReward.Items);
+        }       
+        else {
+          foreach (var item in itemReward.Items) {
+            this.AddItem(Item.CreateItemFrom(item)); 
+          }
+        }
+      } 
+    }
+  }
+
+  void LoseItems(ItemData[] items)
+  {
+    foreach (var item in items) {
+      if (this.GetItemCount(item) > 1) {
+        this.GetItem(item);
+      } 
+    }
   }
 
   public void LoadQuickSlotItems(List<string> itemIds)
@@ -102,24 +130,30 @@ public class Inventory : ItemStorageBase
   {
     if (item is RecoveryItem recoveryItem)
     {
-      var recoveryItemData = recoveryItem.Recovery();
+      if (recoveryItem.Data.Id == BAG_ID) {
+        this.slotCount += 5;
+        this.OnChanged?.Invoke(this);
+      }
+      else {
+        var recoveryItemData = recoveryItem.Recovery();
 
-      foreach (var data in recoveryItemData)
-      {
-        switch (data.Stat)
+        foreach (var data in recoveryItemData)
         {
-          case TempCharacter.Stat.Hp:
-            PlayerStatManager.Instance.HP.Heal(data.Amount);
-            break;
-          case TempCharacter.Stat.Hydration:
-            PlayerStatManager.Instance.Thirsty.Drink(data.Amount);
-            break;
-          case TempCharacter.Stat.Hunger:
-            PlayerStatManager.Instance.Hunger.Eat(data.Amount);
-            break;
-          case TempCharacter.Stat.Fatigue:
-            PlayerStatManager.Instance.Fatigue.Sleep(data.Amount);
-            break;
+          switch (data.Stat)
+          {
+            case TempCharacter.Stat.Hp:
+              PlayerStatManager.Instance.HP.Heal(data.Amount);
+              break;
+            case TempCharacter.Stat.Hydration:
+              PlayerStatManager.Instance.Thirsty.Drink(data.Amount);
+              break;
+            case TempCharacter.Stat.Hunger:
+              PlayerStatManager.Instance.Hunger.Eat(data.Amount);
+              break;
+            case TempCharacter.Stat.Fatigue:
+              PlayerStatManager.Instance.Fatigue.Sleep(data.Amount);
+              break;
+          }
         }
       }
     }

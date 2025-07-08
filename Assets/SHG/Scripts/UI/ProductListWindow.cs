@@ -19,6 +19,39 @@ namespace SHG
       this.productBoxes = new ();
       this.CreateUI();
       this.FillProducts();
+      App.Instance.RecipeRegistry.OnChanged += this.OnRecipeChanged;
+    }
+
+    void OnRecipeChanged(RecipeRegistry recipeRegistry)
+    {
+      for (int i = 0; i < this.productBoxes.Count; i++) {
+        this.productBoxes[i].RemoveData();
+      }
+      var products = RecipeRegistry.Instance.GetAllProducts(CraftWindow.CurrentProvider);
+      int index = 0;
+      foreach (var product in products) {
+        if (index >= this.productBoxes.Count - 1) {
+          #if UNITY_EDITOR
+          Debug.LogError($"number of products is more than {RecipeRegistry.NUMBER_OF_PRODUCTS}");
+          #endif
+          var newBox = this.CreateItemBox();
+          this.productBoxes.Add(newBox);
+          this.Add(newBox);
+        }
+        this.productBoxes[index].SetData(new ItemAndCount {
+          Item = product, Count = 1
+          });
+        var recipes = App.Instance.Inventory.GetCraftableRecipes(product, CraftWindow.CurrentProvider);
+        this.productBoxes[index].SetLabel(product.Name);
+        if (recipes.Count == 0) {
+          this.productBoxes[index].AddToClassList("product-list-item-box-inactive");
+        }
+        else {
+          this.productBoxes[index].RemoveFromClassList("product-list-item-box-inactive");
+        }
+        index += 1;
+      }
+
     }
 
     public void UpdateProductsEnable()
@@ -70,7 +103,7 @@ namespace SHG
 
     void FillProducts()
     {
-      var products = RecipeRegistry.Instance.GetAllProducts();
+      var products = RecipeRegistry.Instance.GetAllProducts(CraftWindow.CurrentProvider);
       int index = 0;
       foreach (var product in products) {
         if (index >= this.productBoxes.Count - 1) {

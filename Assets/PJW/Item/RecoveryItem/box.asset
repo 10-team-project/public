@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7567cf3238682da98bdaeed661d52583, type: 3}
+  m_Name: box
+  m_EditorClassIdentifier: 
+  uuid: e1a786a2-ae8b-4a55-9aee-75e2b9f20cfe
+  itemName: "\uC0C1\uC790"
+  image: {fileID: 21300000, guid: 833f48dadb70b6f4c91a2b4d0c2b3c2f, type: 3}
+  prefab: {fileID: 0}
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC18C\uBAA8 \uC2DC
+    \uAD50\uC2E4\uC5D0 \uC788\uB294 \uCC3D\uACE0 \uD574\uAE08"
+  recipes:
+  - {fileID: 11400000, guid: 246d04d3b17acd546bedd21963013b2a, type: 2}
+  efficacy: []

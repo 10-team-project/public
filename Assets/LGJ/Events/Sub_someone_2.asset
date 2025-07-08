@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cb458a83e35ab3aaf01fa0b756db28, type: 3}
+  m_Name: Sub_someone_2
+  m_EditorClassIdentifier: 
+  uuid: 82cc0fbd-bcf7-49b7-b0bf-6758c0398f24
+  eventName: 11501
+  eventRewards:
+  - {fileID: 11400000, guid: 71ecbb7f9844955488564f7d7d7dc61f, type: 2}
+  startMessages: []
+  skipable: 0
+  eventTrigger: {fileID: 11400000, guid: 98150517a0642ae4e9d29d894e2e78ad, type: 2}
+  eventPriority: 4
+  effectSound: {fileID: 0}
+  traumaEffect: {fileID: 0}
