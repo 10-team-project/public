@@ -12,7 +12,7 @@ namespace LTH
     /// ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker); => Ãß°¡ÇÏ¸é µÊ
     /// </summary>
  
-    public class ItemTrackerConnector : MonoBehaviour
+    public class ItemTrackerConnector
     {
        
         public static void ConnectToGameProgress(ItemTracker tracker)
