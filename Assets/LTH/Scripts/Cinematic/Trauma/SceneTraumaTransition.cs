@@ -61,7 +61,7 @@ namespace LTH
             }
         }
 
-        public void TrggerEffect()
+        public void TriggerTrauma()
         {
           StartCoroutine(PlayTraumaTransition());
         }

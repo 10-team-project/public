@@ -77,17 +77,24 @@ namespace SHG
     {
       this.IsEventTriggerable = true; 
       var gameEvent = this.HandleGameEvent();
-      this.TriggerTraumaIfExist(gameEvent);
+      if (gameEvent != null) {
+        this.TriggerTraumaIfExist(gameEvent);
+      }
     }
 
     void TriggerTraumaIfExist(GameEvent gameEvent)
     {
-      if (gameEvent != null &&
-        gameEvent is StoryGameEvent storyGameEvent &&
+      if (gameEvent is StoryGameEvent storyGameEvent &&
         storyGameEvent.Trauma != null) {
+        Debug.Log("trauma exist");
         this.IsEventTriggerable = false;
-        var trauma = GameObject.Instantiate(storyGameEvent.Trauma);
-        trauma.GetComponent<SceneTraumaTransition>().PlayTraumaTransition();
+        var trauma = GameObject.FindWithTag("Trauma");
+        if (trauma != null) {
+          trauma.GetComponent<SceneTraumaTransition>().TriggerTrauma();
+        }
+        else {
+          Debug.LogError("fail to find trauma");
+        }
       }
     }
 
