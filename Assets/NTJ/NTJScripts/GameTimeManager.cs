@@ -41,6 +41,17 @@ namespace NTJ
 
         public event Action<int> OnDayChanged;
         public event Action OnSleep;
+        
+        private void Awake()
+        {
+            if (Instance != null && Instance != this)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
 
         void Start()
         {
