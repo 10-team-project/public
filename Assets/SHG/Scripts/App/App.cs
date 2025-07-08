@@ -87,9 +87,9 @@ namespace SHG
       this.RecipeRegistry.RegisterItemUse(this.Inventory);
       this.ScriptManager = ScriptManager.Instance;
       this.GameProgressManager = GameProgressManager.CreateInstance();
+      this.EscapeManager = EscapeManager.CreateInstance();
       this.EscapeConnector = new EscapeConnector(this.ItemTracker, this.Inventory);
       this.ItemTrackerConnector = new ItemTrackerConnector();
-      this.EscapeManager = EscapeManager.CreateInstance();
       ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker);
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
 
