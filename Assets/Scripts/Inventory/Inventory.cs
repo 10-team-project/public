@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Patterns;
 using KSH;
 using SHG;
 using NTJ;
@@ -37,7 +36,9 @@ public class Inventory : ItemStorageBase
   public Inventory(): base()
   {
     this.QuickSlotItems = new ();
+    #if UNITY_EDITOR
     this.ItemNamesForDebuggingInQuickSlot = new();
+    #endif
   }
 
   public ItemData[] PeakItemsInQuickSlot()
@@ -82,6 +83,25 @@ public class Inventory : ItemStorageBase
       } 
     }
   }
+
+  public void LoadFromItemSaveDataList(List<ItemSaveData> data)
+  {
+    foreach (var savedItem in data) {
+      if (ItemStorageBase.ALL_ITEMS.TryGetValue(
+        savedItem.id,
+        out ItemData item
+        )) {
+        if (this.Items.TryGetValue(item, out int itemCount)) {
+          this.Items[item] = itemCount + 1;
+        }
+        else {
+          this.Items.Add(item, 1);
+        }
+      }
+    }   
+    this.OnChanged?.Invoke(this);
+  }
+
 
   public void LoadQuickSlotItems(List<string> itemIds)
   {

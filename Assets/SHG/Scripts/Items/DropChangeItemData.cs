@@ -26,15 +26,15 @@ namespace SHG
     public ItemRecipeData[] UnlockedRecipesWhenUse => this.unlockedRecipes;
 
     [SerializeField]
-    [Validate("Item to change is none", nameof(IsNullObtainChangeItem), MessageMode.Error)]
+    [Validate("Item to change is none", nameof(IsNullObtainChangeItem), MessageMode.Log)]
     ItemDropChange[] onObtainChange;
     [SerializeField]
-    [Validate("Item to change is none", nameof(IsNullUseChangeItem), MessageMode.Error)]
+    [Validate("Item to change is none", nameof(IsNullUseChangeItem), MessageMode.Log)]
     ItemDropChange[] onUseChange;
     [SerializeField, ReadOnly]
-    [Validate("No item drop is change", nameof(IsItemDropChangeNull), MessageMode.Error)]
+    [Validate("No item drop is change", nameof(IsItemDropChangeNull), MessageMode.Log)]
     Void emptyChangeCheck;
-    [SerializeField] [Validate("Some unlock recipe is none", nameof(HasNullUnlockRecipe), MessageMode.Error)]
+    [SerializeField] [Validate("Some unlock recipe is none", nameof(HasNullUnlockRecipe), MessageMode.Log)]
     ItemRecipeData[] unlockedRecipes;
 
     protected bool HasNullUnlockRecipe()

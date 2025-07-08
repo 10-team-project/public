@@ -17,7 +17,7 @@ namespace SHG
 
   public class GameModeManager: SingletonBehaviour<GameModeManager>
   {
-    const string SCENE_DIR = "Assets/ScriptableObjects/Scenes";
+    const string SCENE_DIR = "Scenes";
     public Dictionary<string, GameScene> Scenes { get; private set; }
     public bool IsSwitching { get; set; }
     public IGameMode CurrentMode 

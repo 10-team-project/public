@@ -9,11 +9,11 @@ namespace SHG
   {
 
     public static readonly string[] ITEM_DIRS = new string[] {
-      "Assets/PJW/Item/DropChangeItem",
-      "Assets/PJW/Item/EquipmentItem",
-      "Assets/PJW/Item/PlainItem",
-      "Assets/PJW/Item/RecoveryItem",
-      "Assets/PJW/Item/StoryItem"
+      "PJW/Item/DropChangeItem",
+      "PJW/Item/EquipmentItem",
+      "PJW/Item/PlainItem",
+      "PJW/Item/RecoveryItem",
+      "PJW/Item/StoryItem"
     };
     public virtual int MAX_STACK_COUNT => 20;
     public virtual int MAX_SLOT_COUNT => 30;
@@ -21,7 +21,7 @@ namespace SHG
     public Action<ItemStorageBase> WillChange { get; set; }
     public Action<ItemStorageBase> OnChanged { get; set; }
     public Action<ItemData> OnObtainItem;
-    public static List<ItemData> ALL_ITEMS { get; private set; }
+    public static Dictionary<string, ItemData> ALL_ITEMS { get; private set; }
 
   #if UNITY_EDITOR
     [SerializeField]
@@ -40,26 +40,25 @@ namespace SHG
       return (list);
     }
 
-    public void LoadFromItemSaveDataList(List<ItemSaveData> data)
-    {
-       
-    }
-
     static ItemStorageBase()
     {
       ALL_ITEMS = new ();
-      foreach (var dir in ItemStorageBase.ITEM_DIRS) {
-        ItemData[] items = Utils.LoadAllFrom<ItemData>(dir);
-        ALL_ITEMS.AddRange(items);
+    }
+
+    public static void LoadItems<T>(string dir) where T: ItemData
+    {
+      ItemData[] items = Utils.LoadAllFrom<T>(dir);
+      foreach (var item in items) {
+        ALL_ITEMS[item.Id] = item; 
       }
     }
 
     protected ItemStorageBase()
     {
       this.Items = new ();
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
       this.ItemNamesForDebugging = new();
-    #endif
+#endif
     }
 
     public bool IsAbleToAddItem(ItemAndCount itemAndCount)
@@ -125,14 +124,14 @@ namespace SHG
         throw (new ApplicationException($"Stroy items are not able to added at once"));
       }
       this.WillChange?.Invoke(this);
-      #if UNITY_EDITOR
+#if UNITY_EDITOR
       for (int i = 0; i < count; i++) {
         this.AddItemName(item.Data);
       }
       if (!this.IsAbleToAddItem(new ItemAndCount { Item = item.Data, Count = count})) {
         throw (new ApplicationException($"Unable to add {count} more {item.Data.Name}"));
       }
-      #endif
+#endif
       if (this.Items.TryGetValue(item.Data, out int itemCount)) {
         this.Items[item.Data] = itemCount + count;
       }
@@ -181,11 +180,11 @@ namespace SHG
       }
       this.WillChange?.Invoke(this);
       Item item = Item.CreateItemFrom(itemData);
-      #if UNITY_EDITOR
+#if UNITY_EDITOR
       for (int i = 0; i < count; i++) {
         this.RemoveItemName(itemData);
       }
-      #endif
+#endif
       if (itemCount < count + 1) {
         this.Items.Remove(itemData);
       }
@@ -200,11 +199,11 @@ namespace SHG
     {
       int itemCount = this.GetItemCount(itemData);
       if (itemCount < count) {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         throw (new ApplicationException($"RemoveItem")); 
-        #else
+#else
         return ;
-        #endif
+#endif
       }
       this.WillChange?.Invoke(this);
       if (itemCount - count < 1) {

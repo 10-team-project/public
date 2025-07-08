@@ -36,6 +36,11 @@ namespace SHG
       App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
     }
 
+    public void OnClickLoad()
+    {
+      CharacterSelectMode.Instance.OnSelectCharacter(0);
+    }
+
     public IEnumerator OnStart()
     {
       Debug.Log("MainMenuMode OnStart");

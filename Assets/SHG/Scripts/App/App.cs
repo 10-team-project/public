@@ -42,6 +42,7 @@ namespace SHG
     public GameTimeManager GameTimeManager { get; private set; }
     public GameProgressManager GameProgressManager { get; private set; }
     public ScriptManager ScriptManager { get; private set; }
+    public AudioManager AudioManager { get; private set; }
     public GameObject CharacterPrefab => CharacterSelectMode.Instance.CharacterPrefab;
     public GameObject NpcPrefab => CharacterSelectMode.Instance.NpcPrefab;
     public EscapeConnector EscapeConnector { get; private set; }
@@ -65,6 +66,7 @@ namespace SHG
     protected override void Awake()
     {
       base.Awake();
+      this.LoadItems();
       this.IsEditor = false;
       IsGamemodeControlEnabled = true;
       this.SceneManager = TestSceneManager.CreateInstance();
@@ -89,6 +91,9 @@ namespace SHG
       this.GameProgressManager = GameProgressManager.CreateInstance();
       this.EscapeManager = EscapeManager.CreateInstance();
       this.EscapeConnector = new EscapeConnector(this.ItemTracker, this.Inventory);
+      this.AudioManager = GameObject.Instantiate(
+        Resources.Load<GameObject>("AudioManager")
+        ).GetComponent<AudioManager>(); 
       this.ItemTrackerConnector = new ItemTrackerConnector();
       ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker);
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
@@ -102,7 +107,8 @@ namespace SHG
         this.PlayerStatManager,
         this.GameTimeManager,
         this.GameProgressManager,
-        this.EscapeManager
+        this.EscapeManager,
+        this.AudioManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {
@@ -111,10 +117,20 @@ namespace SHG
       #if UNITY_EDITOR
       this.IsEditor = true;
       IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
+      #endif
       if (IsGamemodeControlEnabled) {
         this.ChangeMode(this.startMode);
       }
-      #endif
+    }
+
+    void LoadItems()
+    {
+
+      ItemStorageBase.LoadItems<DropChangeItemData>(ItemStorageBase.ITEM_DIRS[0]);
+      ItemStorageBase.LoadItems<EquipmentItemData>(ItemStorageBase.ITEM_DIRS[1]);
+      ItemStorageBase.LoadItems<PlainItemData>(ItemStorageBase.ITEM_DIRS[2]);
+      ItemStorageBase.LoadItems<RecoveryItemData>(ItemStorageBase.ITEM_DIRS[3]);
+      ItemStorageBase.LoadItems<StoryItemData>(ItemStorageBase.ITEM_DIRS[4]);
     }
 
     public void SetCameraController(CameraController cameraController)

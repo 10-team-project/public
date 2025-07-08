@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using TreeEditor;
+#endif
 using UnityEngine;
 using KSH;
 

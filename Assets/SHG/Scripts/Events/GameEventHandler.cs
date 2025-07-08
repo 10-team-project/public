@@ -9,7 +9,7 @@ namespace SHG
   using Character = TempCharacter;
   public class GameEventHandler
   {
-    const string EVENT_DIR = "Assets/LGJ/Events";
+    const string EVENT_DIR = "LGJ/Events";
     public bool IsEventTriggerable;
     public Action<StoryGameEvent> OnStoryEventStart;
     public Action<NormalGameEvent> OnNormalEventStart;
@@ -156,14 +156,11 @@ namespace SHG
 
     void LoadAllEvents()
     {
-      var allEvents = Utils.LoadAllFrom<GameEvent>(EVENT_DIR);
+      var allEvents = Utils.LoadAllFrom<StoryGameEvent>(EVENT_DIR);
       foreach (var gameEvent in allEvents) {
         this.eventsByName.TryAdd(gameEvent.Name, gameEvent);
         if (gameEvent is StoryGameEvent normalGameEvent) {
           this.AddNormalGameEvent(normalGameEvent);
-        }
-        else if (gameEvent is NormalGameEvent storyGameEvent) {
-          this.AddStoryGameEvent(storyGameEvent);
         }
       }
     }

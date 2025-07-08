@@ -11,10 +11,10 @@ namespace SHG
   {
     public string[] Messages => this.hintMessages;
     [SerializeField]
-    [Validate("Empty messages", nameof(HasEmptyMessage), MessageMode.Error)]
+    [Validate("Empty messages", nameof(HasEmptyMessage), MessageMode.Log)]
     string[] hintMessages;
     [SerializeField, ReadOnly]
-    [Validate("Some message is none", nameof(HasInvalidMessage), MessageMode.Error)]
+    [Validate("Some message is none", nameof(HasInvalidMessage), MessageMode.Log)]
     Void nullMessageCheck;
 
     protected bool HasEmptyMessage() => (this.Messages == null || this.Messages.Length == 0);

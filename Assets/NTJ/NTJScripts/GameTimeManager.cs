@@ -44,7 +44,6 @@ namespace NTJ
 
         void Start()
         {
-            SaveManager.ClearSave(); // 에디터에서 실행할 때 저장 삭제
             if (SaveManager.HasSavedData())
             {
                 GameData data = SaveManager.LoadData();

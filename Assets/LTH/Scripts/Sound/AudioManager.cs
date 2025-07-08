@@ -17,10 +17,22 @@ public class AudioManager : SingletonBehaviour<AudioManager>
     [SerializeField] private AudioClip clickSound; // 클릭 효과음
     [SerializeField] private AudioClip dialogAppearSound; // 대화창 등장 효과음
     [SerializeField] private AudioClip itemPickupSound; // 아이템 획득 효과음
+    [SerializeField] public AudioClip InventoryOpenSound;
+    [SerializeField] public AudioClip TeleportSound;
+    [SerializeField] public AudioClip BookcaseSound;
+    [SerializeField] public AudioClip LockPickSound;
+    [SerializeField] public AudioClip PadlockOpenSound;
+   
+
+    [SerializeField] public AudioClip ClassroomBgm;
+    [SerializeField] public AudioClip FarmingBgm;
+    [SerializeField] public AudioClip TraumaBgm;
+    [SerializeField] public AudioClip RooftopSound;
 
     private const string MASTER_KEY = "MasterVolume";
     private const string BGM_KEY = "BGMVolume";
     private const string SFX_KEY = "SFXVolume";
+
 
     protected override void Awake()
     {
@@ -31,6 +43,7 @@ public class AudioManager : SingletonBehaviour<AudioManager>
 
     public void PlayBGM(AudioClip clip)
     {
+      Debug.Log($"play bgm {clip}");
         if (clip == null) return;
         bgmSource.clip = clip;
         bgmSource.loop = true;
@@ -41,6 +54,7 @@ public class AudioManager : SingletonBehaviour<AudioManager>
 
     public void PlaySFX(AudioClip clip)
     {
+      Debug.Log($"play sfx {clip}");
         if (clip == null) return;
         sfxSource.PlayOneShot(clip);
     }

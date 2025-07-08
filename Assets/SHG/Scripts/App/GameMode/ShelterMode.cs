@@ -40,6 +40,7 @@ namespace SHG
 
     public IEnumerator OnStart()
     {
+      App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.ClassroomBgm);
       this.IsEventTriggerable = true;
       GameObject[] spawnPoints = GameObject.FindGameObjectsWithTag("SpawnPoint");
       GameObject player = null;
@@ -91,6 +92,7 @@ namespace SHG
         var trauma = GameObject.FindWithTag("Trauma");
         if (trauma != null) {
           trauma.GetComponent<SceneTraumaTransition>().TriggerTrauma();
+          App.Instance.AudioManager.PlayBGM(App.Instance.AudioManager.TraumaBgm);
         }
         else {
           Debug.LogError("fail to find trauma");

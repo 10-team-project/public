@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using LTH;
 using UnityEngine;
 using Patterns;
@@ -8,6 +6,7 @@ namespace SHG
 {
   public class UIController : SingletonBehaviour<UIController>, IInputLockHandler
   {
+
     public WindowUI MainUI { get; private set; }
 
     public void SetMainUI(WindowUI ui)
@@ -58,6 +57,7 @@ namespace SHG
 
     public void OpenCraftWindow()
     {
+      App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.InventoryOpenSound);
       var mode = App.Instance.CurrentMode;
       if (mode is ShelterMode shelterMode) {
         CraftWindow.CurrentProvider = CraftProvider.NPC;
@@ -82,6 +82,7 @@ namespace SHG
     {
       if (this.MainUI != null && App.Instance?.InputManager != null &&
         !App.Instance.InputManager.IsBlocked(InputType.UI)) {
+        App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.InventoryOpenSound);
         this.MainUI.SetWindowVisible(WindowUI.WindowType.ItemLocker, true);
         this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true);
         this.MainUI.SetWindowVisible(WindowUI.WindowType.QuickSlot, false);
@@ -124,6 +125,7 @@ namespace SHG
 
     void OpenInventoryWindow()
     {
+        App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.InventoryOpenSound);
       this.MainUI.SetWindowVisible(WindowUI.WindowType.Inventory, true); 
       App.Instance.InputManager.StartInput(this);
     }
