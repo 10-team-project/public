@@ -160,8 +160,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 600
+  decayTime: 300
   resourceAmount: 20
+  timedecrease: 10
   decaying: 1
   resource: {fileID: 7976748056796937035}
 --- !u!1 &2177585465589816728
@@ -225,6 +226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 0
   resource: {fileID: 2832125950420829927}
 --- !u!1 &2554326523151784401
@@ -333,8 +335,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0701b88209cc0c45a292d645e7dc6ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  decayTime: 360
+  decayTime: 180
   resourceAmount: 20
+  timedecrease: 10
   decaying: 1
   resource: {fileID: 1332741633052770423}
 --- !u!1 &6725767244280643729
@@ -398,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   decayTime: 0
   resourceAmount: 0
+  timedecrease: 0
   decaying: 0
   resource: {fileID: 4131383434677324331}
 --- !u!1 &7309337754662104647
@@ -447,18 +451,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceDegenerator: {fileID: 7098317842046240574}
   resource: {fileID: 4131383434677324331}
-  hunger: {fileID: 6903535470999690838}
-  thirsty: {fileID: 8956467507444142910}
-  fatigue: {fileID: 7235757622275338284}
-  hungerLimit: 50
-  thirstyLimit: 50
-  fatigueLimit: 0
-  decayTimeFromHunger: 2
-  decayTimeFromThirsty: 6
-  decayTimeFromFatigue: 6
-  HpLossFromHunger: 1
-  HpLossFromThirsty: 5
-  HpLossFromFatigue: 5
   HpBarSlider: {fileID: 5278488124614927374}
 --- !u!1 &7842805054482421287
 GameObject:
