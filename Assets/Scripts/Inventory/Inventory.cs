@@ -86,9 +86,20 @@ public class Inventory : ItemStorageBase
 
   public void LoadFromItemSaveDataList(List<ItemSaveData> data)
   {
-    foreach (var item in data) {
-
+    foreach (var savedItem in data) {
+      if (ItemStorageBase.ALL_ITEMS.TryGetValue(
+        savedItem.id,
+        out ItemData item
+        )) {
+        if (this.Items.TryGetValue(item, out int itemCount)) {
+          this.Items[item] = itemCount + 1;
+        }
+        else {
+          this.Items.Add(item, 1);
+        }
+      }
     }   
+    this.OnChanged?.Invoke(this);
   }
 
 

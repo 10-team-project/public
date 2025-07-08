@@ -6,6 +6,7 @@ namespace SHG
   [RequireComponent(typeof(Collider))]
   public class BreakBookcaseTrigger : MonoBehaviour, IMapObject
   {
+
     const string PIPE_ID = "a58c5edf-798e-4d72-ab12-b4bab3c360fb";
     [SerializeField]
     BreakBookcaseController[] bookcases;
@@ -59,6 +60,7 @@ namespace SHG
 
     void OnHit(PlayerItemController player)
     { 
+      App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.BookcaseSound);
       this.Break();
       if (this.bookcases[0].IsFinshed()) {
         App.Instance.CameraController.OnCommandEnd(); 

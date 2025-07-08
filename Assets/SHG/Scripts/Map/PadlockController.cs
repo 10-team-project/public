@@ -66,6 +66,7 @@ namespace SHG
     [Button ("Unlock")]
     public void UnLock()
     {
+      App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.PadlockOpenSound);
       this.lockedUpperPart.SetActive(false);
       this.unlockedUpperPart.SetActive(true);
       this.IsLocked = false;

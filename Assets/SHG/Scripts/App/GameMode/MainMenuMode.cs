@@ -38,7 +38,7 @@ namespace SHG
 
     public void OnClickLoad()
     {
-      App.Instance.ChangeMode(GameMode.CharacterSelect, CharacterSelectMode.Instance.SceneName);
+      CharacterSelectMode.Instance.OnSelectCharacter(0);
     }
 
     public IEnumerator OnStart()

@@ -42,6 +42,7 @@ namespace SHG
     public GameTimeManager GameTimeManager { get; private set; }
     public GameProgressManager GameProgressManager { get; private set; }
     public ScriptManager ScriptManager { get; private set; }
+    public AudioManager AudioManager { get; private set; }
     public GameObject CharacterPrefab => CharacterSelectMode.Instance.CharacterPrefab;
     public GameObject NpcPrefab => CharacterSelectMode.Instance.NpcPrefab;
     public EscapeConnector EscapeConnector { get; private set; }
@@ -90,6 +91,9 @@ namespace SHG
       this.GameProgressManager = GameProgressManager.CreateInstance();
       this.EscapeManager = EscapeManager.CreateInstance();
       this.EscapeConnector = new EscapeConnector(this.ItemTracker, this.Inventory);
+      this.AudioManager = GameObject.Instantiate(
+        Resources.Load<GameObject>("AudioManager")
+        ).GetComponent<AudioManager>(); 
       this.ItemTrackerConnector = new ItemTrackerConnector();
       ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker);
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
@@ -103,7 +107,8 @@ namespace SHG
         this.PlayerStatManager,
         this.GameTimeManager,
         this.GameProgressManager,
-        this.EscapeManager
+        this.EscapeManager,
+        this.AudioManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {

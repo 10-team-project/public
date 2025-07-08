@@ -15,6 +15,7 @@ namespace SHG
 
       public IEnumerator Interact(EquipmentItem item, Action OnEnded)
       {
+        App.Instance.AudioManager.PlaySFX(App.Instance.AudioManager.LockPickSound);
         yield return (new WaitForSeconds(this.duration));
         this.OnUnlock?.Invoke();
         OnEnded?.Invoke();
