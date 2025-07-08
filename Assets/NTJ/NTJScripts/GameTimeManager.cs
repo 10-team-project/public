@@ -163,9 +163,9 @@ namespace NTJ
 
             // 체력 회복
             var stat = PlayerStatManager.Instance;
-            var maxHP = stat.HP.MaxHP;
-            float healAmount = isManual ? maxHP * 0.7f : maxHP * 0.3f;
-            stat.HP.CurrentHP = Mathf.Min(stat.HP.CurrentHP + healAmount, maxHP);
+            float fatigueMax = stat.Fatigue.FatigueMax;
+            float fatigueRecover = isManual ? fatigueMax * 0.7f : fatigueMax * 0.3f;
+            stat.Fatigue.Sleep(fatigueRecover);
 
 
             // 자동 저장
