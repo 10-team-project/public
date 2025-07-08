@@ -22,6 +22,9 @@ namespace LTH
         {
             foreach (var rule in spawnRules)
             {
+                if (rule == null || rule.spawnPoint == null || rule.gradeEntries == null || rule.gradeEntries.Count == 0)
+                    continue;
+
                 var selectedGrade = ChooseGrade(rule.gradeEntries);
                 if (selectedGrade == null || selectedGrade.items.Count == 0) continue;
 
