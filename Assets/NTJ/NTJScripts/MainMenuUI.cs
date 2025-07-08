@@ -50,8 +50,10 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnConfirmLoad()
     {
-        string sceneToLoad = string.IsNullOrEmpty(cachedData.lastScene) ? DEFAULT_GAME_SCENE : cachedData.lastScene;
-        SceneManager.LoadScene(sceneToLoad);
+        //string sceneToLoad = string.IsNullOrEmpty(cachedData.lastScene) ? DEFAULT_GAME_SCENE : cachedData.lastScene;
+        //SceneManager.LoadScene(sceneToLoad);
+      var mode = App.Instance.CurrentMode as MainMenuMode;
+      mode.OnClickLoad();
     }
 
     public void OnCancelLoadInfo()

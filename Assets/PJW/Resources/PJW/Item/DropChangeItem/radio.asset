@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e2cfc229f83fd1986c0d7538ccdd43, type: 3}
+  m_Name: radio
+  m_EditorClassIdentifier: 
+  uuid: b5778b62-1b8b-4000-aba5-14992b4348ea
+  itemName: "\uB77C\uB514\uC624"
+  image: {fileID: 21300000, guid: 74bbcf583fd99eb40b482b6e780fc0f8, type: 3}
+  prefab: {fileID: 0}
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC81C\uC791 \uC2DC
+    \uC911\uC694\uD55C \uC815\uBCF4\uB97C \uD68D\uB4DD\uD560 \uC218 \uC788\uC74C"
+  recipes:
+  - {fileID: 11400000, guid: 81702c4a514769a4ab14941ea1ef7e94, type: 2}
+  onObtainChange:
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: 56d41e9acba3f624592829dc8901d79a, type: 2}
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: 8b1a49da794c53f45889f59bb60ea123, type: 2}
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: 974bfa9c5ebdc4749be4b059c4544113, type: 2}
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: 2664a707249eda14987a035d905258f5, type: 2}
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: b045df7a3cd8cf6478df302a02341412, type: 2}
+  - TableChange: 0
+    Item: {fileID: 11400000, guid: 1d274368d6825f54592870a2c7c99fef, type: 2}
+  onUseChange: []
+  unlockedRecipes: []

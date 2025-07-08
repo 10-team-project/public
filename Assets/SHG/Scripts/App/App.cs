@@ -65,6 +65,7 @@ namespace SHG
     protected override void Awake()
     {
       base.Awake();
+      this.LoadItems();
       this.IsEditor = false;
       IsGamemodeControlEnabled = true;
       this.SceneManager = TestSceneManager.CreateInstance();
@@ -111,10 +112,20 @@ namespace SHG
       #if UNITY_EDITOR
       this.IsEditor = true;
       IsGamemodeControlEnabled = EditorPrefs.GetBool("IsGamemodeControlEnabled");
+      #endif
       if (IsGamemodeControlEnabled) {
         this.ChangeMode(this.startMode);
       }
-      #endif
+    }
+
+    void LoadItems()
+    {
+
+      ItemStorageBase.LoadItems<DropChangeItemData>(ItemStorageBase.ITEM_DIRS[0]);
+      ItemStorageBase.LoadItems<EquipmentItemData>(ItemStorageBase.ITEM_DIRS[1]);
+      ItemStorageBase.LoadItems<PlainItemData>(ItemStorageBase.ITEM_DIRS[2]);
+      ItemStorageBase.LoadItems<RecoveryItemData>(ItemStorageBase.ITEM_DIRS[3]);
+      ItemStorageBase.LoadItems<StoryItemData>(ItemStorageBase.ITEM_DIRS[4]);
     }
 
     public void SetCameraController(CameraController cameraController)

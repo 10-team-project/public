@@ -9,11 +9,11 @@ namespace SHG
   {
     public const int NUMBER_OF_PRODUCTS = 40;
     public static readonly string[] RECIPE_DIRS = new string[5] {
-      "Assets/PJW/Recipe/DropChangeRecipe",
-      "Assets/PJW/Recipe/EquipmentRecipe",
-      "Assets/PJW/Recipe/PlainRecipe",
-      "Assets/PJW/Recipe/RecoveryRecipe",
-      "Assets/PJW/Recipe/StoryRecipe"
+      "PJW/Recipe/DropChangeRecipe",
+      "PJW/Recipe/EquipmentRecipe",
+      "PJW/Recipe/PlainRecipe",
+      "PJW/Recipe/RecoveryRecipe",
+      "PJW/Recipe/StoryRecipe"
     };
     public Dictionary<ItemData, List<ItemRecipe>>[] AvailableRecipes;
     public static readonly List<ItemRecipe> EMPTY_RECIPES = new (0);
@@ -21,26 +21,15 @@ namespace SHG
     Dictionary<ItemData, List<ItemRecipe>> recipeTable;
     #if UNITY_EDITOR
     List<ItemRecipe> recipes = new ();
+    #endif
 
     public Action<RecipeRegistry> WillChange { get; set; }
     public Action<RecipeRegistry> OnChanged { get; set;}
-#endif
 
     public IEnumerable<ItemData> GetAllProducts(CraftProvider provider)
     {
       return (this.AvailableRecipes[(int)provider - 1].Keys);
     }
-
-    public List<ItemRecipe> GetRecipes(ItemData craftableItem, CraftProvider provider)
-    {
-      if (this.AvailableRecipes[(int)provider - 1].TryGetValue(craftableItem, out List<ItemRecipe> recipes)) {
-        return (recipes.FindAll(
-          recipe => (recipe.Provider == CraftProvider.All ||
-          recipe.Provider == provider)));
-      }
-      return (EMPTY_RECIPES);
-    }
-
     public void RegisterItemUse(Inventory inventory)
     {
       inventory.OnUseItem += this.OnUseItem;
@@ -64,6 +53,16 @@ namespace SHG
       if (isChanged) {
         this.OnChanged?.Invoke(this);
       }
+    }
+    
+    public List<ItemRecipe> GetRecipes(ItemData craftableItem, CraftProvider provider)
+    {
+      if (this.AvailableRecipes[(int)provider - 1].TryGetValue(craftableItem, out List<ItemRecipe> recipes)) {
+        return (recipes.FindAll(
+          recipe => (recipe.Provider == CraftProvider.All ||
+          recipe.Provider == provider)));
+      }
+      return (EMPTY_RECIPES);
     }
 
     void AddRecipe(int providerIndex, ItemRecipeData recipeData)
@@ -139,9 +138,9 @@ namespace SHG
       //    this.recipeTable.Add(item, new ());
       //  } 
       //}
-      foreach (var item in ItemStorageBase.ALL_ITEMS) {
-        if (item.IsCraftable) {
-          this.recipeTable.Add(item, new ());
+      foreach (var idItemPair in ItemStorageBase.ALL_ITEMS) {
+        if (idItemPair.Value.IsCraftable) {
+          this.recipeTable.Add(idItemPair.Value, new ());
         } 
       }
     }

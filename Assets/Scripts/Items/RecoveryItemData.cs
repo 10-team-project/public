@@ -7,9 +7,9 @@ using Void = EditorAttributes.Void;
 [CreateAssetMenu (menuName = "ScriptableObjects/Items/Recovery Item")]
 public class RecoveryItemData : ItemData
 {
-  [SerializeField, ReadOnly, Validate("Must have some efficacy", nameof(this.EmptyEfficacy), MessageMode.Error)]
+  [SerializeField, ReadOnly, Validate("Must have some efficacy", nameof(this.EmptyEfficacy), MessageMode.Log)]
   Void emptyEfficacyCheck;
-  [SerializeField, ReadOnly, Validate("Amount must greater than zero", nameof(this.HasInvalidAmount), MessageMode.Warning)]
+  [SerializeField, ReadOnly, Validate("Amount must greater than zero", nameof(this.HasInvalidAmount), MessageMode.Log)]
   Void amountCheck;
   public Efficacy[] Efficacies => this.efficacy;
   [SerializeField]
