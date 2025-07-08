@@ -80,8 +80,6 @@ namespace NTJ
 
             int hours = (int)(gameTime / 3600) % 24;
             int minutes = (int)(gameTime / 60) % 60;
-            this.hours = hours;
-            this.minutes = minutes;
             timeText.text = string.Format("{0:D2}:{1:D2}", hours, minutes);
 
             if (hours >= 24 || hours < 9)
@@ -99,7 +97,6 @@ namespace NTJ
 
         public void SetDay(int newDay)
         {
-          this.day = newDay;
             if (currentDay != newDay)
             {
                 currentDay = newDay;
