@@ -40,9 +40,13 @@ namespace SHG
     public GameEventHandler GameEventHandler { get; private set; }
     public PlayerStatManager PlayerStatManager { get; private set; }
     public GameTimeManager GameTimeManager { get; private set; }
+    public GameProgressManager GameProgressManager { get; private set; }
     public ScriptManager ScriptManager { get; private set; }
     public GameObject CharacterPrefab => CharacterSelectMode.Instance.CharacterPrefab;
     public GameObject NpcPrefab => CharacterSelectMode.Instance.NpcPrefab;
+    public EscapeConnector EscapeConnector { get; private set; }
+    public ItemTrackerConnector ItemTrackerConnector { get; private set; }
+    public EscapeManager EscapeManager { get; private set; }
     GameMode startMode = GameMode.MainMenu;
     
     [RuntimeInitializeOnLoadMethodAttribute(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -82,7 +86,13 @@ namespace SHG
       this.Inventory.RegisterEventRewards(this.GameEventHandler);
       this.RecipeRegistry.RegisterItemUse(this.Inventory);
       this.ScriptManager = ScriptManager.Instance;
+      this.GameProgressManager = GameProgressManager.CreateInstance();
+      this.EscapeManager = EscapeManager.CreateInstance();
+      this.EscapeConnector = new EscapeConnector(this.ItemTracker, this.Inventory);
+      this.ItemTrackerConnector = new ItemTrackerConnector();
+      ItemTrackerConnector.ConnectToGameProgress(this.ItemTracker);
       this.PopupManager = Instantiate(Resources.Load<GameObject>("Popupmanager")).GetComponent<PopupManager>();
+
       this.managers = new Component[] {
         this.SceneManager,
         this.InputManager,
@@ -90,7 +100,9 @@ namespace SHG
         this.UIController,
         this.PopupManager,
         this.PlayerStatManager,
-        this.GameTimeManager
+        this.GameTimeManager,
+        this.GameProgressManager,
+        this.EscapeManager
       };
       this.gameModeManager = GameModeManager.CreateInstance();
       foreach (var manager in this.managers) {

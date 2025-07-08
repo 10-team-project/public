@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using SHG;
 
 public class MainMenuUI : MonoBehaviour
 {
@@ -19,7 +20,9 @@ public class MainMenuUI : MonoBehaviour
 
     public void OnStartGame()
     {
-        SceneManager.LoadScene(CHARACTER_CHOICE_SCENE);
+      var mode = App.Instance.CurrentMode as MainMenuMode;
+      mode.OnClickSelectCharacter();
+        //SceneManager.LoadScene(CHARACTER_CHOICE_SCENE);
     }
 
     public void OnContinueGame()
