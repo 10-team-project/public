@@ -3,39 +3,48 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Ladder
+  - TeleportPoint
+  - LadderDownStart
+  - LadderDownEnd
+  - LadderUpStart
+  - LadderUpEnd
+  - SpawnPoint
+  - NpcCharacter
+  - Trauma
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
+  - Item
   - 
   - 
   - 
   - 
   - 
   - 
+  - NPC
+  - Ground
+  - Ladder
+  - Blocker
+  - LadderPlacePoint
   - 
   - 
+  - Teleport
+  - Mask
+  - SeeThrough
+  - ItemInteractObject
+  - Body
+  - Parts
+  - MapInteractObject
+  - Camera
+  - Ceil
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Noise
   - 
   m_SortingLayers:
   - name: Default

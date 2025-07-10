@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e2cfc229f83fd1986c0d7538ccdd43, type: 3}
+  m_Name: TestBook2
+  m_EditorClassIdentifier: 
+  uuid: 093cada2-0c99-4b6e-aa66-ace44fd1447e
+  recipes: []
+  itemName: Test book2
+  image: {fileID: 21300000, guid: bc642d8aecba79511a1bb6331f615304, type: 3}
+  prefab: {fileID: 919132149155446097, guid: 43ccb5ccc5ceff043baad71a03e539a2, type: 3}
+  description: 
+  onObtainChange:
+  - TableChange: 1
+    Item: {fileID: 11400000, guid: 3c002d8c926e11e79b7f34f0049333c5, type: 2}
+  onUseChange:
+  - TableChange: 1
+    Item: {fileID: 11400000, guid: 4a16e2d7f3955160b8595e94b29b5afd, type: 2}

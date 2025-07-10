@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66e2cfc229f83fd1986c0d7538ccdd43, type: 3}
+  m_Name: brazier
+  m_EditorClassIdentifier: 
+  uuid: 97445e56-2772-4c7b-a775-33103efa2164
+  itemName: "\uD654\uB85C"
+  image: {fileID: 21300000, guid: dea2d723f11fa8e449196a1c910cf6ec, type: 3}
+  prefab: {fileID: 0}
+  description: "1\uD68C\uC6A9 \uC544\uC774\uD15C\uC73C\uB85C \uC18C\uBAA8 \uC2DC
+    \uC81C\uC791 \uAC00\uB2A5\uD55C \uC544\uC774\uD15C\uC774 \uC99D\uAC00"
+  recipes:
+  - {fileID: 11400000, guid: 291e1900d20947d44b07ef15ce96e39b, type: 2}
+  onObtainChange: []
+  onUseChange: []
+  unlockedRecipes:
+  - {fileID: 11400000, guid: f91187ce1d1d6d648ae4b796c1fc9974, type: 2}
+  - {fileID: 11400000, guid: a306176e4fdd0fc4abcdaeb74dbfe4b4, type: 2}

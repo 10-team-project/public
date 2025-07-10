@@ -6,6 +6,27 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/MainMenuScene.unity
+    guid: a1491ff8330fbdfc9bdd375fbbce7b8f
+  - enabled: 1
+    path: Assets/Scenes/CharacterChoiceScene.unity
+    guid: ceab34be4a4cb88458f0a9be891dd2ef
+  - enabled: 1
+    path: Assets/Scenes/Classroom.unity
+    guid: cdddd20d0a55a6f8aa372aad08689f86
+  - enabled: 1
+    path: Assets/Scenes/LibraryArtScienceCafe.unity
+    guid: 34398d09307cdf47d8eafcc0425c493d
+  - enabled: 1
+    path: Assets/Scenes/Restaurant.unity
+    guid: c7294215012b99e9c91085caf4153523
+  - enabled: 1
+    path: Assets/Scenes/Loading.unity
+    guid: a3c802f13b649c48ebef24b5db727307
+  - enabled: 1
+    path: Assets/Scenes/Rooftop.unity
+    guid: c48d81979750031a183cb5b8ed02032d
+  - enabled: 1
+    path: Assets/Scenes/Ending.unity
+    guid: be9fcdeea63bcea65b108d4a5fde9eda
   m_configObjects: {}
